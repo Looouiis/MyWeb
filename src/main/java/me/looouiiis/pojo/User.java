@@ -5,6 +5,24 @@ public class User {
     String username;
     String password;
     Boolean isMe;
+    Boolean gender;
+    public User(){}
+
+    public User(Integer id, String username, String password, Boolean isMe, Boolean gender) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.isMe = isMe;
+        this.gender = gender;
+    }
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
 
     @Override
     public String toString() {
@@ -13,6 +31,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", isMe=" + isMe +
+                ", gender=" + gender +
                 '}';
     }
 

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class TokenOperator {
     static private String secret = "LooouiiisWebLooouiiisWebLooouiiisWeb";
-    public static String generate(String username){
+    public static String generate(int id){
         Calendar date = Calendar.getInstance();
         Date iat = date.getTime();
         date.add(Calendar.DAY_OF_MONTH, 30);
@@ -22,7 +22,7 @@ public class TokenOperator {
         header.put("typ","JWT");
         String token = Jwts.builder()
                 .setHeader(header)
-                .claim("username",username)
+                .claim("id",id)
                 .setIssuedAt(iat)
                 .setExpiration(exp)
                 .signWith(key)

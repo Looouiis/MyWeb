@@ -30,8 +30,21 @@ public class Account {
     }
     @RequestMapping(value = "/close", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public boolean close(String username, String password){
-        boolean res = service.close(username, password);
+    public String close(String username, String password){
+        String res = service.close(username, password);
         return res;
     }
+    @RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String update(int id, String username, String password, boolean isMe, boolean gender){
+        String res = service.update(id, username, password, isMe, gender);
+        return res;
+    }
+    @RequestMapping(value = "/manage", produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String manage(String token){
+        String res = service.selectAll(token);
+        return res;
+    }
+
 }

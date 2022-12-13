@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.looouiiis.dao.AccountDao">
+<!--    <resultMap id="UserResultMap" type="me.looouiiis.pojo.User">-->
+<!--        <result column="is_me" property="isMe"></result>-->
+<!--    </resultMap>-->
+    <select id="selectByUsername" resultType="me.looouiiis.pojo.User">
+        select id,username,password,is_me as isMe from users
+        <where>
+            <if test="username != null and username != ''">
+                username = #{username}
+            </if>
+        </where>
+    </select>
+</mapper>

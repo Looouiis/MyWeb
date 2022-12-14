@@ -1,7 +1,9 @@
 package me.looouiiis.config;
 
+import jakarta.servlet.Filter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 
 //加载Spring的启动配置
@@ -22,5 +24,11 @@ public class InitConfig extends AbstractDispatcherServletInitializer {
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         return null;
+    }
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter character = new CharacterEncodingFilter();
+        character.setEncoding("UTF-8");
+        return new Filter[]{character};
     }
 }

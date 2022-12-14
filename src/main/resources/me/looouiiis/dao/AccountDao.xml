@@ -12,9 +12,6 @@
             <if test="password != null and password != ''">
                 password = #{password},
             </if>
-            <if test="isMe != null">
-                is_me = #{isMe},
-            </if>
             <if test="gender != null">
                 female = #{gender}
             </if>

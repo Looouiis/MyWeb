@@ -3,6 +3,7 @@ package me.looouiiis.controller;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,14 +19,16 @@ public class Account {
     @RequestMapping(value = "/login", produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String login(String username, String password) {
+        System.out.println(username);
+        System.out.println(password);
         String res = service.login(username, password);
         return res;
     }
 
     @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String register(String username, String password, boolean isMe, boolean gender){
-        String res = service.register(username, password, isMe, gender);
+    public String register(String username, String password, boolean gender){
+        String res = service.register(username, password, gender);
         return res;
     }
     @RequestMapping(value = "/close", produces = "text/html;charset=UTF-8")
@@ -42,9 +45,13 @@ public class Account {
     }
     @RequestMapping(value = "/manage", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String manage(String token){
-        String res = service.selectAll(token);
+    public String manage(){
+        String res = service.selectAll();
         return res;
     }
-
+    @RequestMapping(value = "/test")
+    @ResponseBody
+    public String test(){
+        return "张三";
+    }
 }

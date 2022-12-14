@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 //SpringMVC的配置文件
 @Configuration
 @Import({CharSetConfig.class, DruidConfig.class, MyBatisConfig.class})
-@ComponentScan({"me.looouiiis.controller","me.looouiiis.service"})
+@ComponentScan({"me.looouiiis.controller","me.looouiiis.service","me.looouiiis.config"})
 @PropertySource("classpath:jdbc.properties")
 public class BaseConfig {
 }

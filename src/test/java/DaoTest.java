@@ -82,4 +82,8 @@ public class DaoTest {
     public void deleteTest(){
         messageDao.deleteMsgById(2);
     }
+    @Test
+    public void nullMacTest(){
+        System.out.println(messageDao.getAnoIdByMac("123"));
+    }
 }

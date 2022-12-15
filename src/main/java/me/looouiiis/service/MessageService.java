@@ -1,11 +1,11 @@
 package me.looouiiis.service;
 
 public interface MessageService {
-    String getAnoCommunicationByMac(String mac);
-    String getCommunicationByUserId(Integer id);
-    String commitAnoMessage();
-    String commitMessage();
-    String commitAnoReply();
-    String commitReply();
-    void transformToUser();
+    String getAnoCommunicationByMac(String mac, Integer start, Integer num);
+    String getCommunicationByUserId(Integer id, Integer start, Integer num);
+    boolean commitAnoMessage(String mac, String content);
+    boolean commitMessage(int id, String content);
+    boolean commitAnoReply(int id, String content);
+    boolean commitReply(int id, String content);
+    void transformToUser(int anoId, int usrId);
 }

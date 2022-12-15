@@ -1,6 +1,7 @@
 package me.looouiiis.service;
 
 import me.looouiiis.pojo.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ public interface MessageService {
     JsonContentReturn commitMessage(int id, String content);
     JsonContentReturn commitAnoReply(int id, String content);
     JsonContentReturn commitReply(int id, String content);
+    @Transactional(rollbackFor = {Exception.class})
     void transformToUser(Integer anoId, Integer usrId);
     JsonContentReturn addMyAnoUnread(int anoId);
     JsonContentReturn addMyAnoUnread(int anoId, Integer num);

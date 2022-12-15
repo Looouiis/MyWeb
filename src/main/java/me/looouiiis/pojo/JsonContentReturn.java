@@ -1,8 +1,6 @@
 package me.looouiiis.pojo;
 
-import com.alibaba.fastjson2.JSON;
-
-public class JsonAccountSelect {
+public class JsonContentReturn {
     private boolean status;
     private String description;
 

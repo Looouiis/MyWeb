@@ -15,13 +15,13 @@
         <if test="start != null or num != null">
             limit
             <if test="start != null">
-                #{start},
+                #{start}
             </if>
             <if test="start == null">
-                0,
+                0
             </if>
             <if test="num != null">
-                #{num}
+                ,#{num}
             </if>
         </if>
     </select>
@@ -31,13 +31,13 @@
         <if test="start != null or num != null">
             limit
             <if test="start != null">
-                #{start},
+                #{start}
             </if>
             <if test="start == null">
-                0,
+                0
             </if>
             <if test="num != null">
-                #{num}
+                ,#{num}
             </if>
         </if>
     </select>

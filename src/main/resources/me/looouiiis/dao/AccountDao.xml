@@ -21,12 +21,4 @@
     <!--    <resultMap id="UserResultMap" type="me.looouiiis.pojo.User">-->
 <!--        <result column="is_me" property="isMe"></result>-->
 <!--    </resultMap>-->
-    <select id="selectByUsername" resultType="me.looouiiis.pojo.User">
-        select id,username,password,is_me as isMe, female as gender from users
-        <where>
-            <if test="username != null and username != ''">
-                username = #{username}
-            </if>
-        </where>
-    </select>
 </mapper>

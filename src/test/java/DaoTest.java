@@ -63,7 +63,7 @@ public class DaoTest {
     }
     @Test
     public void selectMessageTest(){
-        List<Message> messages = messageDao.selectMessageById(2,null,null);
+        List<Message> messages = messageDao.selectMessageById(2,1,1);
         System.out.println(messages);
     }
     public void getAnoIdTest(){

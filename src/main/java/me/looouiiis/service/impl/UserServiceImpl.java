@@ -3,7 +3,7 @@ package me.looouiiis.service.impl;
 import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
 import me.looouiiis.dao.AccountDao;
-import me.looouiiis.pojo.JsonAccountSelect;
+import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.JsonAccountStatus;
 import me.looouiiis.pojo.User;
 import me.looouiiis.service.UserService;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,10 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String register(String username, String password, boolean gender) {
-        List<User> users = accountDao.selectByUsername(username);
+        User users = accountDao.selectByUsername(username);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("register");
-        if (users.size() == 0) {
+        if (users == null) {
             User user = new User(0, username, password, false, gender);
             int res = accountDao.insert(user);
             if (res != 0) {
@@ -62,6 +61,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String close(String username, String password) {
+        User user = accountDao.selectByUsername(username);
+        int id = user.getId();
+        accountDao.deleteFromMessage(id);
         int res = accountDao.delete(username, password);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("close");
@@ -113,8 +115,8 @@ public class UserServiceImpl implements UserService {
 //    }
     @Override
     public String selectAll() {
-        JsonAccountSelect select = new JsonAccountSelect();
-        select.setContext(JSON.toJSON(accountDao.selectByUsername(null)));
+        JsonContentReturn select = new JsonContentReturn();
+        select.setContext(JSON.toJSON(accountDao.selectAll()));
         select.setStatus(true);
         select.setDescription("Success");
         return JSON.toJSONString(select);

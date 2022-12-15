@@ -3,7 +3,7 @@ package me.looouiiis.controller.interceptor;
 import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import me.looouiiis.pojo.JsonAccountSelect;
+import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getParameter("token");
-        JsonAccountSelect select = new JsonAccountSelect();
+        JsonContentReturn select = new JsonContentReturn();
         select.setStatus(false);
         select.setContext(null);
         if (token != null && !"".equals(token)) {

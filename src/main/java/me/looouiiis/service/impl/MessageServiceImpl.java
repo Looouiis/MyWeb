@@ -3,6 +3,7 @@ package me.looouiiis.service.impl;
 import com.alibaba.fastjson2.JSON;
 import me.looouiiis.dao.MessageDao;
 import me.looouiiis.pojo.AnonymousMessage;
+import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.Message;
 import me.looouiiis.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class MessageServiceImpl implements MessageService {
                     message.setContent(sb.toString());
                     br.close();
                 } catch (IOException e) {
+                    message.setContent("系統文件出問題了，抱歉");
                     e.printStackTrace();
                 }
             }
@@ -63,6 +65,7 @@ public class MessageServiceImpl implements MessageService {
                     message.setContent(sb.toString());
                     br.close();
                 } catch (IOException e) {
+                    message.setContent("系統文件出問題了，抱歉");
                     e.printStackTrace();
                 }
             }
@@ -71,24 +74,38 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean commitAnoMessage(String mac, String content) {
+    public String commitAnoMessage(String mac, String content) {
         if(messageDao.getAnoIdByMac(mac) == null){
             messageDao.createAnoAccount(mac);
         }
         int id = messageDao.getAnoIdByMac(mac);
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContext(null);
         if (content.length() > 100) {
-            String path = "./Ano/Msg/" + id + "/";
+            String path = "../AllMsg/Ano/Msg/" + id + "/";
             String filePath = contentHandle(path, content);
-            if ("".equals(filePath))
-                return false;
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return JSON.toJSONString(ret);
+            }
             message.setContent(filePath);
-        } else
+        } else {
             message.setContent(content);
+        }
         message.setLocal(content.length() > 100);
         message.setAnoId(id);
-        return messageDao.commitAnoMessage(message) != 0;
+        if(messageDao.commitAnoMessage(message) != 0){
+            ret.setStatus(true);
+            ret.setDescription("Success");
+        }
+        else{
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return JSON.toJSONString(ret);
     }
 
     @Override
@@ -96,7 +113,7 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
         message.setDate(new Date());
         if (content.length() > 100) {
-            String path = "./Usr/Msg/" + id + "/";
+            String path = "../AllMsg/Usr/Msg/" + id + "/";
             String filePath = contentHandle(path, content);
             if ("".equals(filePath))
                 return false;
@@ -109,20 +126,33 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean commitAnoReply(int id, String content) {
+    public String commitAnoReply(int id, String content) {
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContext(null);
         if (content.length() > 100) {
-            String path = "./Ano/Rep/" + id + "/";
+            String path = "../AllMsg/Ano/Rep/" + id + "/";
             String filePath = contentHandle(path, content);
-            if ("".equals(filePath))
-                return false;
+            if ("".equals(filePath)){
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return JSON.toJSONString(ret);
+            }
             message.setContent(filePath);
         } else
             message.setContent(content);
         message.setLocal(content.length() > 100);
         message.setAnoId(id);
-        return messageDao.commitAnoReply(message) != 0;
+        if(messageDao.commitAnoReply(message) != 0){
+            ret.setStatus(true);
+            ret.setDescription("Success");
+        }
+        else{
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return JSON.toJSONString(ret);
     }
 
     @Override
@@ -130,7 +160,7 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
         message.setDate(new Date());
         if (content.length() > 100) {
-            String path = "./Usr/Rep/" + id + "/";
+            String path = "../AllMsg/Usr/Rep/" + id + "/";
             String filePath = contentHandle(path, content);
             if ("".equals(filePath))
                 return false;

@@ -1,12 +1,11 @@
 package me.looouiiis.controller.interceptor;
 
 import com.alibaba.fastjson2.JSON;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import me.looouiiis.pojo.JsonContentReturn;
+import me.looouiiis.service.MessageService;
 import me.looouiiis.service.UserService;
-import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,10 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
+
 @Component
-public class IdParseInterceptor implements HandlerInterceptor {
+public class ParseInterceptor implements HandlerInterceptor {
+    private MessageService messageService;
     private UserService userService;
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -30,7 +34,12 @@ public class IdParseInterceptor implements HandlerInterceptor {
         select.setStatus(false);
         select.setContext(null);
         if (token != null && !"".equals(token)) {
-            int id = userService.checkToken(token);
+            if(userService.checkIsOutdated(token)){
+                response.setStatus(302);
+                response.setHeader("Location", "/MyWeb/pages/Login.html");
+                return false;
+            }
+            Integer id = userService.checkToken(token);
             if (id != -1) {
                 request.setAttribute("usrId",id);
                 return true;
@@ -42,11 +51,18 @@ public class IdParseInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
+        else{
+            request.setAttribute("usrId",null);
+        }
         String mac = request.getParameter("mac");
         if(mac != null && !"".equals(mac)){
-
+            Integer id = messageService.getAnoIdByMac(mac);
+            request.setAttribute("anoId", id);
         }
-        return false;
+        else {
+            request.setAttribute("anoId",null);
+        }
+        return true;
     }
 
     @Override

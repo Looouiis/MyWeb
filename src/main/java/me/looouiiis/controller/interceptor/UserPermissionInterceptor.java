@@ -24,28 +24,34 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getParameter("token");
-        JsonContentReturn select = new JsonContentReturn();
-        select.setStatus(false);
-        select.setContext(null);
-        if (token != null && !"".equals(token)) {
-            int id = userService.checkToken(token);
-            if (id != -1) {
-                if (userService.checkPermission(id)) {
-                    return true;
-                } else {
-                    select.setDescription("Permission Denied");
-                }
-            } else {
-                select.setDescription("Token cannot be trusted");
-            }
+//        String token = request.getParameter("token");
+//        JsonContentReturn select = new JsonContentReturn();
+//        select.setStatus(false);
+//        select.setContext(null);
+//        if (token != null && !"".equals(token)) {
+//            int id = userService.checkToken(token);
+//            if (id != -1) {
+//                if (userService.checkPermission(id)) {
+//                    return true;
+//                } else {
+//                    select.setDescription("Permission Denied");
+//                }
+//            } else {
+//                select.setDescription("Token cannot be trusted");
+//            }
+//        } else {
+//            select.setDescription("Token cannot be null");
+//        }
+//        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+//        writer.write(JSON.toJSONString(select));
+//        writer.close();
+        Integer id = (Integer) request.getAttribute("usrId");
+        if (userService.checkPermission(id)) {
+            request.setAttribute("isMe", true);
         } else {
-            select.setDescription("Token cannot be null");
+            request.setAttribute("isMe", false);
         }
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-        writer.write(JSON.toJSONString(select));
-        writer.close();
-        return false;
+        return true;
     }
 
     @Override

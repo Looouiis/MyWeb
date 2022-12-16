@@ -1,5 +1,6 @@
 package me.looouiiis.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,9 +46,15 @@ public class Account {
     }
     @RequestMapping(value = "/manage", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String manage(){
-        String res = service.selectAll();
-        return res;
+    public String manage(HttpServletRequest request){
+        boolean isMe = (boolean) request.getAttribute("isMe");
+        if(isMe) {
+            String res = service.selectAll();
+            return res;
+        }
+        else{
+            return "{\"description\":\"Permission Denied\",\"status\":false}";
+        }
     }
     @RequestMapping(value = "/test")
     @ResponseBody

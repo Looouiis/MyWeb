@@ -23,8 +23,16 @@ public class MessageServiceImpl implements MessageService {
     private MessageDao messageDao;
 
     @Override
-    public String getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
-        Integer id = messageDao.getAnoIdByMac(mac);
+    public Integer getAnoIdByMac(String mac) {
+        return messageDao.getAnoIdByMac(mac);
+    }
+
+    @Override
+    public List<AnonymousMessage> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
+        Integer id = getAnoIdByMac(mac);
+        if(id == null){
+            id = 0;
+        }
         List<AnonymousMessage> messages = messageDao.selectAnoMessageById(id, start, num);
         if(me)
             deleteMyAnoUnread(id);
@@ -48,11 +56,11 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-        return JSON.toJSONString(messages);
+        return messages;
     }
 
     @Override
-    public String getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
+    public List<Message> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
         List<Message> messages = messageDao.selectMessageById(id, start, num);
         if(me)
             deleteMyUsrUnread(id);
@@ -76,11 +84,11 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-        return JSON.toJSONString(messages);
+        return messages;
     }
 
     @Override
-    public String commitAnoMessage(String mac, String content) {
+    public JsonContentReturn commitAnoMessage(String mac, String content) {
         if(messageDao.getAnoIdByMac(mac) == null){
             messageDao.createAnoAccount(mac);
         }
@@ -95,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
             if ("".equals(filePath)) {
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
-                return JSON.toJSONString(ret);
+                return ret;
             }
             message.setContent(filePath);
         } else {
@@ -112,11 +120,11 @@ public class MessageServiceImpl implements MessageService {
             ret.setStatus(false);
             ret.setDescription("Insert affect 0 rows");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String commitMessage(int id, String content) {
+    public JsonContentReturn commitMessage(int id, String content) {
         Message message = new Message();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
@@ -127,7 +135,7 @@ public class MessageServiceImpl implements MessageService {
             if ("".equals(filePath)) {
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
-                return JSON.toJSONString(ret);
+                return ret;
             }
             message.setContent(filePath);
         } else {
@@ -144,11 +152,11 @@ public class MessageServiceImpl implements MessageService {
             ret.setStatus(false);
             ret.setDescription("Insert affect 0 rows");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String commitAnoReply(int id, String content) {
+    public JsonContentReturn commitAnoReply(int id, String content) {
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
@@ -159,7 +167,7 @@ public class MessageServiceImpl implements MessageService {
             if ("".equals(filePath)){
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
-                return JSON.toJSONString(ret);
+                return ret;
             }
             message.setContent(filePath);
         } else
@@ -175,11 +183,11 @@ public class MessageServiceImpl implements MessageService {
             ret.setStatus(false);
             ret.setDescription("Insert affect 0 rows");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String commitReply(int id, String content) {
+    public JsonContentReturn commitReply(int id, String content) {
         Message message = new Message();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
@@ -190,7 +198,7 @@ public class MessageServiceImpl implements MessageService {
             if ("".equals(filePath)){
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
-                return JSON.toJSONString(ret);
+                return ret;
             }
             message.setContent(filePath);
         } else
@@ -206,7 +214,7 @@ public class MessageServiceImpl implements MessageService {
             ret.setStatus(false);
             ret.setDescription("Insert affect 0 rows");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
@@ -268,12 +276,12 @@ public class MessageServiceImpl implements MessageService {
         return filePath;
     }
     @Override
-    public String addMyAnoUnread(int anoId) {
+    public JsonContentReturn addMyAnoUnread(int anoId) {
         return addMyAnoUnread(anoId, null);
     }
 
     @Override
-    public String addMyAnoUnread(int anoId, Integer num) {
+    public JsonContentReturn addMyAnoUnread(int anoId, Integer num) {
         MyUnread check = messageDao.checkAnoExist(anoId);
         boolean flag;
         if(check == null){
@@ -288,15 +296,15 @@ public class MessageServiceImpl implements MessageService {
         JsonContentReturn ret = new JsonContentReturn();
         ret.setDescription("addMyAnoUnread");
         ret.setStatus(flag);
-        return JSON.toJSONString(ret);
+        return ret;
     }
     @Override
-    public String addMyUsrUnread(int usrId) {
+    public JsonContentReturn addMyUsrUnread(int usrId) {
         return addMyUsrUnread(usrId, null);
     }
 
     @Override
-    public String addMyUsrUnread(int usrId, Integer num) {
+    public JsonContentReturn addMyUsrUnread(int usrId, Integer num) {
         MyUnread check = messageDao.checkAnoExist(usrId);
         boolean flag;
         if(check == null){
@@ -311,21 +319,21 @@ public class MessageServiceImpl implements MessageService {
         JsonContentReturn ret = new JsonContentReturn();
         ret.setDescription("addMyUnread");
         ret.setStatus(flag);
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String checkMyUnread() {
+    public List<MyUnread> checkMyUnread() {
         List<MyUnread> myUnread = messageDao.checkMyUnread();
-        return JSON.toJSONString(myUnread);
+        return myUnread;
     }
     @Override
-    public String addAnoUnread(int anoId) {
+    public JsonContentReturn addAnoUnread(int anoId) {
         return addAnoUnread(anoId, null);
     }
 
     @Override
-    public String addAnoUnread(int anoId, Integer num) {
+    public JsonContentReturn addAnoUnread(int anoId, Integer num) {
         AnoUnread check = messageDao.checkAnoUnread(anoId);
         boolean flag;
         if(check == null){
@@ -340,21 +348,21 @@ public class MessageServiceImpl implements MessageService {
         JsonContentReturn ret = new JsonContentReturn();
         ret.setDescription("addAnoUnread");
         ret.setStatus(flag);
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String checkAnoUnread(int anoId) {
+    public AnoUnread checkAnoUnread(int anoId) {
         AnoUnread anoUnread = messageDao.checkAnoUnread(anoId);
-        return JSON.toJSONString(anoUnread);
+        return anoUnread;
     }
     @Override
-    public String addUsrUnread(int usrId) {
+    public JsonContentReturn addUsrUnread(int usrId) {
         return addUsrUnread(usrId, null);
     }
 
     @Override
-    public String addUsrUnread(int usrId, Integer num) {
+    public JsonContentReturn addUsrUnread(int usrId, Integer num) {
         UsrUnread check = messageDao.checkUsrUnread(usrId);
         boolean flag;
         if(check == null){
@@ -369,13 +377,13 @@ public class MessageServiceImpl implements MessageService {
         JsonContentReturn ret = new JsonContentReturn();
         ret.setDescription("addUsrUnread");
         ret.setStatus(flag);
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
     @Override
-    public String checkUsrUnread(int usrId) {
+    public UsrUnread checkUsrUnread(int usrId) {
         UsrUnread usrUnread = messageDao.checkUsrUnread(usrId);
-        return JSON.toJSONString(usrUnread);
+        return usrUnread;
     }
 
     @Override

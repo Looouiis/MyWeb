@@ -1,24 +1,29 @@
 package me.looouiiis.service;
 
+import me.looouiiis.pojo.*;
+
+import java.util.List;
+
 public interface MessageService {
-    String getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
-    String getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
-    String commitAnoMessage(String mac, String content);
-    String commitMessage(int id, String content);
-    String commitAnoReply(int id, String content);
-    String commitReply(int id, String content);
+    Integer getAnoIdByMac(String mac);
+    List<AnonymousMessage> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
+    List<Message> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
+    JsonContentReturn commitAnoMessage(String mac, String content);
+    JsonContentReturn commitMessage(int id, String content);
+    JsonContentReturn commitAnoReply(int id, String content);
+    JsonContentReturn commitReply(int id, String content);
     void transformToUser(Integer anoId, Integer usrId);
-    String addMyAnoUnread(int anoId);
-    String addMyAnoUnread(int anoId, Integer num);
-    String addMyUsrUnread(int usrId);
-    String addMyUsrUnread(int usrId,Integer num);
-    String checkMyUnread();
-    String addAnoUnread(int anoId);
-    String addAnoUnread(int anoId, Integer num);
-    String checkAnoUnread(int anoId);
-    String addUsrUnread(int usrId);
-    String addUsrUnread(int usrId, Integer num);
-    String checkUsrUnread(int usrId);
+    JsonContentReturn addMyAnoUnread(int anoId);
+    JsonContentReturn addMyAnoUnread(int anoId, Integer num);
+    JsonContentReturn addMyUsrUnread(int usrId);
+    JsonContentReturn addMyUsrUnread(int usrId,Integer num);
+    List<MyUnread> checkMyUnread();
+    JsonContentReturn addAnoUnread(int anoId);
+    JsonContentReturn addAnoUnread(int anoId, Integer num);
+    AnoUnread checkAnoUnread(int anoId);
+    JsonContentReturn addUsrUnread(int usrId);
+    JsonContentReturn addUsrUnread(int usrId, Integer num);
+    UsrUnread checkUsrUnread(int usrId);
     void deleteMyAnoUnread(int anoId);
     void deleteMyUsrUnread(int usrId);
     void deleteAnoUnread(int anoId);

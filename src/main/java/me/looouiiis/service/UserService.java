@@ -10,6 +10,7 @@ public interface UserService {
     String selectAll();
     String close(String username, String password);
     String update(int id, String username, String password, boolean isMe, boolean gender);
-    boolean checkPermission(int id);
+    boolean checkPermission(Integer id);
     int checkToken(String token);
+    boolean checkIsOutdated(String token);
 }

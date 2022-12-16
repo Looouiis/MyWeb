@@ -11,6 +11,7 @@ import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -125,7 +126,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPermission(int id) {
+    public boolean checkPermission(Integer id) {
+        if(id == null){
+            return false;
+        }
         User user = accountDao.selectById(id);
         return user.getIsMe();
     }
@@ -140,5 +144,14 @@ public class UserServiceImpl implements UserService {
             return -1;
         }
     }
-}
 
+    @Override
+    public boolean checkIsOutdated(String token) {
+        HashMap<String, Object> verify = TokenOperator.verify(token);
+        if((boolean) verify.get("trusted")){
+            Claims jws = (Claims) verify.get("jws");
+            return new Date().after(jws.getExpiration());
+        }
+        return true;
+    }
+}

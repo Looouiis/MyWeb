@@ -77,4 +77,7 @@ public interface MessageDao {
     Integer deleteAnoUnread(@Param("anoId") int anoId);
     @Delete("delete from unread_for_usr where usr_id = #{usrId}")
     Integer deleteUsrUnread(@Param("usrId") int usrId);
+
+    @Delete("delete from anonymous_users where id = #{id}")
+    Integer deleteAnoUsr(@Param("id") int id);
 }

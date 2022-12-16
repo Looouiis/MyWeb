@@ -210,10 +210,47 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void transformToUser(int anoId, int usrId) {
+    public void transformToUser(Integer anoId, Integer usrId) {
         List<AnonymousMessage> messages = messageDao.selectAnoMessageById(anoId,null,null);
+        for (AnonymousMessage message : messages) {
+            if(message.isLocal()){
+                String filePath = message.getContent();
+                String targetPath = filePath.replace("Ano","Usr").replace("/"+anoId+"/","/"+usrId+"/");
+                try {
+                    File path = new File(targetPath.substring(0,targetPath.lastIndexOf("/")));
+                    path.mkdirs();
+                    BufferedReader br = new BufferedReader(new FileReader(filePath));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(targetPath));
+                    StringBuilder sb = new StringBuilder();
+                    String tmp = br.readLine();
+                    sb.append(tmp);
+                    while((tmp = br.readLine()) != null){
+                        sb.append("\n").append(tmp);
+                    }
+                    bw.write(sb.toString());
+                    bw.close();
+                    br.close();
+                    File old = new File(filePath);
+                    old.delete();
+                    message.setContent(targetPath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+        }
+        new File("../AllMsg/Ano/Msg/"+anoId).delete();
+        new File("../AllMsg/Ano/Rep/"+anoId).delete();
+        AnoUnread anoUnread = messageDao.checkAnoUnread(anoId);
+        int anoNum = anoUnread.getNum();
+        addUsrUnread(usrId,anoNum);
+        MyUnread myUnread = messageDao.checkAnoExist(anoId);
+        int myNum = myUnread.getNum();
+        addMyUsrUnread(usrId,myNum);
         messageDao.insertFromAno(messages,usrId);
+        messageDao.deleteAnoUnread(anoId);
+        messageDao.deleteMyAnoUnread(anoId);
         messageDao.deleteAnoMsgById(anoId);
+        messageDao.deleteAnoUsr(anoId);
     }
     String contentHandle(String path, String content){
         File dir = new File(path);
@@ -230,16 +267,22 @@ public class MessageServiceImpl implements MessageService {
         }
         return filePath;
     }
-
     @Override
     public String addMyAnoUnread(int anoId) {
+        return addMyAnoUnread(anoId, null);
+    }
+
+    @Override
+    public String addMyAnoUnread(int anoId, Integer num) {
         MyUnread check = messageDao.checkAnoExist(anoId);
         boolean flag;
         if(check == null){
             flag = (messageDao.insertMyAnoUnread(anoId, 1) != 0);
         }
         else{
-            int num = check.getNum();
+            if (num == null){
+                num = check.getNum();
+            }
             flag = (messageDao.updateMyAnoUnread(anoId, num+1) != 0);
         }
         JsonContentReturn ret = new JsonContentReturn();
@@ -247,16 +290,22 @@ public class MessageServiceImpl implements MessageService {
         ret.setStatus(flag);
         return JSON.toJSONString(ret);
     }
-
     @Override
     public String addMyUsrUnread(int usrId) {
+        return addMyUsrUnread(usrId, null);
+    }
+
+    @Override
+    public String addMyUsrUnread(int usrId, Integer num) {
         MyUnread check = messageDao.checkAnoExist(usrId);
         boolean flag;
         if(check == null){
             flag = (messageDao.insertMyUsrUnread(usrId, 1) != 0);
         }
         else{
-            int num = check.getNum();
+            if (num == null){
+                num = check.getNum();
+            }
             flag = (messageDao.updateMyUsrUnread(usrId, num+1) != 0);
         }
         JsonContentReturn ret = new JsonContentReturn();
@@ -270,16 +319,22 @@ public class MessageServiceImpl implements MessageService {
         List<MyUnread> myUnread = messageDao.checkMyUnread();
         return JSON.toJSONString(myUnread);
     }
-
     @Override
     public String addAnoUnread(int anoId) {
+        return addAnoUnread(anoId, null);
+    }
+
+    @Override
+    public String addAnoUnread(int anoId, Integer num) {
         AnoUnread check = messageDao.checkAnoUnread(anoId);
         boolean flag;
         if(check == null){
             flag = (messageDao.insertAnoUnread(anoId, 1) != 0);
         }
         else{
-            int num = check.getNum();
+            if (num == null){
+                num = check.getNum();
+            }
             flag = (messageDao.updateAnoUnread(anoId, num+1) != 0);
         }
         JsonContentReturn ret = new JsonContentReturn();
@@ -293,16 +348,22 @@ public class MessageServiceImpl implements MessageService {
         AnoUnread anoUnread = messageDao.checkAnoUnread(anoId);
         return JSON.toJSONString(anoUnread);
     }
-
     @Override
     public String addUsrUnread(int usrId) {
+        return addUsrUnread(usrId, null);
+    }
+
+    @Override
+    public String addUsrUnread(int usrId, Integer num) {
         UsrUnread check = messageDao.checkUsrUnread(usrId);
         boolean flag;
         if(check == null){
             flag = (messageDao.insertUsrUnread(usrId, 1) != 0);
         }
         else{
-            int num = check.getNum();
+            if (num == null){
+                num = check.getNum();
+            }
             flag = (messageDao.updateUsrUnread(usrId, num+1) != 0);
         }
         JsonContentReturn ret = new JsonContentReturn();

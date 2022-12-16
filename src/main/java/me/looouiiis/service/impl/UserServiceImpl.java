@@ -63,6 +63,8 @@ public class UserServiceImpl implements UserService {
     public String close(String username, String password) {
         User user = accountDao.selectByUsername(username);
         int id = user.getId();
+        accountDao.deleteFromMyUnread(id);
+        accountDao.deleteFromUsrUnread(id);
         accountDao.deleteFromMessage(id);
         int res = accountDao.delete(username, password);
         JsonAccountStatus status = new JsonAccountStatus();
@@ -133,8 +135,7 @@ public class UserServiceImpl implements UserService {
         HashMap<String, Object> verify = TokenOperator.verify(token);
         if ((boolean) verify.get("trusted")) {
             Claims jws = (Claims) verify.get("jws");
-            int id = (int) jws.get("id");
-            return id;
+            return (int) jws.get("id");
         } else {
             return -1;
         }

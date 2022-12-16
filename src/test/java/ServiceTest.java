@@ -36,7 +36,7 @@ public class ServiceTest {
     @Test
     public void messageTest() throws IOException {
         String xczowf = "asdf这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度\n十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试啊";
-        System.out.println(messageService.commitReply(2, xczowf));
+//        System.out.println(messageService.commitReply(2, xczowf));
 //        File dir = new File("D:/a/b/c");
 //        dir.mkdirs();
 //        BufferedWriter bw = new BufferedWriter(new FileWriter("D:/a/b/c/a.txt"));
@@ -46,5 +46,9 @@ public class ServiceTest {
     @Test
     public void getMessageTest() throws IOException {
         System.out.println(messageService.getCommunicationByUserId(2, null, null, true));
+    }
+    @Test
+    public void transformTest(){
+        messageService.transformToUser(1,2);
     }
 }

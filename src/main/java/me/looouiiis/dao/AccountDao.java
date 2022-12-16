@@ -22,4 +22,8 @@ public interface AccountDao {
     int update(User user);
     @Delete("delete from message where user_id = #{userId}")
     int deleteFromMessage(@Param("userId") int userId);
+    @Delete("delete from unread_for_me where usr_id = #{userId}")
+    int deleteFromMyUnread(@Param("userId") int userId);
+    @Delete("delete from unread_for_usr where usr_id = #{userId}")
+    int deleteFromUsrUnread(@Param("userId") int userId);
 }

@@ -31,7 +31,7 @@ public class ServiceTest {
     }
     @Test
     public void getAnoMessageTest() throws IOException {
-        System.out.println(messageService.getAnoCommunicationByMac("12:34:56:78:89:12", null, null));
+        System.out.println(messageService.getAnoCommunicationByMac("12:34:56:78:89:12", null, null, true));
     }
     @Test
     public void messageTest() throws IOException {
@@ -45,6 +45,6 @@ public class ServiceTest {
     }
     @Test
     public void getMessageTest() throws IOException {
-        System.out.println(messageService.getCommunicationByUserId(2, null, null));
+        System.out.println(messageService.getCommunicationByUserId(2, null, null, true));
     }
 }

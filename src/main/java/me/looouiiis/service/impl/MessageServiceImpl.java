@@ -2,9 +2,7 @@ package me.looouiiis.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import me.looouiiis.dao.MessageDao;
-import me.looouiiis.pojo.AnonymousMessage;
-import me.looouiiis.pojo.JsonContentReturn;
-import me.looouiiis.pojo.Message;
+import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +23,13 @@ public class MessageServiceImpl implements MessageService {
     private MessageDao messageDao;
 
     @Override
-    public String getAnoCommunicationByMac(String mac, Integer start, Integer num) {
+    public String getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
         Integer id = messageDao.getAnoIdByMac(mac);
         List<AnonymousMessage> messages = messageDao.selectAnoMessageById(id, start, num);
+        if(me)
+            deleteMyAnoUnread(id);
+        else
+            deleteAnoUnread(id);
         for (AnonymousMessage message : messages) {
             if(message.isLocal()){
                 try {
@@ -50,8 +52,12 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public String getCommunicationByUserId(Integer id, Integer start, Integer num) {
+    public String getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
         List<Message> messages = messageDao.selectMessageById(id, start, num);
+        if(me)
+            deleteMyUsrUnread(id);
+        else
+            deleteUsrUnread(id);
         for (Message message : messages) {
             if(message.isLocal()){
                 try {
@@ -100,6 +106,7 @@ public class MessageServiceImpl implements MessageService {
         if(messageDao.commitAnoMessage(message) != 0){
             ret.setStatus(true);
             ret.setDescription("Success");
+            addMyAnoUnread(id);
         }
         else{
             ret.setStatus(false);
@@ -147,6 +154,7 @@ public class MessageServiceImpl implements MessageService {
         if(messageDao.commitAnoReply(message) != 0){
             ret.setStatus(true);
             ret.setDescription("Success");
+            addAnoUnread(id);
         }
         else{
             ret.setStatus(false);
@@ -192,6 +200,112 @@ public class MessageServiceImpl implements MessageService {
             return "";
         }
         return filePath;
+    }
+
+    @Override
+    public String addMyAnoUnread(int anoId) {
+        MyUnread check = messageDao.checkAnoExist(anoId);
+        boolean flag;
+        if(check == null){
+            flag = (messageDao.insertMyAnoUnread(anoId, 1) != 0);
+        }
+        else{
+            int num = check.getNum();
+            flag = (messageDao.updateMyAnoUnread(anoId, num+1) != 0);
+        }
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setDescription("addMyAnoUnread");
+        ret.setStatus(flag);
+        return JSON.toJSONString(ret);
+    }
+
+    @Override
+    public String addMyUsrUnread(int usrId) {
+        MyUnread check = messageDao.checkAnoExist(usrId);
+        boolean flag;
+        if(check == null){
+            flag = (messageDao.insertMyUsrUnread(usrId, 1) != 0);
+        }
+        else{
+            int num = check.getNum();
+            flag = (messageDao.updateMyUsrUnread(usrId, num+1) != 0);
+        }
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setDescription("addMyUnread");
+        ret.setStatus(flag);
+        return JSON.toJSONString(ret);
+    }
+
+    @Override
+    public String checkMyUnread() {
+        List<MyUnread> myUnread = messageDao.checkMyUnread();
+        return JSON.toJSONString(myUnread);
+    }
+
+    @Override
+    public String addAnoUnread(int anoId) {
+        AnoUnread check = messageDao.checkAnoUnread(anoId);
+        boolean flag;
+        if(check == null){
+            flag = (messageDao.insertAnoUnread(anoId, 1) != 0);
+        }
+        else{
+            int num = check.getNum();
+            flag = (messageDao.updateAnoUnread(anoId, num+1) != 0);
+        }
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setDescription("addAnoUnread");
+        ret.setStatus(flag);
+        return JSON.toJSONString(ret);
+    }
+
+    @Override
+    public String checkAnoUnread(int anoId) {
+        AnoUnread anoUnread = messageDao.checkAnoUnread(anoId);
+        return JSON.toJSONString(anoUnread);
+    }
+
+    @Override
+    public String addUsrUnread(int usrId) {
+        UsrUnread check = messageDao.checkUsrUnread(usrId);
+        boolean flag;
+        if(check == null){
+            flag = (messageDao.insertUsrUnread(usrId, 1) != 0);
+        }
+        else{
+            int num = check.getNum();
+            flag = (messageDao.updateUsrUnread(usrId, num+1) != 0);
+        }
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setDescription("addUsrUnread");
+        ret.setStatus(flag);
+        return JSON.toJSONString(ret);
+    }
+
+    @Override
+    public String checkUsrUnread(int usrId) {
+        UsrUnread usrUnread = messageDao.checkUsrUnread(usrId);
+        return JSON.toJSONString(usrUnread);
+    }
+
+    @Override
+    public void deleteMyAnoUnread(int anoId) {
+        messageDao.deleteMyAnoUnread(anoId);
+    }
+
+    @Override
+    public void deleteMyUsrUnread(int usrId) {
+        messageDao.deleteMyUsrUnread(usrId);
+    }
+
+    @Override
+    public void deleteAnoUnread(int anoId) {
+        messageDao.deleteAnoUnread(anoId);
+    }
+
+    @Override
+    public void deleteUsrUnread(int usrId) {
+        messageDao.deleteUsrUnread(usrId);
     }
 }
 

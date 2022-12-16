@@ -19,14 +19,14 @@ public class Message {
 
     @GetMapping(value = "/anonymous/communication", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String getAnoCommunication(String mac, Integer page, Integer num) {
+    public String getAnoCommunication(String mac, Integer page, Integer num, boolean me) {
         Integer start = null;
         if (page != null && num != null && page > 0) {
             start = num * (page - 1);
         } else if (page == null && num != null) {
             start = 0;
         }
-        String res = service.getAnoCommunicationByMac(mac, start, num);
+        String res = service.getAnoCommunicationByMac(mac, start, num, me);
         return res;
     }
 

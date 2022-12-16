@@ -86,4 +86,8 @@ public class DaoTest {
     public void nullMacTest(){
         System.out.println(messageDao.getAnoIdByMac("123"));
     }
+    @Test
+    public void checkIsNull(){
+        System.out.println(messageDao.checkAnoExist(2));
+    }
 }

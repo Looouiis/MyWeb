@@ -35,8 +35,8 @@ public class ServiceTest {
     }
     @Test
     public void messageTest() throws IOException {
-        String xczowf = "这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度\n十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试啊";
-        messageService.commitMessage(2,xczowf);
+        String xczowf = "asdf这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度\n十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试这是长度十个字的测试啊";
+        System.out.println(messageService.commitReply(2, xczowf));
 //        File dir = new File("D:/a/b/c");
 //        dir.mkdirs();
 //        BufferedWriter bw = new BufferedWriter(new FileWriter("D:/a/b/c/a.txt"));

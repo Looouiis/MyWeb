@@ -116,20 +116,35 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean commitMessage(int id, String content) {
+    public String commitMessage(int id, String content) {
         Message message = new Message();
         message.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContext(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Usr/Msg/" + id + "/";
             String filePath = contentHandle(path, content);
-            if ("".equals(filePath))
-                return false;
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return JSON.toJSONString(ret);
+            }
             message.setContent(filePath);
-        } else
+        } else {
             message.setContent(content);
+        }
         message.setLocal(content.length() > 100);
         message.setUserId(id);
-        return messageDao.commitMessage(message) != 0;
+        if(messageDao.commitMessage(message) != 0){
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addMyUsrUnread(id);
+        }
+        else{
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return JSON.toJSONString(ret);
     }
 
     @Override
@@ -164,20 +179,34 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean commitReply(int id, String content) {
+    public String commitReply(int id, String content) {
         Message message = new Message();
         message.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContext(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Usr/Rep/" + id + "/";
             String filePath = contentHandle(path, content);
-            if ("".equals(filePath))
-                return false;
+            if ("".equals(filePath)){
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return JSON.toJSONString(ret);
+            }
             message.setContent(filePath);
         } else
             message.setContent(content);
         message.setLocal(content.length() > 100);
         message.setUserId(id);
-        return messageDao.commitMessage(message) != 0;
+        if(messageDao.commitReply(message) != 0){
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addUsrUnread(id);
+        }
+        else{
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return JSON.toJSONString(ret);
     }
 
     @Override

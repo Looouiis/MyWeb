@@ -4,9 +4,9 @@ public interface MessageService {
     String getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
     String getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
     String  commitAnoMessage(String mac, String content);
-    boolean commitMessage(int id, String content);
+    String commitMessage(int id, String content);
     String commitAnoReply(int id, String content);
-    boolean commitReply(int id, String content);
+    String commitReply(int id, String content);
     void transformToUser(int anoId, int usrId);
     String addMyAnoUnread(int anoId);
     String addMyUsrUnread(int usrId);

@@ -90,4 +90,9 @@ public class DaoTest {
     public void checkIsNull(){
         System.out.println(messageDao.checkAnoExist(2));
     }
+
+    @Test
+    public void getCount(){
+        System.out.println(messageDao.getAnoMessageTotalNum(0));
+    }
 }

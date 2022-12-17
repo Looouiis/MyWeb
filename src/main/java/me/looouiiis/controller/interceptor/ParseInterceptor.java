@@ -32,7 +32,7 @@ public class ParseInterceptor implements HandlerInterceptor {
         String token = request.getParameter("token");
         JsonContentReturn select = new JsonContentReturn();
         select.setStatus(false);
-        select.setContext(null);
+        select.setContent(null);
         if (token != null && !"".equals(token)) {
             if(userService.checkIsOutdated(token)){
                 response.setStatus(302);

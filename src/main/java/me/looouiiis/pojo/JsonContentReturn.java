@@ -3,6 +3,8 @@ package me.looouiiis.pojo;
 public class JsonContentReturn {
     private boolean status;
     private String description;
+    private Object content;
+    private int totalCount;
 
     public boolean isStatus() {
         return status;
@@ -20,13 +22,19 @@ public class JsonContentReturn {
         this.description = description;
     }
 
-    public Object getContext() {
-        return context;
+    public Object getContent() {
+        return content;
     }
 
-    public void setContext(Object context) {
-        this.context = context;
+    public void setContent(Object content) {
+        this.content = content;
     }
 
-    private Object context;
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
 }

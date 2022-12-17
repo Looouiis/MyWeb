@@ -1,4 +1,5 @@
 import me.looouiiis.config.BaseConfig;
+import me.looouiiis.service.AnnounceService;
 import me.looouiiis.service.MessageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,12 @@ import java.io.IOException;
 @ContextConfiguration(classes = BaseConfig.class)
 public class ServiceTest {
     private MessageService messageService;
+    private AnnounceService announceService;
+    @Autowired
+    public void setAnnounceService(AnnounceService announceService) {
+        this.announceService = announceService;
+    }
+
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
@@ -50,5 +57,9 @@ public class ServiceTest {
     @Test
     public void transformTest(){
         messageService.transformToUser(1,2);
+    }
+    @Test
+    public void insertTest(){
+        announceService.insert("123", null);
     }
 }

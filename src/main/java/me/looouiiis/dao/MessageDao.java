@@ -20,10 +20,13 @@ public interface MessageDao {
 
     //    @Select("select ano_id as anoId, comment, local, date from anonymous_message where ano_id = (select id from anonymous_users where mac = #{mac}) order by date DESC limit #{start},#{num}")
     List<AnonymousMessage> selectAnoMessageById(@Param("anoId") int anoId, @Param("start") Integer start, @Param("num") Integer num);
+    @Select("select count(content) from anonymous_message where ano_id = #{anoId}")
+    Integer getAnoMessageTotalNum(@Param("anoId") int anoId);
 
     //    @Select("select user_id as userId, comment, local, date from message where user_id = #{id} order by date DESC limit #{start},#{num}")
     List<Message> selectMessageById(@Param("id") int id, @Param("start") Integer start, @Param("num") Integer num);
-
+    @Select("select count(content) from message where user_id = #{usrId}")
+    Integer getUsrMessageTotalNum(@Param("usrId") int usrId);
     @Select("select id from anonymous_users where mac = #{mac}")
     Integer getAnoIdByMac(@Param("mac") String mac);
 

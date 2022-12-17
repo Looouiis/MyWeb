@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.looouiiis.dao.AnnounceDao">
+
+    <delete id="delete">
+        delete from announce where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="select" resultType="me.looouiiis.pojo.Announce">
+        select id, content, local, date from announce order by
+        date DESC
+        <if test="start != null or num != null">
+            limit
+            <if test="start != null">
+                #{start}
+            </if>
+            <if test="start == null">
+                0
+            </if>
+            <if test="num != null">
+                ,#{num}
+            </if>
+        </if>
+    </select>
+</mapper>

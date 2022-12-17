@@ -2,12 +2,13 @@ package me.looouiiis.service;
 
 import me.looouiiis.pojo.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface MessageService {
     Integer getAnoIdByMac(String mac);
-    List<AnonymousMessage> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
-    List<Message> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
+    HashMap<String, Object> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
+    HashMap<String, Object> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
     JsonContentReturn commitAnoMessage(String mac, String content);
     JsonContentReturn commitMessage(int id, String content);
     JsonContentReturn commitAnoReply(int id, String content);

@@ -1,21 +1,29 @@
 package me.looouiiis.pojo;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Announce {
-    String message;
-    boolean local;
-    String date;
+    private int id;
+    private String content;
+    private boolean local;
+    private String date;
 
-    public String getMessage() {
-        return message;
+    public int getId() {
+        return id;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public boolean isLocal() {
@@ -42,7 +50,8 @@ public class Announce {
     @Override
     public String toString() {
         return "Announce{" +
-                "message='" + message + '\'' +
+                "id=" + id +
+                ", content='" + content + '\'' +
                 ", local=" + local +
                 ", date='" + date + '\'' +
                 '}';

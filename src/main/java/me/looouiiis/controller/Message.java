@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -28,18 +29,18 @@ public class Message {
         if(isMe){
             List<MyUnread> res = service.checkMyUnread();
             if(res.size() == 0) {
-                ret.setContext(res);
+                ret.setContent(res);
                 ret.setDescription("Find nothing");
                 ret.setStatus(false);
             }
             else {
-                ret.setContext(res);
+                ret.setContent(res);
                 ret.setDescription("success");
                 ret.setStatus(true);
             }
         }
         else{
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("Permission denied");
         }
@@ -56,17 +57,20 @@ public class Message {
             start = 0;
         }
         boolean me = (boolean) request.getAttribute("isMe");
-        List<AnonymousMessage> res = service.getAnoCommunicationByMac(mac, start, num, me);
+        HashMap<String, Object> res = service.getAnoCommunicationByMac(mac, start, num, me);
         JsonContentReturn ret = new JsonContentReturn();
-        if(res.size() == 0) {
+        List<AnonymousMessage> messages = (List<AnonymousMessage>) res.get("messages");
+        if(messages.size() == 0) {
             ret.setStatus(false);
             ret.setDescription("Find nothing");
-            ret.setContext(res);
+            ret.setContent(null);
+            ret.setTotalCount((Integer) res.get("totalCount"));
         }
         else {
-            ret.setContext(res);
+            ret.setContent(messages);
             ret.setDescription("success");
             ret.setStatus(true);
+            ret.setTotalCount((Integer) res.get("totalCount"));
         }
         return JSON.toJSONString(ret);
     }
@@ -92,12 +96,12 @@ public class Message {
         JsonContentReturn ret = new JsonContentReturn();
         if(id != null){
             AnoUnread res = service.checkAnoUnread(id);
-            ret.setContext(res);
+            ret.setContent(res);
             ret.setDescription("success");
             ret.setStatus(true);
         }
         else{
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("Give me your mac first");
         }
@@ -108,7 +112,7 @@ public class Message {
     @ResponseBody
     public String getUsrCommunication(Integer page, Integer num, HttpServletRequest request) {
         Integer start = null;
-        Integer id = (int) request.getAttribute("usrId");
+        Integer id = (Integer) request.getAttribute("usrId");
         JsonContentReturn ret = new JsonContentReturn();
         if(id != null) {
             boolean me = (boolean) request.getAttribute("isMe");
@@ -117,13 +121,24 @@ public class Message {
             } else if (page == null && num != null) {
                 start = 0;
             }
-            List<me.looouiiis.pojo.Message> res = service.getCommunicationByUserId(id, start, num, me);
-            ret.setContext(JSON.toJSON(res));
-            ret.setStatus(true);
-            ret.setDescription("success");
+            HashMap<String, Object> res = service.getCommunicationByUserId(id, start, num, me);
+            List<me.looouiiis.pojo.Message> messages = (List<me.looouiiis.pojo.Message>) res.get("messages");
+            Integer totalCount = (Integer) res.get("totalCount");
+            if(messages.size() != 0) {
+                ret.setContent(messages);
+                ret.setStatus(true);
+                ret.setDescription("success");
+                ret.setTotalCount(totalCount);
+            }
+            else{
+                ret.setContent(null);
+                ret.setStatus(false);
+                ret.setDescription("failed");
+                ret.setTotalCount(totalCount);
+            }
         }
         else{
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
         }
@@ -140,7 +155,7 @@ public class Message {
         }
         else{
             JsonContentReturn ret = new JsonContentReturn();
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
             return JSON.toJSONString(ret);
@@ -156,9 +171,9 @@ public class Message {
         }
         else{
             JsonContentReturn ret = new JsonContentReturn();
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
-            ret.setDescription("It seems that you haven't determined sent to who");
+            ret.setDescription("It seems that you haven't determined who to send");
             return JSON.toJSONString(ret);
         }
     }
@@ -169,12 +184,12 @@ public class Message {
         JsonContentReturn ret = new JsonContentReturn();
         if(id != null){
             UsrUnread res = service.checkUsrUnread(id);
-            ret.setContext(res);
+            ret.setContent(res);
             ret.setDescription("success");
             ret.setStatus(true);
         }
         else{
-            ret.setContext(null);
+            ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
         }

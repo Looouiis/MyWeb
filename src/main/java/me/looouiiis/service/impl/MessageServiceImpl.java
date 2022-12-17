@@ -1,16 +1,15 @@
 package me.looouiiis.service.impl;
 
-import com.alibaba.fastjson2.JSON;
 import me.looouiiis.dao.MessageDao;
 import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
+import me.looouiiis.utils.ContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -28,11 +27,12 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<AnonymousMessage> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
+    public HashMap<String, Object> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
         Integer id = getAnoIdByMac(mac);
         if(id == null){
             id = 0;
         }
+        int totalCount = messageDao.getAnoMessageTotalNum(id);
         List<AnonymousMessage> messages = messageDao.selectAnoMessageById(id, start, num);
         if(me)
             deleteMyAnoUnread(id);
@@ -56,11 +56,15 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-        return messages;
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("totalCount",totalCount);
+        res.put("messages",messages);
+        return res;
     }
 
     @Override
-    public List<Message> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
+    public HashMap<String, Object> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
+        int totalCount = messageDao.getUsrMessageTotalNum(id);
         List<Message> messages = messageDao.selectMessageById(id, start, num);
         if(me)
             deleteMyUsrUnread(id);
@@ -84,7 +88,10 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-        return messages;
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("totalCount",totalCount);
+        res.put("messages",messages);
+        return res;
     }
 
     @Override
@@ -96,10 +103,10 @@ public class MessageServiceImpl implements MessageService {
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
-        ret.setContext(null);
+        ret.setContent(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Ano/Msg/" + id + "/";
-            String filePath = contentHandle(path, content);
+            String filePath = ContentHandler.handle(path, content);
             if ("".equals(filePath)) {
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
@@ -128,10 +135,10 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
-        ret.setContext(null);
+        ret.setContent(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Usr/Msg/" + id + "/";
-            String filePath = contentHandle(path, content);
+            String filePath = ContentHandler.handle(path, content);
             if ("".equals(filePath)) {
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
@@ -160,10 +167,10 @@ public class MessageServiceImpl implements MessageService {
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
-        ret.setContext(null);
+        ret.setContent(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Ano/Rep/" + id + "/";
-            String filePath = contentHandle(path, content);
+            String filePath = ContentHandler.handle(path, content);
             if ("".equals(filePath)){
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
@@ -191,10 +198,10 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
-        ret.setContext(null);
+        ret.setContent(null);
         if (content.length() > 100) {
             String path = "../AllMsg/Usr/Rep/" + id + "/";
-            String filePath = contentHandle(path, content);
+            String filePath = ContentHandler.handle(path, content);
             if ("".equals(filePath)){
                 ret.setStatus(false);
                 ret.setDescription("New file failed");
@@ -260,21 +267,21 @@ public class MessageServiceImpl implements MessageService {
         messageDao.deleteAnoMsgById(anoId);
         messageDao.deleteAnoUsr(anoId);
     }
-    String contentHandle(String path, String content){
-        File dir = new File(path);
-        dir.mkdirs();
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        String filePath = path + df.format(new Date()) + ".txt";
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-            bw.write(content);
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-        return filePath;
-    }
+//    String contentHandle(String path, String content){
+//        File dir = new File(path);
+//        dir.mkdirs();
+//        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+//        String filePath = path + df.format(new Date()) + ".txt";
+//        try {
+//            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+//            bw.write(content);
+//            bw.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "";
+//        }
+//        return filePath;
+//    }
     @Override
     public JsonContentReturn addMyAnoUnread(int anoId) {
         return addMyAnoUnread(anoId, null);

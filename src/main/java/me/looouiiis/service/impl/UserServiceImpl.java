@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String selectAll() {
         JsonContentReturn select = new JsonContentReturn();
-        select.setContext(JSON.toJSON(accountDao.selectAll()));
+        select.setContent(JSON.toJSON(accountDao.selectAll()));
         select.setStatus(true);
         select.setDescription("Success");
         return JSON.toJSONString(select);

@@ -23,14 +23,8 @@ public class Announce {
     }
     @PostMapping(value = "/announce" )
     @ResponseBody
-    public String postAnnounce(String content, Integer id, HttpServletRequest request){
+    public String postAnnounceWithPer(HttpServletRequest request, String content, Integer id){
         JsonContentReturn ret = new JsonContentReturn();
-        if(!(boolean) request.getAttribute("isMe")){
-            ret.setStatus(false);
-            ret.setContent(null);
-            ret.setDescription("Permission Denied");
-            return JSON.toJSONString(ret);
-        }
         Integer insert = announceService.insert(content, id);
         if(insert != null){
             ret.setStatus(true);
@@ -71,14 +65,8 @@ public class Announce {
     }
     @DeleteMapping(value= "/announce")
     @ResponseBody
-    public String deleteAnnounce(int[] ids, HttpServletRequest request){
+    public String deleteAnnounceWithPer(HttpServletRequest request, int[] ids){
         JsonContentReturn ret = new JsonContentReturn();
-        if(!(boolean) request.getAttribute("isMe")){
-            ret.setStatus(false);
-            ret.setContent(null);
-            ret.setDescription("Permission Denied");
-            return JSON.toJSONString(ret);
-        }
         Integer delete = announceService.delete(ids);
         if(delete != null) {
             ret.setDescription("success");

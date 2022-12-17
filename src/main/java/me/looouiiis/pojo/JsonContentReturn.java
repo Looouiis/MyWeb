@@ -4,7 +4,7 @@ public class JsonContentReturn {
     private boolean status;
     private String description;
     private Object content;
-    private int totalCount;
+    private Integer totalCount;
 
     public boolean isStatus() {
         return status;
@@ -30,7 +30,7 @@ public class JsonContentReturn {
         this.content = content;
     }
 
-    public int getTotalCount() {
+    public Integer getTotalCount() {
         return totalCount;
     }
 

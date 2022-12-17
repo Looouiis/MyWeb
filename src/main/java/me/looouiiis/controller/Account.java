@@ -28,37 +28,34 @@ public class Account {
 
     @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String register(String username, String password, boolean gender){
+    public String register(String username, String password, boolean gender) {
         String res = service.register(username, password, gender);
         return res;
     }
+
     @RequestMapping(value = "/close", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String close(String username, String password){
+    public String close(String username, String password) {
         String res = service.close(username, password);
         return res;
     }
+
     @RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String update(int id, String username, String password, boolean isMe, boolean gender){
+    public String update(int id, String username, String password, boolean isMe, boolean gender) {
         String res = service.update(id, username, password, isMe, gender);
         return res;
     }
+
     @RequestMapping(value = "/manage", produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String manage(HttpServletRequest request){
-        boolean isMe = (boolean) request.getAttribute("isMe");
-        if(isMe) {
-            String res = service.selectAll();
-            return res;
-        }
-        else{
-            return "{\"description\":\"Permission Denied\",\"status\":false}";
-        }
+    public String manageWithPer(HttpServletRequest request) {
+        return service.selectAll();
     }
+
     @RequestMapping(value = "/test")
     @ResponseBody
-    public String test(){
+    public String test() {
         return "张三";
     }
 }

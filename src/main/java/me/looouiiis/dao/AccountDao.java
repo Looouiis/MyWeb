@@ -1,6 +1,7 @@
 package me.looouiiis.dao;
 
 import me.looouiiis.pojo.User;
+import me.looouiiis.pojo.UserForUpdate;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public interface AccountDao {
     @Options(useGeneratedKeys = true,keyProperty = "id")
     int insert(User user);
     @Delete("delete from users where username = #{username} and password = #{password}")
-    int delete(@Param("username")String username, @Param("password")String password);
-    int update(User user);
+    int delete(User user);
+    @Select("select id from users where id = #{id} and password = #{oriPassword}")
+    User preUpdate(UserForUpdate user);
+    int update(UserForUpdate user);
     @Delete("delete from message where user_id = #{userId}")
     int deleteFromMessage(@Param("userId") int userId);
     @Delete("delete from unread_for_me where usr_id = #{userId}")

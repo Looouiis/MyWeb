@@ -24,8 +24,8 @@ public class InitConfig extends AbstractDispatcherServletInitializer {
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         AnnotationConfigWebApplicationContext IoC = new AnnotationConfigWebApplicationContext();
-        IoC.register(SpringMVCConfig.class);
-        return null;
+        IoC.register(SpringConfig.class);
+        return IoC;
     }
     @Override
     protected Filter[] getServletFilters() {

@@ -6,6 +6,7 @@ import me.looouiiis.dao.AccountDao;
 import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.JsonAccountStatus;
 import me.looouiiis.pojo.User;
+import me.looouiiis.pojo.UserForUpdate;
 import me.looouiiis.service.UserService;
 import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JsonAccountStatus login(String username, String password) {
-        User user = accountDao.selectByPassword(username, password);
+        User select = accountDao.selectByPassword(username, password);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("login");
-        if (user != null) {
-            status.setToken(TokenOperator.generate(user.getId()));
+        if (select != null) {
+            status.setToken(TokenOperator.generate(select.getId()));
             status.setStatus(true);
         } else {
             status.setToken("");
@@ -39,12 +40,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonAccountStatus register(String username, String password, boolean gender) {
-        User users = accountDao.selectByUsername(username);
+    public JsonAccountStatus register(User user) {
+        User users = accountDao.selectByUsername(user.getUsername());
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("register");
         if (users == null) {
-            User user = new User(0, username, password, false, gender);
+            user.setId(0);
+            user.setIsMe(false);
             int res = accountDao.insert(user);
             if (res != 0) {
                 status.setToken(TokenOperator.generate(user.getId()));
@@ -61,13 +63,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonAccountStatus close(String username, String password) {
-        User user = accountDao.selectByUsername(username);
-        int id = user.getId();
+    public JsonAccountStatus closeByPassword(User user) {
+        User select = accountDao.selectByUsername(user.getUsername());
+        int id = select.getId();
         accountDao.deleteFromMyUnread(id);
         accountDao.deleteFromUsrUnread(id);
         accountDao.deleteFromMessage(id);
-        int res = accountDao.delete(username, password);
+        int res = accountDao.delete(user);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("close");
         status.setToken("");
@@ -76,13 +78,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonAccountStatus update(int id, String username, String password, boolean isMe, boolean gender) {
-        User user = new User(id, username, password, isMe, gender);
-        int res = accountDao.update(user);
+    public JsonAccountStatus update(UserForUpdate user) {
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("update");
         status.setToken("");
-        status.setStatus(res != 0);
+        User select = accountDao.preUpdate(user);
+        if(select != null) {
+            int res = accountDao.update(user);
+            System.out.println(res);
+            status.setStatus(res != 0);
+        }
+        else{
+            System.out.println(select);
+            status.setStatus(false);
+        }
         return status;
     }
 

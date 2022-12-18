@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //SpringMVC的配置文件
 @Configuration
 @Import(CharSetConfig.class)
-@ComponentScan({"me.looouiiis.controller","me.looouiiis.config"})
+@ComponentScan({"me.looouiiis.controller"})
 @EnableWebMvc
 public class SpringMVCConfig {
 }

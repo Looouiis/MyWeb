@@ -1,4 +1,4 @@
-package me.looouiiis.controller.pageHandler;
+package me.looouiiis.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

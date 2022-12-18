@@ -1,4 +1,4 @@
-import me.looouiiis.config.BaseConfig;
+import me.looouiiis.config.SpringMVCConfig;
 import me.looouiiis.service.AnnounceService;
 import me.looouiiis.service.MessageService;
 import org.junit.Test;
@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseConfig.class)
+@ContextConfiguration(classes = SpringMVCConfig.class)
 public class ServiceTest {
     private MessageService messageService;
     private AnnounceService announceService;

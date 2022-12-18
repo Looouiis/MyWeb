@@ -1,4 +1,4 @@
-import me.looouiiis.config.BaseConfig;
+import me.looouiiis.config.SpringMVCConfig;
 import me.looouiiis.service.MessageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseConfig.class)
+@ContextConfiguration(classes = SpringMVCConfig.class)
 public class NormalTest {
     private MessageService messageService;
     @Autowired

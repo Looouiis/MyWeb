@@ -1,4 +1,4 @@
-import me.looouiiis.config.BaseConfig;
+import me.looouiiis.config.SpringMVCConfig;
 import me.looouiiis.dao.MessageDao;
 import me.looouiiis.pojo.AnonymousMessage;
 import me.looouiiis.pojo.Message;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseConfig.class)
+@ContextConfiguration(classes = SpringMVCConfig.class)
 public class DaoTest {
     private MessageDao messageDao;
     @Autowired

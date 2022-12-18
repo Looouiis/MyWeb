@@ -12,7 +12,7 @@ public class InitConfig extends AbstractDispatcherServletInitializer {
     @Override
     protected WebApplicationContext createServletApplicationContext() {
         AnnotationConfigWebApplicationContext webIoC = new AnnotationConfigWebApplicationContext();
-        webIoC.register(BaseConfig.class);
+        webIoC.register(SpringMVCConfig.class);
         return webIoC;
     }
     //获取SpringMVC处理的请求
@@ -23,6 +23,8 @@ public class InitConfig extends AbstractDispatcherServletInitializer {
     //加载Spring容器配置
     @Override
     protected WebApplicationContext createRootApplicationContext() {
+        AnnotationConfigWebApplicationContext IoC = new AnnotationConfigWebApplicationContext();
+        IoC.register(SpringMVCConfig.class);
         return null;
     }
     @Override

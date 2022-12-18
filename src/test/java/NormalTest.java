@@ -1,3 +1,4 @@
+import me.looouiiis.config.SpringConfig;
 import me.looouiiis.config.SpringMVCConfig;
 import me.looouiiis.service.MessageService;
 import org.junit.Test;
@@ -11,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SpringMVCConfig.class)
+@ContextConfiguration(classes = SpringConfig.class)
 public class NormalTest {
     private MessageService messageService;
     @Autowired
@@ -20,7 +21,7 @@ public class NormalTest {
     }
     @Test
     public void anoMessageTest() throws IOException {
-        String a = null;
+        String a = "777";
         Integer b = Integer.parseInt(a);
         System.out.println(b);
     }

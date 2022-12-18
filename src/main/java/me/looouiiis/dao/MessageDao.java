@@ -38,7 +38,7 @@ public interface MessageDao {
 
     @Delete("delete from message where user_id = #{id}")
     Integer deleteMsgById(@Param("id") int id);
-    @Insert("insert into anonymous_users(mac) values #{mac}")
+    @Insert("insert into anonymous_users(mac) values(#{mac})")
     Integer createAnoAccount(@Param("mac") String mac);
 
 

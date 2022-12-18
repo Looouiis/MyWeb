@@ -1,3 +1,4 @@
+import me.looouiiis.config.SpringConfig;
 import me.looouiiis.config.SpringMVCConfig;
 import me.looouiiis.service.AnnounceService;
 import me.looouiiis.service.MessageService;
@@ -10,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SpringMVCConfig.class)
+@ContextConfiguration(classes = SpringConfig.class)
 public class ServiceTest {
     private MessageService messageService;
     private AnnounceService announceService;
@@ -53,7 +54,7 @@ public class ServiceTest {
     }
     @Test
     public void transformTest(){
-        messageService.transformToUser(1,2);
+        messageService.transformToUser(4,2);
     }
     @Test
     public void insertTest(){

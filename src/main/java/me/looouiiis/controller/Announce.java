@@ -6,10 +6,7 @@ import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.AnnounceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +35,9 @@ public class Announce {
         }
         return ret;
     }
-    @GetMapping(value = "/announce")
+    @GetMapping(value = "/announce/{num}/{page}")
     @ResponseBody
-    public JsonContentReturn getAnnounce(Integer page, Integer num){
+    public JsonContentReturn getAnnounce(@PathVariable Integer page, @PathVariable Integer num){
         Integer start = null;
         if (page != null && num != null && page > 0) {
             start = num * (page - 1);

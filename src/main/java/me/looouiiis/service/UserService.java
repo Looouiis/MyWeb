@@ -3,19 +3,20 @@ package me.looouiiis.service;
 import me.looouiiis.pojo.JsonAccountStatus;
 import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.User;
+import me.looouiiis.pojo.UserForUpdate;
 
 import java.util.List;
 
 public interface UserService {
     JsonAccountStatus login(String username, String password);
 
-    JsonAccountStatus register(String username, String password, boolean gender);
+    JsonAccountStatus register(User user);
 
     JsonContentReturn selectAll();
 
-    JsonAccountStatus close(String username, String password);
+    JsonAccountStatus closeByPassword(User user);
 
-    JsonAccountStatus update(int id, String username, String password, boolean isMe, boolean gender);
+    JsonAccountStatus update(UserForUpdate user);
 
     boolean checkPermission(Integer id);
 

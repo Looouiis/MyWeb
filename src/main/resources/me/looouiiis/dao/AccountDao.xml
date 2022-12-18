@@ -9,8 +9,8 @@
             <if test="username != null and username != ''">
                 username = #{username},
             </if>
-            <if test="password != null and password != ''">
-                password = #{password},
+            <if test="newPassword != null and newPassword != ''">
+                password = #{newPassword},
             </if>
             <if test="gender != null">
                 female = #{gender}

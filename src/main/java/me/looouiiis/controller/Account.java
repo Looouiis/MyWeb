@@ -3,14 +3,13 @@ package me.looouiiis.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import me.looouiiis.pojo.JsonAccountStatus;
 import me.looouiiis.pojo.JsonContentReturn;
+import me.looouiiis.pojo.User;
+import me.looouiiis.pojo.UserForUpdate;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-@Controller//SpringMVC专用声明bean注解
+import org.springframework.web.bind.annotation.*;
+@RequestMapping("/users")
+@RestController//SpringMVC专用声明bean注解
 public class Account {
     private UserService service;
 
@@ -19,40 +18,34 @@ public class Account {
         this.service = service;
     }
 
-    @RequestMapping(value = "/login")
-    @ResponseBody
-    public JsonAccountStatus login(String username, String password) {
-        System.out.println(username);
-        System.out.println(password);
-        return service.login(username, password);
+    @PostMapping
+    public JsonAccountStatus login(@RequestBody User user) {
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        return service.login(user.getUsername(), user.getPassword());
     }
 
-    @RequestMapping(value = "/register")
-    @ResponseBody
-    public JsonAccountStatus register(String username, String password, boolean gender) {
-        return service.register(username, password, gender);
+    @PutMapping
+    public JsonAccountStatus register(@RequestBody User user) {
+        return service.register(user);
     }
 
-    @RequestMapping(value = "/close")
-    @ResponseBody
-    public JsonAccountStatus close(String username, String password) {
-        return service.close(username, password);
+    @DeleteMapping
+    public JsonAccountStatus closeByPassword(@RequestBody User user) {
+        return service.closeByPassword(user);
     }
 
-    @RequestMapping(value = "/update")
-    @ResponseBody
-    public JsonAccountStatus update(int id, String username, String password, boolean isMe, boolean gender) {
-        return service.update(id, username, password, isMe, gender);
+    @PatchMapping
+    public JsonAccountStatus update(@RequestBody UserForUpdate user) {
+        return service.update(user);
     }
 
-    @RequestMapping(value = "/manage")
-    @ResponseBody
+    @GetMapping
     public JsonContentReturn manageWithPer(HttpServletRequest request) {
         return service.selectAll();
     }
 
     @RequestMapping(value = "/test")
-    @ResponseBody
     public String test() {
         return "张三";
     }

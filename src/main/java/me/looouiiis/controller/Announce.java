@@ -23,7 +23,7 @@ public class Announce {
     }
     @PostMapping(value = "/announce" )
     @ResponseBody
-    public String postAnnounceWithPer(HttpServletRequest request, String content, Integer id){
+    public JsonContentReturn postAnnounceWithPer(HttpServletRequest request, String content, Integer id){
         JsonContentReturn ret = new JsonContentReturn();
         Integer insert = announceService.insert(content, id);
         if(insert != null){
@@ -36,11 +36,11 @@ public class Announce {
             ret.setDescription("failed");
             ret.setContent(null);
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
     @GetMapping(value = "/announce")
     @ResponseBody
-    public String getAnnounce(Integer page, Integer num){
+    public JsonContentReturn getAnnounce(Integer page, Integer num){
         Integer start = null;
         if (page != null && num != null && page > 0) {
             start = num * (page - 1);
@@ -61,11 +61,11 @@ public class Announce {
         }
         ret.setContent(selects);
         ret.setTotalCount(totalCount);
-        return JSON.toJSONString(ret);
+        return ret;
     }
     @DeleteMapping(value= "/announce")
     @ResponseBody
-    public String deleteAnnounceWithPer(HttpServletRequest request, int[] ids){
+    public JsonContentReturn deleteAnnounceWithPer(HttpServletRequest request, int[] ids){
         JsonContentReturn ret = new JsonContentReturn();
         Integer delete = announceService.delete(ids);
         if(delete != null) {
@@ -77,6 +77,6 @@ public class Announce {
             ret.setContent(null);
             ret.setStatus(false);
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 }

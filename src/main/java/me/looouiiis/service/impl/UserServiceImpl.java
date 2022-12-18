@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private AccountDao accountDao;
 
     @Override
-    public String login(String username, String password) {
+    public JsonAccountStatus login(String username, String password) {
         User user = accountDao.selectByPassword(username, password);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("login");
@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
             status.setToken("");
             status.setStatus(false);
         }
-        return JSON.toJSONString(status);
+        return status;
     }
 
     @Override
-    public String register(String username, String password, boolean gender) {
+    public JsonAccountStatus register(String username, String password, boolean gender) {
         User users = accountDao.selectByUsername(username);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("register");
@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
             status.setToken("");
             status.setStatus(false);
         }
-        return JSON.toJSONString(status);
+        return status;
     }
 
     @Override
-    public String close(String username, String password) {
+    public JsonAccountStatus close(String username, String password) {
         User user = accountDao.selectByUsername(username);
         int id = user.getId();
         accountDao.deleteFromMyUnread(id);
@@ -72,18 +72,18 @@ public class UserServiceImpl implements UserService {
         status.setMethod("close");
         status.setToken("");
         status.setStatus(res != 0);
-        return JSON.toJSONString(status);
+        return status;
     }
 
     @Override
-    public String update(int id, String username, String password, boolean isMe, boolean gender) {
+    public JsonAccountStatus update(int id, String username, String password, boolean isMe, boolean gender) {
         User user = new User(id, username, password, isMe, gender);
         int res = accountDao.update(user);
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("update");
         status.setToken("");
         status.setStatus(res != 0);
-        return JSON.toJSONString(status);
+        return status;
     }
 
     //    @Override
@@ -117,17 +117,17 @@ public class UserServiceImpl implements UserService {
 //        return JSON.toJSONString(select);
 //    }
     @Override
-    public String selectAll() {
+    public JsonContentReturn selectAll() {
         JsonContentReturn select = new JsonContentReturn();
         select.setContent(JSON.toJSON(accountDao.selectAll()));
         select.setStatus(true);
         select.setDescription("Success");
-        return JSON.toJSONString(select);
+        return select;
     }
 
     @Override
     public boolean checkPermission(Integer id) {
-        if(id == null){
+        if (id == null) {
             return false;
         }
         User user = accountDao.selectById(id);
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkIsOutdated(String token) {
         HashMap<String, Object> verify = TokenOperator.verify(token);
-        if((boolean) verify.get("trusted")){
+        if ((boolean) verify.get("trusted")) {
             Claims jws = (Claims) verify.get("jws");
             return new Date().after(jws.getExpiration());
         }

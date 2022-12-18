@@ -1,6 +1,8 @@
 package me.looouiiis.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import me.looouiiis.pojo.JsonAccountStatus;
+import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,39 +19,35 @@ public class Account {
         this.service = service;
     }
 
-    @RequestMapping(value = "/login", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/login")
     @ResponseBody
-    public String login(String username, String password) {
+    public JsonAccountStatus login(String username, String password) {
         System.out.println(username);
         System.out.println(password);
-        String res = service.login(username, password);
-        return res;
+        return service.login(username, password);
     }
 
-    @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/register")
     @ResponseBody
-    public String register(String username, String password, boolean gender) {
-        String res = service.register(username, password, gender);
-        return res;
+    public JsonAccountStatus register(String username, String password, boolean gender) {
+        return service.register(username, password, gender);
     }
 
-    @RequestMapping(value = "/close", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/close")
     @ResponseBody
-    public String close(String username, String password) {
-        String res = service.close(username, password);
-        return res;
+    public JsonAccountStatus close(String username, String password) {
+        return service.close(username, password);
     }
 
-    @RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/update")
     @ResponseBody
-    public String update(int id, String username, String password, boolean isMe, boolean gender) {
-        String res = service.update(id, username, password, isMe, gender);
-        return res;
+    public JsonAccountStatus update(int id, String username, String password, boolean isMe, boolean gender) {
+        return service.update(id, username, password, isMe, gender);
     }
 
-    @RequestMapping(value = "/manage", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/manage")
     @ResponseBody
-    public String manageWithPer(HttpServletRequest request) {
+    public JsonContentReturn manageWithPer(HttpServletRequest request) {
         return service.selectAll();
     }
 

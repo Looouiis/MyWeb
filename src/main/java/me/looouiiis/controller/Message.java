@@ -21,9 +21,9 @@ public class Message {
     public void setMessageService(MessageService service) {
         this.service = service;
     }
-    @GetMapping(value = "/myUnread", produces = "text/html;charset=UTF-8")
+    @GetMapping(value = "/myUnread")
     @ResponseBody
-    public String checkMyUnread(HttpServletRequest request) {
+    public JsonContentReturn checkMyUnread(HttpServletRequest request) {
         boolean isMe = (boolean) request.getAttribute("isMe");
         JsonContentReturn ret = new JsonContentReturn();
         if(isMe){
@@ -44,12 +44,12 @@ public class Message {
             ret.setStatus(false);
             ret.setDescription("Permission denied");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
-    @GetMapping(value = "/anonymous/communication", produces = "text/html;charset=UTF-8")
+    @GetMapping(value = "/anonymous/communication")
     @ResponseBody
-    public String getAnoCommunication(String mac, Integer page, Integer num, HttpServletRequest request) {
+    public JsonContentReturn getAnoCommunication(String mac, Integer page, Integer num, HttpServletRequest request) {
         Integer start = null;
         if (page != null && num != null && page > 0) {
             start = num * (page - 1);
@@ -72,26 +72,24 @@ public class Message {
             ret.setStatus(true);
             ret.setTotalCount((Integer) res.get("totalCount"));
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
-    @PostMapping(value = "/anonymous/communication", produces = "text/html;charset=UTF-8")
+    @PostMapping(value = "/anonymous/communication")
     @ResponseBody
-    public String postAnoMessage(String mac, String content) {
-        JsonContentReturn res = service.commitAnoMessage(mac, content);
-        return JSON.toJSONString(res);
+    public JsonContentReturn postAnoMessage(String mac, String content) {
+        return service.commitAnoMessage(mac, content);
     }
 
-    @PostMapping(value = "/anonymous/reply", produces = "text/html;charset=UTF-8")
+    @PostMapping(value = "/anonymous/reply")
     @ResponseBody
-    public String postAnoReply(Integer id, String content) {
-        JsonContentReturn res = service.commitAnoReply(id, content);
-        return JSON.toJSONString(res);
+    public JsonContentReturn postAnoReply(Integer id, String content) {
+        return service.commitAnoReply(id, content);
     }
 
-    @GetMapping(value = "/anonymous/reply", produces = "text/html;charset=UTF-8")
+    @GetMapping(value = "/anonymous/reply")
     @ResponseBody
-    public String checkAnoUnread(HttpServletRequest request) {
+    public JsonContentReturn checkAnoUnread(HttpServletRequest request) {
         Integer id = (Integer) request.getAttribute("anoId");
         JsonContentReturn ret = new JsonContentReturn();
         if(id != null){
@@ -105,12 +103,12 @@ public class Message {
             ret.setStatus(false);
             ret.setDescription("Give me your mac first");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
-    @GetMapping(value = "/users/communication", produces = "text/html;charset=UTF-8")
+    @GetMapping(value = "/users/communication")
     @ResponseBody
-    public String getUsrCommunication(Integer page, Integer num, HttpServletRequest request) {
+    public JsonContentReturn getUsrCommunication(Integer page, Integer num, HttpServletRequest request) {
         Integer start = null;
         Integer id = (Integer) request.getAttribute("usrId");
         JsonContentReturn ret = new JsonContentReturn();
@@ -142,44 +140,44 @@ public class Message {
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 
-    @PostMapping(value = "/users/communication", produces = "text/html;charset=UTF-8")
+    @PostMapping(value = "/users/communication")
     @ResponseBody
-    public String postUsrMessage(String content, HttpServletRequest request) {
+    public JsonContentReturn postUsrMessage(String content, HttpServletRequest request) {
         Integer id = (Integer) request.getAttribute("usrId");
         if(id != null) {
             JsonContentReturn res = service.commitMessage(id, content);
-            return JSON.toJSONString(res);
+            return res;
         }
         else{
             JsonContentReturn ret = new JsonContentReturn();
             ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
-            return JSON.toJSONString(ret);
+            return ret;
         }
     }
 
-    @PostMapping(value = "/users/reply", produces = "text/html;charset=UTF-8")
+    @PostMapping(value = "/users/reply")
     @ResponseBody
-    public String postUsrReply(Integer id, String content) {
+    public JsonContentReturn postUsrReply(Integer id, String content) {
         if(id != null) {
             JsonContentReturn res = service.commitReply(id, content);
-            return JSON.toJSONString(res);
+            return res;
         }
         else{
             JsonContentReturn ret = new JsonContentReturn();
             ret.setContent(null);
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't determined who to send");
-            return JSON.toJSONString(ret);
+            return ret;
         }
     }
-    @GetMapping(value = "/users/reply", produces = "text/html;charset=UTF-8")
+    @GetMapping(value = "/users/reply")
     @ResponseBody
-    public String checkUsrUnread(HttpServletRequest request) {
+    public JsonContentReturn checkUsrUnread(HttpServletRequest request) {
         Integer id = (Integer) request.getAttribute("usrId");
         JsonContentReturn ret = new JsonContentReturn();
         if(id != null){
@@ -193,6 +191,6 @@ public class Message {
             ret.setStatus(false);
             ret.setDescription("It seems that you haven't login yet.");
         }
-        return JSON.toJSONString(ret);
+        return ret;
     }
 }

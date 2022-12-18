@@ -7,9 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SpringMVCSupport extends WebMvcConfigurationSupport {
+public class SpringMVCSupport implements WebMvcConfigurer {
     private UserPermissionInterceptor userPermissionInterceptor;
     private ParseInterceptor parseInterceptor;
     @Autowired
@@ -22,14 +23,14 @@ public class SpringMVCSupport extends WebMvcConfigurationSupport {
     }
 
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
     }
 
     @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(parseInterceptor).addPathPatterns("/**");
         registry.addInterceptor(userPermissionInterceptor).addPathPatterns("/**");
     }

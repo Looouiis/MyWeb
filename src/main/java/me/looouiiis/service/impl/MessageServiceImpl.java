@@ -1,6 +1,8 @@
 package me.looouiiis.service.impl;
 
+import me.looouiiis.controller.Code;
 import me.looouiiis.dao.MessageDao;
+import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
 import me.looouiiis.utils.ContentHandler;
@@ -51,8 +53,7 @@ public class MessageServiceImpl implements MessageService {
                     message.setContent(sb.toString());
                     br.close();
                 } catch (IOException e) {
-                    message.setContent("系統文件出問題了，抱歉");
-                    e.printStackTrace();
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                 }
             }
         }
@@ -83,8 +84,7 @@ public class MessageServiceImpl implements MessageService {
                     message.setContent(sb.toString());
                     br.close();
                 } catch (IOException e) {
-                    message.setContent("系統文件出問題了，抱歉");
-                    e.printStackTrace();
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                 }
             }
         }
@@ -249,7 +249,7 @@ public class MessageServiceImpl implements MessageService {
                     old.delete();
                     message.setContent(targetPath);
                 } catch (IOException e) {
-                    throw new RuntimeException(e.getMessage());
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                 }
             }
         }

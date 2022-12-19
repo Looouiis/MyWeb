@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface MessageService {
     Integer getAnoIdByMac(String mac);
+    @Transactional(rollbackFor = {Exception.class})
     HashMap<String, Object> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
+    @Transactional(rollbackFor = {Exception.class})
     HashMap<String, Object> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
     JsonContentReturn commitAnoMessage(String mac, String content);
     JsonContentReturn commitMessage(int id, String content);

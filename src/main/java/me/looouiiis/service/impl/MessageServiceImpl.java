@@ -251,7 +251,7 @@ public class MessageServiceImpl implements MessageService {
                     news.add(new File(targetPath));
                     olds.add(new File(filePath));
                     message.setContent(targetPath);
-                } catch (IOException e) {
+                } catch (IOException e) {//读写问题无法使用事务回滚，所以出异常则删除新拷贝出来的数据；未出异常则执行删除旧数据
                     for (File newFile : news) {
                         newFile.delete();
                     }

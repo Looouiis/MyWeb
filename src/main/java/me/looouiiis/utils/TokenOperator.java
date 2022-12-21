@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class TokenOperator {
     static private String secret = "LooouiiisWebLooouiiisWebLooouiiisWeb";
-    public static String generate(int id){
+    public static String generate(int id, int day){
         Calendar date = Calendar.getInstance();
         Date iat = date.getTime();
-        date.add(Calendar.DAY_OF_MONTH, 30);
+        date.add(Calendar.DAY_OF_MONTH, day);
         Date exp = date.getTime();
         SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         Map<String,Object> header = new HashMap<>();

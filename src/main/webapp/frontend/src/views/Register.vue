@@ -1,18 +1,16 @@
 <template>
-    <div class="home">
-      <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
-    </div>
+    <button @click="deleteToken">点我清空token</button>
   </template>
   
   <script>
-  // @ is an alias to /src
-  import HelloWorld from '@/components/HelloWorld.vue'
   
   export default {
-    name: 'HomeView',
-    components: {
-      HelloWorld
+    name: 'Register',
+    methods:{
+        deleteToken(){
+            localStorage.removeItem('token')
+            console.log(localStorage.getItem('token'))
+        }
     }
   }
   </script>

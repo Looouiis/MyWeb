@@ -4,6 +4,8 @@ public class JsonAccountStatus {
     private String method;
     private boolean status;
     private String token;
+    private String refreshToken;
+    private String description;
 
     public String getMethod() {
         return method;
@@ -27,5 +29,21 @@ public class JsonAccountStatus {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

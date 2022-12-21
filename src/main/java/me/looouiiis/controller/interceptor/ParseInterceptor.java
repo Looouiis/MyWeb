@@ -35,8 +35,7 @@ public class ParseInterceptor implements HandlerInterceptor {
         select.setContent(null);
         if (token != null && !"".equals(token)) {
             if(userService.checkIsOutdated(token)){
-                response.setStatus(302);
-                response.setHeader("Location", "/Login");
+                response.setStatus(401);
                 return false;
             }
             Integer id = userService.checkToken(token);

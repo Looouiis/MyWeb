@@ -2,7 +2,10 @@ package me.looouiiis.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
+import me.looouiiis.controller.Code;
 import me.looouiiis.dao.AccountDao;
+import me.looouiiis.exception.BusinessException;
+import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.JsonAccountStatus;
 import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.User;
@@ -30,10 +33,12 @@ public class UserServiceImpl implements UserService {
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("login");
         if (select != null) {
-            status.setToken(TokenOperator.generate(select.getId()));
+            status.setToken(TokenOperator.generate(select.getId(),3));
+            status.setRefreshToken(TokenOperator.generate(select.getId(), 7));
+            status.setDescription("恭喜我让你登录成功");
             status.setStatus(true);
         } else {
-            status.setToken("");
+            status.setDescription("登录失败，用户名或密码不正确");
             status.setStatus(false);
         }
         return status;
@@ -49,15 +54,14 @@ public class UserServiceImpl implements UserService {
             user.setIsMe(false);
             int res = accountDao.insert(user);
             if (res != 0) {
-                status.setToken(TokenOperator.generate(user.getId()));
+                status.setToken(TokenOperator.generate(user.getId(),3));
+                status.setRefreshToken(TokenOperator.generate(user.getId(),7));
                 status.setStatus(true);
             } else {
-                status.setToken("");
-                status.setStatus(false);
+                throw new SystemException(Code.SYSTEM_ERR,"疑似数据库出现问题，请及时向我反馈");
             }
         } else {
-            status.setToken("");
-            status.setStatus(false);
+            throw new BusinessException(Code.BUSINESS_ERR,"您的账户已存在，请勿重复注册");
         }
         return status;
     }

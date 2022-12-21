@@ -5,8 +5,6 @@ import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.pojo.User;
 import me.looouiiis.pojo.UserForUpdate;
 
-import java.util.List;
-
 public interface UserService {
     JsonAccountStatus login(String username, String password);
 

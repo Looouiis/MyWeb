@@ -1,6 +1,5 @@
 package me.looouiiis.controller;
 
-import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.AnnounceService;

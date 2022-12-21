@@ -2,7 +2,6 @@ package me.looouiiis.service.impl;
 
 import me.looouiiis.controller.Code;
 import me.looouiiis.dao.MessageDao;
-import me.looouiiis.exception.BusinessException;
 import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
@@ -251,7 +250,7 @@ public class MessageServiceImpl implements MessageService {
                     news.add(new File(targetPath));
                     olds.add(new File(filePath));
                     message.setContent(targetPath);
-                } catch (IOException e) {//读写问题无法使用事务回滚，所以出异常则删除新拷贝出来的数据；未出异常则执行删除旧数据
+                } catch (IOException e) {
                     for (File newFile : news) {
                         newFile.delete();
                     }

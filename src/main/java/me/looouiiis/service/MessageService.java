@@ -1,6 +1,9 @@
 package me.looouiiis.service;
 
-import me.looouiiis.pojo.*;
+import me.looouiiis.pojo.AnoUnread;
+import me.looouiiis.pojo.JsonContentReturn;
+import me.looouiiis.pojo.MyUnread;
+import me.looouiiis.pojo.UsrUnread;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;

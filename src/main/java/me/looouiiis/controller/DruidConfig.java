@@ -1,13 +1,14 @@
-package me.looouiiis.config;
+package me.looouiiis.controller;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-
+@Component
 public class DruidConfig {
     @Value("${jdbc.driver}")
     private String driver;

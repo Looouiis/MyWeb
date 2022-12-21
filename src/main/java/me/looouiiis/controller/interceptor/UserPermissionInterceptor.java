@@ -1,17 +1,12 @@
 package me.looouiiis.controller.interceptor;
 
-import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 
 @Component
 public class UserPermissionInterceptor implements HandlerInterceptor {

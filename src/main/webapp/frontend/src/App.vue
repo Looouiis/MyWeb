@@ -1,15 +1,22 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/About">About</router-link> |
-    <router-link to="/Login">Login</router-link> |
-    <router-link to="/Register">Register</router-link> |
-    <router-link to="/Update">Update</router-link>
-  </nav>
+    <div id="header">
+      <nav>
+        <router-link to="/">Home</router-link> |
+        <router-link to="/About">About</router-link> |
+        <router-link to="/LoginorRegister">Login</router-link> |
+        <!-- <router-link to="/Register">Register</router-link> | -->
+        <router-link to="/Update">Update</router-link>
+      </nav>
+    </div>
   <router-view/>
 </template>
 
 <style lang="less">
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,8 +25,13 @@
   color: #2c3e50;
 }
 
+#header{
+  height: 50px;
+  background-color: #42b983;
+}
+
 nav {
-  padding: 30px;
+  // padding: 30px;
 
   a {
     font-weight: bold;

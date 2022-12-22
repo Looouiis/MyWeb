@@ -1,9 +1,6 @@
 package me.looouiiis.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -36,6 +33,7 @@ public class TokenOperator {
         Jws<Claims> jws;
         HashMap<String, Object> res = new HashMap<>();
         res.put("trusted",true);
+        res.put("outdated", false);
         try{
             SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
             jws = Jwts.parserBuilder()
@@ -44,7 +42,12 @@ public class TokenOperator {
                     .parseClaimsJws(token);
             res.put("jws",jws.getBody());
         }
+        catch (ExpiredJwtException e){
+            res.put("jws",e.getClaims());
+            res.put("outdated", true);
+        }
         catch (JwtException e){
+            e.printStackTrace();
             res.put("trusted",false);
         }
         return res;

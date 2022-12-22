@@ -13,11 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
 
 @Component
 public class ParseInterceptor implements HandlerInterceptor {
     private MessageService messageService;
     private UserService userService;
+
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
@@ -27,39 +29,43 @@ public class ParseInterceptor implements HandlerInterceptor {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
         JsonContentReturn select = new JsonContentReturn();
         select.setStatus(false);
         select.setContent(null);
         if (token != null && !"".equals(token)) {
-            if(userService.checkIsOutdated(token)){
+            HashMap<String, Object> verify = userService.verify(token);
+            if (userService.checkIsTrusted(verify)) {
+                if (userService.checkIsOutdated(verify)) {
+                    response.setStatus(401);
+                    return false;
+                }
+                int id = userService.checkTokenId(verify);
+                request.setAttribute("usrId", id);
+                return true;
+            } else {
+//                select.setDescription("Token cannot be trusted");
+//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+//                writer.write(JSON.toJSONString(select));
+//                writer.close();
                 response.setStatus(401);
                 return false;
             }
-            Integer id = userService.checkToken(token);
-            if (id != -1) {
-                request.setAttribute("usrId",id);
-                return true;
-            } else {
-                select.setDescription("Token cannot be trusted");
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-                writer.write(JSON.toJSONString(select));
-                writer.close();
-                return false;
-            }
+        } else {
+            request.setAttribute("usrId", null);
         }
-        else{
-            request.setAttribute("usrId",null);
-        }
+
         String mac = request.getParameter("mac");
-        if(mac != null && !"".equals(mac)){
+        if (mac != null && !"".
+
+                equals(mac)) {
             Integer id = messageService.getAnoIdByMac(mac);
             request.setAttribute("anoId", id);
-        }
-        else {
-            request.setAttribute("anoId",null);
+        } else {
+            request.setAttribute("anoId", null);
         }
         return true;
     }

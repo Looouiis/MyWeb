@@ -6,10 +6,7 @@ import me.looouiiis.controller.Code;
 import me.looouiiis.dao.AccountDao;
 import me.looouiiis.exception.BusinessException;
 import me.looouiiis.exception.SystemException;
-import me.looouiiis.pojo.JsonAccountStatus;
-import me.looouiiis.pojo.JsonContentReturn;
-import me.looouiiis.pojo.User;
-import me.looouiiis.pojo.UserForUpdate;
+import me.looouiiis.pojo.*;
 import me.looouiiis.service.UserService;
 import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,7 @@ public class UserServiceImpl implements UserService {
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("login");
         if (select != null) {
-            status.setToken(TokenOperator.generate(select.getId(),3));
+            status.setToken(TokenOperator.generate(select.getId(), 3));
             status.setRefreshToken(TokenOperator.generate(select.getId(), 7));
             status.setDescription("恭喜我让你登录成功");
             status.setStatus(true);
@@ -54,14 +51,14 @@ public class UserServiceImpl implements UserService {
             user.setIsMe(false);
             int res = accountDao.insert(user);
             if (res != 0) {
-                status.setToken(TokenOperator.generate(user.getId(),3));
-                status.setRefreshToken(TokenOperator.generate(user.getId(),7));
+                status.setToken(TokenOperator.generate(user.getId(), 3));
+                status.setRefreshToken(TokenOperator.generate(user.getId(), 7));
                 status.setStatus(true);
             } else {
-                throw new SystemException(Code.SYSTEM_ERR,"疑似数据库出现问题，请及时向我反馈");
+                throw new SystemException(Code.SYSTEM_ERR, "疑似数据库出现问题，请及时向我反馈");
             }
         } else {
-            throw new BusinessException(Code.BUSINESS_ERR,"您的账户已存在，请勿重复注册");
+            throw new BusinessException(Code.BUSINESS_ERR, "您的账户已存在，请勿重复注册");
         }
         return status;
     }
@@ -87,12 +84,11 @@ public class UserServiceImpl implements UserService {
         status.setMethod("update");
         status.setToken("");
         User select = accountDao.preUpdate(user);
-        if(select != null) {
+        if (select != null) {
             int res = accountDao.update(user);
             System.out.println(res);
             status.setStatus(res != 0);
-        }
-        else{
+        } else {
             System.out.println(select);
             status.setStatus(false);
         }
@@ -148,23 +144,57 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int checkToken(String token) {
-        HashMap<String, Object> verify = TokenOperator.verify(token);
-        if ((boolean) verify.get("trusted")) {
-            Claims jws = (Claims) verify.get("jws");
-            return (int) jws.get("id");
-        } else {
-            return -1;
-        }
+    public int checkTokenId(HashMap<String, Object> verify) {
+        Claims jws = (Claims) verify.get("jws");
+        return (int) jws.get("id");
+    }
+
+    public boolean checkIsTrusted(HashMap<String, Object> verify) {
+        return (boolean) verify.get("trusted");
     }
 
     @Override
-    public boolean checkIsOutdated(String token) {
-        HashMap<String, Object> verify = TokenOperator.verify(token);
-        if ((boolean) verify.get("trusted")) {
-            Claims jws = (Claims) verify.get("jws");
-            return new Date().after(jws.getExpiration());
+    public boolean checkIsOutdated(HashMap<String, Object> verify) {
+//        HashMap<String, Object> verify = TokenOperator.verify(token);
+//        if ((boolean) verify.get("trusted")) {
+        return (boolean) verify.get("outdated");
+//        }
+//        return true;
+    }
+
+    @Override
+    public HashMap<String, Object> verify(String token) {
+        return TokenOperator.verify(token);
+    }
+
+    @Override
+    public JsonAccountStatus refresh(RefreshRequest refresh) {
+        HashMap<String, Object> first = verify(refresh.getToken());
+        HashMap<String, Object> second = verify(refresh.getRefreshToken());
+        System.out.println(first);
+        System.out.println(second);
+        JsonAccountStatus status = new JsonAccountStatus();
+        if(checkIsTrusted(first) && checkIsTrusted(second)) {
+            int id = checkTokenId(first);
+            if (id == checkTokenId(second)) {
+                if (checkIsOutdated(second)) {
+                    status.setDescription("Refresh token也过期了，请重新登录吧");
+                    status.setStatus(false);
+                } else {
+                    System.out.println("已发放");
+                    status.setDescription("成功(当你看到这条信息时，你给我小心点)");
+                    status.setToken(TokenOperator.generate(id, 3));
+                    status.setRefreshToken(TokenOperator.generate(id, 7));
+                    status.setStatus(true);
+                }
+            } else {
+                status.setDescription("token身份信息错乱，疑似盗用他人token");
+                status.setStatus(false);
+            }
+        } else {
+            status.setDescription("token不可信，请勿擅自修改token");
+            status.setStatus(false);
         }
-        return true;
+        return status;
     }
 }

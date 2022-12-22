@@ -1,9 +1,8 @@
 package me.looouiiis.service;
 
-import me.looouiiis.pojo.JsonAccountStatus;
-import me.looouiiis.pojo.JsonContentReturn;
-import me.looouiiis.pojo.User;
-import me.looouiiis.pojo.UserForUpdate;
+import me.looouiiis.pojo.*;
+
+import java.util.HashMap;
 
 public interface UserService {
     JsonAccountStatus login(String username, String password);
@@ -18,7 +17,13 @@ public interface UserService {
 
     boolean checkPermission(Integer id);
 
-    int checkToken(String token);
+    int checkTokenId(HashMap<String, Object> verify);
 
-    boolean checkIsOutdated(String token);
+    boolean checkIsTrusted(HashMap<String, Object> verify);
+
+    boolean checkIsOutdated(HashMap<String, Object> verify);
+
+    HashMap<String, Object> verify(String token);
+
+    JsonAccountStatus refresh(RefreshRequest refresh);
 }

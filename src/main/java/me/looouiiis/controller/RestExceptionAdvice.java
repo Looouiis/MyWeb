@@ -18,6 +18,7 @@ public class RestExceptionAdvice {
     }
     @ExceptionHandler(Exception.class)
     public JsonExceptionReport doException(Exception ex){
+        ex.printStackTrace();
         return new JsonExceptionReport(ex);
     }
 }

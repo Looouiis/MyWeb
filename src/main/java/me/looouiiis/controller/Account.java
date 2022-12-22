@@ -1,10 +1,7 @@
 package me.looouiiis.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import me.looouiiis.pojo.JsonAccountStatus;
-import me.looouiiis.pojo.JsonContentReturn;
-import me.looouiiis.pojo.User;
-import me.looouiiis.pojo.UserForUpdate;
+import me.looouiiis.pojo.*;
 import me.looouiiis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +40,11 @@ public class Account {
     @GetMapping
     public JsonContentReturn manageWithPer(HttpServletRequest request) {
         return service.selectAll();
+    }
+
+    @PutMapping("/token")
+    public JsonAccountStatus refresh(@RequestBody RefreshRequest refresh){
+        return service.refresh(refresh);
     }
 
     @RequestMapping(value = "/test")

@@ -1,5 +1,4 @@
 <template>
-    <div :class="signUpMode">
         <div class="form-background">
             <div class="LogInandRegister">
 
@@ -19,21 +18,20 @@
             </form>
             <RouterLink class="router-to-register" to='/Register'>注册账号</RouterLink> -->
   
-            </div>
         </div>
         <div class="tips">
             <div class="tip left">
                 <div class="content">
                     <h3>想注册辣？😍</h3>
                     <p>来注册吧，注册后与我的匿名留言将会转移到您的新账号下，此后我将通过这个账号和您交流</p>
-                    <button class="btnRegister trans" @click="add">注册</button>
+                    <button class="btnRegister trans" @click="add">去注册</button>
                 </div>
             </div>
             <div class="tip right">
                 <div class="content">
                     <h3>已有账号辣？</h3>
                     <p>回去登录吧</p>
-                    <button class="btnLogin trans" @click="remove">登录</button>
+                    <button class="btnLogin trans" @click="remove">去登录</button>
                 </div>
             </div>
         </div>
@@ -43,30 +41,33 @@
 </template>
 
 <style lang="less">
-.background{
-  position: relative;
-  width: 100%;
-  min-height: 94.8vh;
-  background-color: #fff;
-  overflow: hidden;
-  &:before{
+// .background{
+//   position: relative;
+//   width: 100%;
+//   height: 95vh;
+//   background-color: #fff;
+//   overflow: hidden;
+//   &:before{
+//     content: '';
+//     position: absolute;
+//     width: 2000px;
+//     height: 2000px;
+//     border-radius: 50%;
+//     background:#0AD182;
+//     top: 15%;
+//     right: 39%;
+//     transform: translateY(-50%);
+//     z-index: 6;
+//     transition: 1.8s ease-in-out;
+//   }
+// }
+.background.register-mode{
+    &:before{
     content: '';
-    position: absolute;
     width: 2000px;
     height: 2000px;
-    border-radius: 50%;
-    background:#0AD182;
-    top: 0%;
-    right: 39%;
-    transform: translateY(-50%);
-    z-index: 6;
-    transition: 1.8s ease-in-out;
-  }
-}
-.background.sign-up-mode{
-    &:before{
     transform: translate(100%, -50%);
-    right: 65%;
+    right: 50%;
     top: 95%;
     background: #1ABBFE;
   }
@@ -83,7 +84,7 @@
     }
   }
   .LogInandRegister{
-    left: 20%;
+    left: 30%;
   }
   .form{
     &#login{
@@ -93,6 +94,42 @@
     &#register{
         z-index: 2;
         opacity: 1;
+    }
+  }
+}
+.background.log-in-mode{
+    &:before{
+    content: '';
+    width: 2000px;
+    height: 2000px;
+    transform: translateY(-50%);
+    top: 15%;
+    right: 39%;
+    background: #0AD182;
+  }
+  .left{
+    pointer-events: all;
+    .content{
+        transform: translateX(0px);
+    }
+  }
+  .right{
+    pointer-events: none;
+    .content{
+        transform: translateX(800px);
+    }
+  }
+  .LogInandRegister{
+    left: 75%;
+  }
+  .form{
+    &#login{
+        z-index: 2;
+        opacity: 1;
+    }
+    &#register{
+        z-index: 1;
+        opacity: 0;
     }
   }
 }
@@ -132,7 +169,6 @@
     z-index: 7;
     .content{
         transition: .9s .6s ease-in-out;
-        // color: white;
     }
     h3{
         font-weight: 666;
@@ -143,6 +179,9 @@
 .left{
     pointer-events: all;
     padding: 0rem 17% 2rem 12%;
+    .content{
+        transition: .9s .6s ease-in-out;
+    }
 }
 .right{
     pointer-events: none;
@@ -169,6 +208,102 @@
         opacity: 0;
     }
 }
+@media (max-width: 870px){
+    .background{
+        // min-height: 800px;
+        height: 95vh;
+        &.log-in-mode, &.register-mode{
+            .LogInandRegister{
+                left: 50%;
+                width: 100%;
+                top: 95%;
+                transform: translate(-50%, -100%);
+                transition: 1s 0.8s ease-in-out;
+            }
+            .tip{
+                .left{
+                    padding-right: 20%;
+                }
+                .right{
+                    padding-left: 30%;
+                }
+            }
+        }
+        &.register-mode{
+            &:before{
+                top: 190%;
+                right: 260%;
+            }
+            .left .content{
+                transform: translateY(-300px);
+            }
+            .right .content{
+                transform: translateY(0px);
+            }
+            .LogInandRegister{
+                top: 5%;
+                transform: translate(-50%, 0);
+            }
+        }
+        &.log-in-mode{
+            &:before{
+                width: 1500px;
+                height: 1500px;
+                top: -55%;
+                right: -90%;
+            }
+            .left .content{
+                transform: translateY(0px);
+            }
+            .right .content{
+                transform: translateY(300px);
+            }
+            .LogInandRegister{
+                top: 95%;
+                transform: translate(-50%, -100%);
+            }
+        }
+    }
+    .LogInandRegister{
+        left: 50%;
+        width: 100%;
+        top: 95%;
+        transform: translate(-50%, -100%);
+        transition: 1s 0.8s ease-in-out;
+    }
+    // .tips{
+    //     z-index: 10;
+    //     .right{
+    //         .content{
+    //             transform: translateX(0px);
+    //         }
+    //     }
+    // }
+    .tips{
+        .tip{
+            padding-right: 15%;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            padding: 2.5rem 8%;
+        }
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 2fr 1fr;
+        .left{
+            grid-row: 1 / 2;
+            .content{
+                transform: translate(0px);
+            }
+        }
+        .right{
+            grid-row: 3 / 4;
+            .content{
+                transform: translateX(0px);
+            }
+        }
+    }
+    
+}
 // .btn{
 //     .trans
 // }
@@ -177,14 +312,16 @@
 <script>
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
+import { bottom } from '@popperjs/core'
 import { remove } from 'lodash'
 
 export default{
     name: 'Handler',
     components: {
-        Login,
-        Register
-    },
+    Login,
+    Register,
+    bottom
+},
     data(){
         return{
             signUpMode: 'background'
@@ -192,11 +329,14 @@ export default{
     },
     methods:{
         add(){
-            this.signUpMode = 'background sign-up-mode'
+            this.$emit('response', 'background register-mode')
         },
         remove(){
-            this.signUpMode = 'background'
+            this.$emit('response', 'background log-in-mode')
         }
+    },
+    created(){
+        this.$emit('response', 'background register-mode')
     }
 }
 </script>

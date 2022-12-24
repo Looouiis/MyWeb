@@ -26,4 +26,5 @@ public interface UserService {
     HashMap<String, Object> verify(String token);
 
     JsonAccountStatus refresh(RefreshRequest refresh);
+    JsonContentReturn loginWithToken(String token);
 }

@@ -197,4 +197,26 @@ public class UserServiceImpl implements UserService {
         }
         return status;
     }
+
+    @Override
+    public JsonContentReturn loginWithToken(String token) {
+        HashMap<String, Object> verify = TokenOperator.verify(token);
+        JsonContentReturn ret = new JsonContentReturn();
+        if(checkIsTrusted(verify)){
+            if(!checkIsOutdated(verify)) {
+                int id = checkTokenId(verify);
+                ret.setContent(accountDao.selectById(id));
+                ret.setDescription("成功");
+                ret.setStatus(true);
+            }else {
+                ret.setStatus(false);
+                ret.setDescription("Token已过期");
+            }
+        }
+        else{
+            ret.setDescription("Token不可信");
+            ret.setStatus(false);
+        }
+        return ret;
+    }
 }

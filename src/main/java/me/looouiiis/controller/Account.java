@@ -47,8 +47,8 @@ public class Account {
         return service.refresh(refresh);
     }
 
-    @RequestMapping(value = "/test")
-    public String test() {
-        return "张三";
+    @GetMapping("/token")
+    public JsonContentReturn loginWithToken(@RequestHeader String token) {
+        return service.loginWithToken(token);
     }
 }

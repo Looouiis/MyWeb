@@ -71,6 +71,9 @@
     top: 95%;
     background: #1ABBFE;
   }
+  .msg{
+    display: none;
+  }
   .left{
     pointer-events: none;
     .content{
@@ -106,6 +109,9 @@
     top: 15%;
     right: 39%;
     background: #0AD182;
+  }
+  .msg{
+    display: none;
   }
   .left{
     pointer-events: all;
@@ -213,6 +219,9 @@
         // min-height: 800px;
         height: 95vh;
         &.log-in-mode, &.register-mode{
+            .msg{
+                display: none;
+            }
             .LogInandRegister{
                 left: 50%;
                 width: 100%;
@@ -304,24 +313,24 @@
     }
     
 }
-// .btn{
-//     .trans
-// }
 </style>
 
 <script>
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
-import { bottom } from '@popperjs/core'
+// import { bottom } from '@popperjs/core'
 import { remove } from 'lodash'
 
 export default{
     name: 'Handler',
     components: {
-    Login,
-    Register,
-    bottom
-},
+        Login,
+        Register,
+        // bottom
+    },
+    props:{
+      default: String
+    },
     data(){
         return{
             signUpMode: 'background'
@@ -329,14 +338,14 @@ export default{
     },
     methods:{
         add(){
-            this.$emit('response', 'background register-mode')
+            this.$emit('response', this.default+'register-mode')
         },
         remove(){
-            this.$emit('response', 'background log-in-mode')
+            this.$emit('response', this.default+'log-in-mode')
         }
     },
     created(){
-        this.$emit('response', 'background register-mode')
+        this.$emit('response', this.default+'log-in-mode')
     }
 }
 </script>

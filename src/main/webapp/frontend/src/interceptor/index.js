@@ -5,7 +5,7 @@ const request = axios.create()
 
 request.interceptors.request.use(
     (config) => {
-        console.log(1)
+        // console.log(1)
         let token = localStorage.getItem('token')
         if(token != null && token != ''){
             config.headers.set('token',token)
@@ -19,11 +19,11 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
     (config) => {
-        console.log(config)
+        // console.log(config)
         return config
     },
     (error) => {
-        console.log(error.response.status)
+        // console.log(error.response.status)
         let data= {
             token: localStorage.getItem('token'),
             refreshToken: localStorage.getItem('refreshToken')
@@ -36,7 +36,7 @@ request.interceptors.response.use(
             else{
                 localStorage.removeItem('token')
                 localStorage.removeItem('refreshToken')
-                router.push('/Login')
+                router.push('/LoginorRegister')
             }
         })
         return Promise.reject(error)

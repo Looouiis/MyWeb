@@ -325,7 +325,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public JsonContentReturn addMyUsrUnread(int usrId, Integer num) {
-        MyUnread check = messageDao.checkAnoExist(usrId);
+        MyUnread check = messageDao.checkUsrExist(usrId);
         boolean flag;
         if (check == null) {
             flag = (messageDao.insertMyUsrUnread(usrId, 1) != 0);

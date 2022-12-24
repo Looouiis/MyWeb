@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface AccountDao {
-    @Select("select is_me as isMe from users where id = #{id}")
+    @Select("select id,username,is_me as isMe, female as gender from users where id = #{id}")
     User selectById(@Param("id")int id);
     @Select("select id,username,password,is_me as isMe, female as gender from users where username = #{username}")
     User selectByUsername(@Param("username")String username);

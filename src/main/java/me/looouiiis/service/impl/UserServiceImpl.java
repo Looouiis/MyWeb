@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -83,14 +84,20 @@ public class UserServiceImpl implements UserService {
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("update");
         status.setToken("");
-        User select = accountDao.preUpdate(user);
-        if (select != null) {
-            int res = accountDao.update(user);
-            System.out.println(res);
-            status.setStatus(res != 0);
-        } else {
-            System.out.println(select);
+        if(user.getGender() == null && "".equals(user.getUsername()) && "".equals(user.getNewPassword())){
             status.setStatus(false);
+            status.setDescription("您好像没提交任何修改");
+        }
+        else {
+            User select = accountDao.preUpdate(user);
+            if (select != null) {
+                int res = accountDao.update(user);
+                status.setStatus(res != 0);
+                status.setDescription("成功");
+            } else {
+                status.setDescription("输入的原始密码错误");
+                status.setStatus(false);
+            }
         }
         return status;
     }

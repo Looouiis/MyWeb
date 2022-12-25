@@ -3,8 +3,8 @@
             <div class="LogInandRegister">
 
         
-                <Login class="form" id="login"/>
-                <Register class="form" id="register"/>
+                <Login id="login"/>
+                <Register id="register"/>
   
             <!-- <form action="">
                 <div class="title">LogIn</div>
@@ -41,110 +41,87 @@
 </template>
 
 <style lang="less">
-// .background{
-//   position: relative;
-//   width: 100%;
-//   height: 95vh;
-//   background-color: #fff;
-//   overflow: hidden;
-//   &:before{
-//     content: '';
-//     position: absolute;
-//     width: 2000px;
-//     height: 2000px;
-//     border-radius: 50%;
-//     background:#0AD182;
-//     top: 15%;
-//     right: 39%;
-//     transform: translateY(-50%);
-//     z-index: 6;
-//     transition: 1.8s ease-in-out;
-//   }
-// }
 .background.register-mode{
     &:before{
-    content: '';
-    width: 2000px;
-    height: 2000px;
-    transform: translate(100%, -50%);
-    right: 50%;
-    top: 95%;
-    background: #1ABBFE;
-  }
-  .msg{
-    display: none;
-  }
-  .left{
-    pointer-events: none;
-    .content{
-        transform: translateX(-800px);
+        content: '';
+        width: 2000px;
+        height: 2000px;
+        transform: translate(100%, -50%);
+        right: 50%;
+        top: 95%;
+        background: #1ABBFE;
     }
-  }
-  .right{
-    pointer-events: all;
-    .content{
-        transform: translateX(0px);
+    .left{
+        pointer-events: none;
+        .content{
+            transform: translateX(-800px);
+        }
     }
-  }
-  .LogInandRegister{
-    left: 30%;
-  }
-  .form{
-    &#login{
-        z-index: 1;
-        opacity: 0;
+    .right{
+        pointer-events: all;
+        .content{
+            transform: translateX(0px);
+        }
     }
-    &#register{
-        z-index: 2;
-        opacity: 1;
+    .LogInandRegister{
+        left: 30%;
     }
-  }
+    form{
+        &#login{
+            z-index: 1;
+            opacity: 0;
+        }
+        &#register{
+            z-index: 2;
+            opacity: 1;
+        }
+    }
 }
 .background.log-in-mode{
     &:before{
-    content: '';
-    width: 2000px;
-    height: 2000px;
-    transform: translateY(-50%);
-    top: 15%;
-    right: 39%;
-    background: #0AD182;
-  }
-  .msg{
-    display: none;
-  }
-  .left{
-    pointer-events: all;
-    .content{
-        transform: translateX(0px);
+        content: '';
+        width: 2000px;
+        height: 2000px;
+        transform: translateY(-50%);
+        top: 15%;
+        right: 39%;
+        background: #0AD182;
     }
-  }
-  .right{
-    pointer-events: none;
-    .content{
-        transform: translateX(800px);
+    .msg{
+        display: none;
     }
-  }
-  .LogInandRegister{
-    left: 75%;
-  }
-  .form{
-    &#login{
-        z-index: 2;
-        opacity: 1;
+    .left{
+        pointer-events: all;
+        .content{
+            transform: translateX(0px);
+        }
     }
-    &#register{
-        z-index: 1;
-        opacity: 0;
+    .right{
+        pointer-events: none;
+        .content{
+            transform: translateX(800px);
+        }
     }
-  }
+    .LogInandRegister{
+        left: 75%;
+    }
+    form{
+        &#login{
+            z-index: 2;
+            opacity: 1;
+        }
+        &#register{
+            z-index: 1;
+            opacity: 0;
+        }
+    }
 }
 .form-background{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 .LogInandRegister{
     position: absolute;
@@ -156,6 +133,11 @@
     grid-template-columns: 1fr;
     z-index: 5;
     transition: 1s 0.7s ease-in-out;
+    .input-text{
+        input{
+            background-color: rgba(0,0,0,0.1);
+        }
+    }
 }
 .tips{
     position: absolute;
@@ -196,16 +178,10 @@
         transform: translateX(800px);
     }
 }
-.form{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 5rem;
-    overflow: hidden;
+form{
+    height: 95vh;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
-    transition: 0.2s 0.7s ease-in-out;
     &#login{
         z-index: 2;
     }
@@ -338,14 +314,14 @@ export default{
     },
     methods:{
         add(){
-            this.$emit('response', this.default+'register-mode')
+            this.$emit('response', this.default+'register-mode noMsg')
         },
         remove(){
-            this.$emit('response', this.default+'log-in-mode')
+            this.$emit('response', this.default+'log-in-mode noMsg')
         }
     },
     created(){
-        this.$emit('response', this.default+'log-in-mode')
+        this.$emit('response', this.default+'log-in-mode noMsg')
     }
 }
 </script>

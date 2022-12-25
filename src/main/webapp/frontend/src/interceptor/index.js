@@ -23,7 +23,10 @@ request.interceptors.response.use(
         return config
     },
     (error) => {
-        // console.log(error.response.status)
+        if('code' in error && error.code === 'ERR_NETWORK'){
+            console.log('与服务器的链接断开')
+            return Promise.reject(error)
+        }
         let data= {
             token: localStorage.getItem('token'),
             refreshToken: localStorage.getItem('refreshToken')

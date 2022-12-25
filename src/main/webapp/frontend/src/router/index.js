@@ -3,13 +3,21 @@ import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/index',
     name: 'home',
     component: HomeView
   },
   {
     path: '/Message',
     name: 'Message',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Message.vue')
+  },
+  {
+    path: '/Announce',
+    name: 'Announce',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

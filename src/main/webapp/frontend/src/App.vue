@@ -2,8 +2,9 @@
     <div id="header">
       <nav>
         <p style="color: white;">{{ signUpMode }}</p>
-        <router-link to="/">Home</router-link>
+        <router-link to="/index">Home</router-link>
         <router-link to="/Message">Message</router-link>
+        <router-link to="/Announce">Announce</router-link>
         <router-link to="/LoginorRegister">Login</router-link>
         <router-link to="/Update">Update</router-link>
       </nav>

@@ -4,20 +4,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AnonymousMessage {
-    int anoId;
-    String content;
-    String date;
-    boolean local;
-    boolean message;
-    int id;
+public class UsrComment {
+    private int msgId;
+    private String content;
+    private String date;
+    private boolean local;
+    private boolean message;
 
-    public int getAnoId() {
-        return anoId;
+    public int getMsgId() {
+        return msgId;
     }
 
-    public void setAnoId(int anoId) {
-        this.anoId = anoId;
+    public void setMsgId(int msgId) {
+        this.msgId = msgId;
     }
 
     public String getContent() {
@@ -49,32 +48,11 @@ public class AnonymousMessage {
         this.local = local;
     }
 
-
     public boolean isMessage() {
         return message;
     }
 
     public void setMessage(boolean message) {
         this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "AnonymousMessage{" +
-                "anoId=" + anoId +
-                ", content='" + content + '\'' +
-                ", date='" + date + '\'' +
-                ", local=" + local +
-                ", message=" + message +
-                ", id=" + id +
-                '}';
     }
 }

@@ -1,8 +1,13 @@
 package me.looouiiis;
 
+import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import me.looouiiis.controller.Message;
+import me.looouiiis.dao.MessageDao;
+import me.looouiiis.service.MessageService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.SecretKey;
@@ -14,28 +19,11 @@ import java.util.Map;
 
 @SpringBootTest
 class MyWebTests {
-
+    @Autowired
+    private Message messageService;
     @Test
     void contextLoads() {
-        int day = 3;
-        int id = 1;
-        String secret = "LooouiiisWebLooouiiisWebLooouiiisWeb";
-        Calendar date = Calendar.getInstance();
-        date.add(Calendar.DAY_OF_MONTH, -10);
-        Date iat = date.getTime();
-        date.add(Calendar.DAY_OF_MONTH, day);
-        Date exp = date.getTime();
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        Map<String,Object> header = new HashMap<>();
-        header.put("typ","JWT");
-        String token = Jwts.builder()
-                .setHeader(header)
-                .claim("id",id)
-                .setIssuedAt(iat)
-                .setExpiration(exp)
-                .signWith(key)
-                .compact();
-        System.out.println(token);
+        System.out.println(JSON.toJSONString(messageService.getAnoComment(1)));
     }
 
 }

@@ -1,9 +1,6 @@
 package me.looouiiis.service;
 
-import me.looouiiis.pojo.AnoUnread;
-import me.looouiiis.pojo.JsonContentReturn;
-import me.looouiiis.pojo.MyUnread;
-import me.looouiiis.pojo.UsrUnread;
+import me.looouiiis.pojo.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -35,4 +32,10 @@ public interface MessageService {
     void deleteMyUsrUnread(int usrId);
     void deleteAnoUnread(int anoId);
     void deleteUsrUnread(int usrId);
+    List<AnoComment> getAnoCommentByMsgId(int msgId);
+    JsonContentReturn commitAnoComment(int msgId, String content);
+    JsonContentReturn commitAnoCommentReply(int msgId, String content);
+    List<UsrComment> getUsrCommentByMsgId(int msgId);
+    JsonContentReturn commitUsrComment(int msgId, String content);
+    JsonContentReturn commitUsrCommentReply(int msgId, String content);
 }

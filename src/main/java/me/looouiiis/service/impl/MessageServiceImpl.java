@@ -425,6 +425,157 @@ public class MessageServiceImpl implements MessageService {
         messageDao.deleteUsrUnread(usrId);
     }
 
+    public List<AnoComment> getAnoCommentByMsgId(int id) {
+        List<AnoComment> messages = messageDao.selectAnoCommentByMsgId(id);
+        for (AnoComment message : messages) {
+            if (message.isLocal()) {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(message.getContent()));
+                    StringBuilder sb = new StringBuilder();
+                    String tmp = br.readLine();
+                    sb.append(tmp);
+                    while ((tmp = br.readLine()) != null) {
+                        sb.append("\n").append(tmp);
+                    }
+                    message.setContent(sb.toString());
+                    br.close();
+                } catch (IOException e) {
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
+                }
+            }
+        }
+        return messages;
+    }
+
+    @Override
+    public JsonContentReturn commitAnoComment(int msgId, String content) {
+        AnoComment comment = new AnoComment();
+        comment.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContent(null);
+        if (content.length() > 100) {
+            String path = "../AllCom/Ano/Com/" + msgId + "/";
+            String filePath = ContentHandler.handle(path, content);
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return ret;
+            }
+            comment.setContent(filePath);
+        } else {
+            comment.setContent(content);
+        }
+        comment.setLocal(content.length() > 100);
+        comment.setMsgId(msgId);
+        if (messageDao.addAnoComment(comment) != 0) {
+            int anoId = messageDao.getAnoIdByMsgId(msgId);
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addMyAnoUnread(anoId);
+        } else {
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return ret;
+    }
+
+    @Override
+    public JsonContentReturn commitAnoCommentReply(int msgId, String content) {
+        AnoComment comment = new AnoComment();
+        comment.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContent(null);
+        if (content.length() > 100) {
+            String path = "../AllCom/Ano/Rep/" + msgId + "/";
+            String filePath = ContentHandler.handle(path, content);
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return ret;
+            }
+            comment.setContent(filePath);
+        } else
+            comment.setContent(content);
+        comment.setLocal(content.length() > 100);
+        comment.setMsgId(msgId);
+        if (messageDao.addAnoCommentReply(comment) != 0) {
+            int anoId = messageDao.getAnoIdByMsgId(msgId);
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addAnoUnread(anoId);
+        } else {
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return ret;
+    }
+
+    public List<UsrComment> getUsrCommentByMsgId(int id) {
+        return messageDao.selectUsrCommentByMsgId(id);
+    }
+
+    @Override
+    public JsonContentReturn commitUsrComment(int msgId, String content) {
+        UsrComment comment = new UsrComment();
+        comment.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContent(null);
+        if (content.length() > 100) {
+            String path = "../AllCom/Usr/Com/" + msgId + "/";
+            String filePath = ContentHandler.handle(path, content);
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return ret;
+            }
+            comment.setContent(filePath);
+        } else {
+            comment.setContent(content);
+        }
+        comment.setLocal(content.length() > 100);
+        comment.setMsgId(msgId);
+        if (messageDao.addUsrComment(comment) != 0) {
+            int usrId = messageDao.getUsrIdByMsgId(msgId);
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addMyUsrUnread(usrId);
+        } else {
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return ret;
+    }
+
+    @Override
+    public JsonContentReturn commitUsrCommentReply(int msgId, String content) {
+        UsrComment comment = new UsrComment();
+        comment.setDate(new Date());
+        JsonContentReturn ret = new JsonContentReturn();
+        ret.setContent(null);
+        if (content.length() > 100) {
+            String path = "../AllCom/Usr/Rep/" + msgId + "/";
+            String filePath = ContentHandler.handle(path, content);
+            if ("".equals(filePath)) {
+                ret.setStatus(false);
+                ret.setDescription("New file failed");
+                return ret;
+            }
+            comment.setContent(filePath);
+        } else
+            comment.setContent(content);
+        comment.setLocal(content.length() > 100);
+        comment.setMsgId(msgId);
+        if (messageDao.addUsrCommentReply(comment) != 0) {
+            int usrId = messageDao.getUsrIdByMsgId(msgId);
+            ret.setStatus(true);
+            ret.setDescription("Success");
+            addUsrUnread(usrId);
+        } else {
+            ret.setStatus(false);
+            ret.setDescription("Insert affect 0 rows");
+        }
+        return ret;
+    }
 }
 
 //            File dir = new File(path);

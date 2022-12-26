@@ -83,4 +83,32 @@ public interface MessageDao {
 
     @Delete("delete from anonymous_users where id = #{id}")
     Integer deleteAnoUsr(@Param("id") int id);
+
+    @Insert("insert into ano_comment(msg_id, content, date, local, message) values(#{msgId}, #{content}, #{date}, #{local}, 1)")
+    Integer addAnoComment(AnoComment comment);
+    @Delete("delete from ano_comment where msg_id = #{msgId}")
+    Integer delAnoComment(@Param("msgId") int msgId);
+    @Select("select msg_id as msgId, content, date, local, message from ano_comment where msg_id = #{msgId}")
+    List<AnoComment> selectAnoCommentByMsgId(@Param("msgId") int msgId);
+    @Insert("insert into ano_comment(msg_id, content, date, local, message) values(#{msgId}, #{content}, #{date}, #{local}, 0)")
+    Integer addAnoCommentReply(AnoComment comment);
+
+    @Insert("insert into usr_comment(msg_id, content, date, local, message) values(#{msgId}, #{content}, #{date}, #{local}, 1)")
+    Integer addUsrComment(UsrComment comment);
+    @Delete("delete from usr_comment where msg_id = #{msgId}")
+    Integer delUsrComment(@Param("msgId") int msgId);
+    @Select("select msg_id as msgId, content, date, local, message from usr_comment where msg_id = #{msgId}")
+    List<UsrComment> selectUsrCommentByMsgId(@Param("msgId") int msgId);
+    @Insert("insert into usr_comment(msg_id, content, date, local, message) values(#{msgId}, #{content}, #{date}, #{local}, 0)")
+    Integer addUsrCommentReply(UsrComment comment);
+
+    @Select("select * from anonymous_message where id = #{msgId}")
+    AnonymousMessage selectAnoMSgById(@Param("msgId") int msgId);
+    @Select("select * from message where id = #{msgId}")
+    Message selectUsrMSgById(@Param("msgId") int msgId);
+
+    @Select("select ano_id from anonymous_message where id = #{msgId}")
+    int getAnoIdByMsgId(@Param("msgId") int msgId);
+    @Select("select user_id from message where id = #{msgId}")
+    int getUsrIdByMsgId(@Param("msgId") int msgId);
 }

@@ -11,7 +11,7 @@
     </insert>
 
     <select id="selectMessageById" resultType="me.looouiiis.pojo.Message">
-        select user_id as userId, content, local, date, message from message where user_id = #{id} order by date DESC
+        select user_id as userId, content, local, date, message, id from message where user_id = #{id} order by date DESC
         <if test="start != null or num != null">
             limit
             <if test="start != null">
@@ -26,7 +26,7 @@
         </if>
     </select>
     <select id="selectAnoMessageById" resultType="me.looouiiis.pojo.AnonymousMessage">
-        select ano_id as anoId, content, local, date, message from anonymous_message where ano_id = #{anoId} order by
+        select ano_id as anoId, content, local, date, message, id from anonymous_message where ano_id = #{anoId} order by
         date DESC
         <if test="start != null or num != null">
             limit

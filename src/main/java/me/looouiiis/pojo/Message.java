@@ -10,6 +10,7 @@ public class Message {
     String date;
     boolean local;
     boolean message;
+    int id;
 
     public int getUserId() {
         return userId;
@@ -57,6 +58,14 @@ public class Message {
         this.message = message;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -65,6 +74,7 @@ public class Message {
                 ", date='" + date + '\'' +
                 ", local=" + local +
                 ", message=" + message +
+                ", id=" + id +
                 '}';
     }
 }

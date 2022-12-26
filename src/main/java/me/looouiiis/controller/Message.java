@@ -182,4 +182,34 @@ public class Message {
         }
         return ret;
     }
+    @GetMapping("/anonymous/comment")
+    @ResponseBody
+    public JsonContentReturn getAnoComment(int msgId){
+        List<AnoComment> message = service.getAnoCommentByMsgId(msgId);
+        JsonContentReturn ret = new JsonContentReturn();
+        if(message.size() != 0){
+            ret.setStatus(true);
+            ret.setContent(message);
+            ret.setDescription("成功");
+        } else{
+            ret.setStatus(false);
+            ret.setDescription("疑似数据库出问题，请稍后再试，可以的话麻烦向我反馈一下");
+        }
+        return ret;
+    }
+    @GetMapping("/users/comment")
+    @ResponseBody
+    public JsonContentReturn getUsrComment(int msgId){
+        List<UsrComment> message = service.getUsrCommentByMsgId(msgId);
+        JsonContentReturn ret = new JsonContentReturn();
+        if(message.size() != 0){
+            ret.setStatus(true);
+            ret.setContent(message);
+            ret.setDescription("成功");
+        } else{
+            ret.setStatus(false);
+            ret.setDescription("疑似数据库出问题，请稍后再试，可以的话麻烦向我反馈下");
+        }
+        return ret;
+    }
 }

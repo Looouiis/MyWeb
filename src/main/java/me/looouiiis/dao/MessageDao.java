@@ -32,6 +32,8 @@ public interface MessageDao {
 
     //    @Insert("insert into message(user_id, content, local, date, message) values(#{userId},#{content}, #{local}, #{date}, #{message})")
     Integer insertFromAno(@Param("anoList") List<AnonymousMessage> messages, @Param("userId") Integer id);
+//    @Insert("insert into message(user_id, content, local, date, message) values(#{userId},#{content}, #{local}, #{date}, #{message})")
+    Integer insertSingleFromAno(@Param("anoMsg") AnonymousMessage message, @Param("userId") Integer id);
 
     @Delete("delete from anonymous_message where ano_id = #{id}")
     Integer deleteAnoMsgById(@Param("id") int id);
@@ -111,4 +113,6 @@ public interface MessageDao {
     int getAnoIdByMsgId(@Param("msgId") int msgId);
     @Select("select user_id from message where id = #{msgId}")
     int getUsrIdByMsgId(@Param("msgId") int msgId);
+
+    Integer insertComFromAno(@Param("anoList") List<AnoComment> comments, @Param("usrComId") Integer id);
 }

@@ -3,12 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.looouiiis.dao.MessageDao">
-    <insert id="insertFromAno">
+    <insert id="insertFromAno" useGeneratedKeys="true" keyProperty="id">
         insert into message(user_id, content, local, date, message) values
         <foreach collection="anoList" item="anoMsg" separator=",">
             (#{userId},#{anoMsg.content}, #{anoMsg.local}, #{anoMsg.date}, #{anoMsg.message})
         </foreach>
     </insert>
+
+    <insert id="insertSingleFromAno" useGeneratedKeys="true" keyProperty="anoMsg.id" keyColumn="id">
+        insert into message(user_id, content, local, date, message) values(#{userId},#{anoMsg.content}, #{anoMsg.local}, #{anoMsg.date}, #{anoMsg.message})
+    </insert>
+
+
+
+
+
+    <insert id="insertComFromAno">
+        insert into usr_comment(msg_id, content, local, date, message) values
+        <foreach collection="anoList" item="anoMsg" separator=",">
+            (#{usrComId},#{anoMsg.content}, #{anoMsg.local}, #{anoMsg.date}, #{anoMsg.message})
+        </foreach>
+    </insert>
+
+
+
 
     <select id="selectMessageById" resultType="me.looouiiis.pojo.Message">
         select user_id as userId, content, local, date, message, id from message where user_id = #{id} order by date DESC

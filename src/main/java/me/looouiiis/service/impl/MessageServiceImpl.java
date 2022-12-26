@@ -229,6 +229,7 @@ public class MessageServiceImpl implements MessageService {
         }
         List<File> olds = new ArrayList<>();
         List<File> news = new ArrayList<>();
+        List<Integer> anoComIds = new ArrayList<>();
         for (AnonymousMessage message : messages) {
             if (message.isLocal()) {
                 String filePath = message.getContent();
@@ -254,15 +255,57 @@ public class MessageServiceImpl implements MessageService {
                     for (File newFile : news) {
                         newFile.delete();
                     }
-                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "处理留言时后台文件读写发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                 }
             }
+            int anoComId = message.getId();
+            anoComIds.add(anoComId);
+            List<AnoComment> comments = messageDao.selectAnoCommentByMsgId(anoComId);
+            messageDao.insertSingleFromAno(message, usrId);
+            int usrComId = message.getId();
+
+            for (AnoComment comment : comments) {
+                if (comment.isLocal()) {
+                    String filePath = comment.getContent();
+                    String targetPath = filePath.replace("Ano", "Usr").replace("/" + anoComId + "/", "/" + usrComId + "/");
+                    try {
+                        File path = new File(targetPath.substring(0, targetPath.lastIndexOf("/")));
+                        path.mkdirs();
+                        BufferedReader br = new BufferedReader(new FileReader(filePath));
+                        BufferedWriter bw = new BufferedWriter(new FileWriter(targetPath));
+                        StringBuilder sb = new StringBuilder();
+                        String tmp = br.readLine();
+                        sb.append(tmp);
+                        while ((tmp = br.readLine()) != null) {
+                            sb.append("\n").append(tmp);
+                        }
+                        bw.write(sb.toString());
+                        bw.close();
+                        br.close();
+                        news.add(new File(targetPath));
+                        olds.add(new File(filePath));
+                        comment.setContent(targetPath);
+                    } catch (IOException e) {
+                        for (File newFile : news) {
+                            newFile.delete();
+                        }
+                        throw new SystemException(Code.SYSTEM_IO_ERR, "处理评论时后台文件读写发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
+                    }
+                }
+            }
+            messageDao.insertComFromAno(comments, usrComId);
+            messageDao.delAnoComment(anoComId);
+
         }
         for (File old : olds) {
             old.delete();
         }
         new File("../AllMsg/Ano/Msg/" + anoId).delete();
         new File("../AllMsg/Ano/Rep/" + anoId).delete();
+        for(Integer anoComId : anoComIds) {
+            new File("../AllCom/Ano/Msg/" + anoComId).delete();
+            new File("../AllCom/Ano/Rep/" + anoComId).delete();
+        }
         AnoUnread anoUnread = messageDao.checkAnoUnread(anoId);
         if (anoUnread != null) {
             int anoNum = anoUnread.getNum();
@@ -273,7 +316,7 @@ public class MessageServiceImpl implements MessageService {
             Integer myNum = myUnread.getNum();
             addMyUsrUnread(usrId, myNum);
         }
-        messageDao.insertFromAno(messages, usrId);
+//        messageDao.insertFromAno(messages, usrId);
         messageDao.deleteAnoUnread(anoId);
         messageDao.deleteMyAnoUnread(anoId);
         messageDao.deleteAnoMsgById(anoId);

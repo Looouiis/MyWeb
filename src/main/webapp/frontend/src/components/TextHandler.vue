@@ -16,6 +16,9 @@ export default {
   data: () => ({
     input: ''
   }),
+  props:{
+    default: String
+  },
   computed: {
     output() {
       return marked(this.input)
@@ -25,6 +28,14 @@ export default {
     update: debounce(function (e) {
       this.input = e.target.value
     }, 100)
+  },
+  created(){
+    if(this.default.indexOf('usr') !== -1){
+      this.input = '# Hello World\n\n在这的留言是\*\*不会\*\*让其他人看到的'
+    }
+    else if(this.default.indexOf('ano') !== -1){
+      
+    }
   }
 }
 </script>
@@ -59,6 +70,8 @@ body {
 .input {
   border: none;
   border-right: 1px solid #ccc;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
   resize: none;
   outline: none;
   background-color: #f6f6f6;

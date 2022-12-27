@@ -1,14 +1,14 @@
 package me.looouiiis.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class Message {
 
     @GetMapping(value = "/anonymous/communication")
     @ResponseBody
-    public JsonContentReturn getAnoCommunication(String mac, Integer page, Integer num, HttpServletRequest request) {
+    public JsonContentReturn getAnoCommunication(Integer anoId, Integer page, Integer num, HttpServletRequest request) {
         Integer start = null;
         if (page != null && num != null && page > 0) {
             start = num * (page - 1);
@@ -48,32 +48,43 @@ public class Message {
             start = 0;
         }
         boolean me = (boolean) request.getAttribute("isMe");
-        HashMap<String, Object> res = service.getAnoCommunicationByMac(mac, start, num, me);
+        Integer id = (Integer) request.getAttribute("anoId");
+        if(anoId != null && anoId > 0){
+            id = anoId;
+        }
+        HashMap<String, Object> res = service.getAnoCommunication(id, start, num, me);
         JsonContentReturn ret = new JsonContentReturn();
         List<AnonymousMessage> messages = (List<AnonymousMessage>) res.get("messages");
+        Integer totalCount = (Integer) res.get("totalCount");
+        res.remove("totalCount");
         if (messages.size() == 0) {
             ret.setStatus(false);
             ret.setDescription("Find nothing");
             ret.setContent(null);
-            ret.setTotalCount((Integer) res.get("totalCount"));
+            ret.setTotalCount(totalCount);
         } else {
-            ret.setContent(messages);
+            ret.setContent(res);
             ret.setDescription("success");
             ret.setStatus(true);
-            ret.setTotalCount((Integer) res.get("totalCount"));
+            ret.setTotalCount(totalCount);
         }
         return ret;
     }
 
     @PostMapping(value = "/anonymous/communication")
     @ResponseBody
-    public JsonContentReturn postAnoMessage(String mac, String content) {
-        return service.commitAnoMessage(mac, content);
+    public JsonContentReturn postAnoMessage(String content, HttpServletRequest request) {
+        Integer id = (Integer) request.getAttribute("anoId");
+        return service.commitAnoMessage(id, content);
     }
 
     @PostMapping(value = "/anonymous/reply")
     @ResponseBody
-    public JsonContentReturn postAnoReply(Integer id, String content) {
+    public JsonContentReturn postAnoReply(String content, HttpServletRequest request) {
+        Integer id = (Integer) request.getAttribute("anoId");
+        if(id == null){
+            throw new SystemException(Code.SYSTEM_ERR,"在预期可获得anoId的位置出错");
+        }
         return service.commitAnoReply(id, content);
     }
 
@@ -97,9 +108,12 @@ public class Message {
 
     @GetMapping(value = "/users/communication")
     @ResponseBody
-    public JsonContentReturn getUsrCommunication(Integer page, Integer num, HttpServletRequest request) {
+    public JsonContentReturn getUsrCommunication(Integer usrId, Integer page,Integer num, HttpServletRequest request) {
         Integer start = null;
         Integer id = (Integer) request.getAttribute("usrId");
+        if(usrId != null && usrId > 0){
+            id = usrId;
+        }
         JsonContentReturn ret = new JsonContentReturn();
         if (id != null) {
             boolean me = (boolean) request.getAttribute("isMe");
@@ -111,8 +125,9 @@ public class Message {
             HashMap<String, Object> res = service.getCommunicationByUserId(id, start, num, me);
             List<me.looouiiis.pojo.Message> messages = (List<me.looouiiis.pojo.Message>) res.get("messages");
             Integer totalCount = (Integer) res.get("totalCount");
+            res.remove("totalCount");
             if (messages.size() != 0) {
-                ret.setContent(messages);
+                ret.setContent(res);
                 ret.setStatus(true);
                 ret.setDescription("success");
                 ret.setTotalCount(totalCount);
@@ -182,34 +197,62 @@ public class Message {
         }
         return ret;
     }
-    @GetMapping("/anonymous/comment")
+    @GetMapping("/anonymous/comment/{msgId}")
     @ResponseBody
-    public JsonContentReturn getAnoComment(int msgId){
-        List<AnoComment> message = service.getAnoCommentByMsgId(msgId);
+    public JsonContentReturn getAnoComment(@PathVariable int msgId){
+        HashMap<String, Object> res = service.getAnoCommentByMsgId(msgId);
         JsonContentReturn ret = new JsonContentReturn();
-        if(message.size() != 0){
+        if(res.size() != 0){
             ret.setStatus(true);
-            ret.setContent(message);
+            ret.setContent(res);
             ret.setDescription("成功");
         } else{
             ret.setStatus(false);
-            ret.setDescription("疑似数据库出问题，请稍后再试，可以的话麻烦向我反馈一下");
+            ret.setDescription("无回复");
         }
         return ret;
     }
-    @GetMapping("/users/comment")
+    @PostMapping(value = "/anonymous/comment/{msgId}")
     @ResponseBody
-    public JsonContentReturn getUsrComment(int msgId){
-        List<UsrComment> message = service.getUsrCommentByMsgId(msgId);
+    public JsonContentReturn postAnoComment(@PathVariable Integer msgId, String content, HttpServletRequest request) {
+        if (msgId != null) {
+            JsonContentReturn res = service.commitAnoComment(msgId, content);
+            return res;
+        } else {
+            JsonContentReturn ret = new JsonContentReturn();
+            ret.setContent(null);
+            ret.setStatus(false);
+            ret.setDescription("It seems that you haven't login yet.");
+            return ret;
+        }
+    }
+    @GetMapping("/users/comment/{msgId}")
+    @ResponseBody
+    public JsonContentReturn getUsrComment(@PathVariable int msgId){
+        HashMap<String, Object> res = service.getUsrCommentByMsgId(msgId);
         JsonContentReturn ret = new JsonContentReturn();
-        if(message.size() != 0){
+        if(res.size() != 0){
             ret.setStatus(true);
-            ret.setContent(message);
+            ret.setContent(res);
             ret.setDescription("成功");
         } else{
             ret.setStatus(false);
-            ret.setDescription("疑似数据库出问题，请稍后再试，可以的话麻烦向我反馈下");
+            ret.setDescription("无回复");
         }
         return ret;
+    }
+    @PostMapping(value = "/users/comment/{msgId}")
+    @ResponseBody
+    public JsonContentReturn postUsrComment(@PathVariable Integer msgId, String content, HttpServletRequest request) {
+        if (msgId != null) {
+            JsonContentReturn res = service.commitUsrComment(msgId, content);
+            return res;
+        } else {
+            JsonContentReturn ret = new JsonContentReturn();
+            ret.setContent(null);
+            ret.setStatus(false);
+            ret.setDescription("It seems that you haven't login yet.");
+            return ret;
+        }
     }
 }

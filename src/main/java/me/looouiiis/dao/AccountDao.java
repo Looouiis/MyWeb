@@ -1,5 +1,6 @@
 package me.looouiiis.dao;
 
+import me.looouiiis.pojo.AnonymousUser;
 import me.looouiiis.pojo.User;
 import me.looouiiis.pojo.UserForUpdate;
 import org.apache.ibatis.annotations.*;
@@ -13,7 +14,7 @@ public interface AccountDao {
     User selectByUsername(@Param("username")String username);
     @Select("select id,username,password,is_me as isMe, female as gender from users")
     List<User> selectAll();
-    @Select("select id from users where username = #{username} and password = #{password}")
+    @Select("select id, is_me as isMe from users where username = #{username} and password = #{password}")
     User selectByPassword(@Param("username")String username, @Param("password")String password);
     @Insert("insert into users(username, password, is_me, female) values(#{username},#{password},#{isMe},#{gender})")
     @Options(useGeneratedKeys = true,keyProperty = "id")

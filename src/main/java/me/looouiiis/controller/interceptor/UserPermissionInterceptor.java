@@ -40,12 +40,14 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
 //        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
 //        writer.write(JSON.toJSONString(select));
 //        writer.close();
-        Integer id = (Integer) request.getAttribute("usrId");
-        if (userService.checkPermission(id)) {
-            request.setAttribute("isMe", true);
-        } else {
-            request.setAttribute("isMe", false);
-        }
+
+
+//        Integer id = (Integer) request.getAttribute("usrId");
+//        if (userService.checkPermission(id)) {
+//            request.setAttribute("isMe", true);
+//        } else {
+//            request.setAttribute("isMe", false);
+//        }
         return true;
     }
 

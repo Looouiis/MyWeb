@@ -10,6 +10,12 @@ request.interceptors.request.use(
         if(token != null && token != ''){
             config.headers.set('token',token)
         }
+        else {
+            let anoToken = localStorage.getItem('anoToken')
+            if(anoToken != null && token != ''){
+                config.headers.set('anoToken', anoToken)
+            }
+        }
         return config
     },
     (error) => {
@@ -27,7 +33,7 @@ request.interceptors.response.use(
             console.log('与服务器的链接断开')
             return Promise.reject(error)
         }
-        let data= {
+        let data = {
             token: localStorage.getItem('token'),
             refreshToken: localStorage.getItem('refreshToken')
         }

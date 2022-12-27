@@ -24,8 +24,9 @@
             (#{usrComId},#{anoMsg.content}, #{anoMsg.local}, #{anoMsg.date}, #{anoMsg.message})
         </foreach>
     </insert>
-
-
+    <insert id="createAnoAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into anonymous_users(id) values(null)
+    </insert>
 
 
     <select id="selectMessageById" resultType="me.looouiiis.pojo.Message">

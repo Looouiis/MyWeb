@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface MessageDao {
+    @Select("select username from users where is_me = 1 order by id ASC limit 0,1")
+    String getMyName();
     @Insert("insert into anonymous_message(ano_id, content, local, date, message) values (#{anoId}, #{content}, #{local}, #{date}, 1)")
     Integer commitAnoMessage(AnonymousMessage message);
 
@@ -27,9 +29,10 @@ public interface MessageDao {
     List<Message> selectMessageById(@Param("id") int id, @Param("start") Integer start, @Param("num") Integer num);
     @Select("select count(content) from message where user_id = #{usrId}")
     Integer getUsrMessageTotalNum(@Param("usrId") int usrId);
-    @Select("select id from anonymous_users where mac = #{mac}")
-    Integer getAnoIdByMac(@Param("mac") String mac);
-
+//    @Select("select id from anonymous_users where mac = #{mac}")
+//    Integer getAnoIdByMac(@Param("mac") String mac);
+    @Select("select username from users where id = #{userId}")
+    String getUsrNameById(@Param("userId") int id);
     //    @Insert("insert into message(user_id, content, local, date, message) values(#{userId},#{content}, #{local}, #{date}, #{message})")
     Integer insertFromAno(@Param("anoList") List<AnonymousMessage> messages, @Param("userId") Integer id);
 //    @Insert("insert into message(user_id, content, local, date, message) values(#{userId},#{content}, #{local}, #{date}, #{message})")
@@ -40,8 +43,10 @@ public interface MessageDao {
 
     @Delete("delete from message where user_id = #{id}")
     Integer deleteMsgById(@Param("id") int id);
-    @Insert("insert into anonymous_users(mac) values(#{mac})")
-    Integer createAnoAccount(@Param("mac") String mac);
+//    @Insert("insert into anonymous_users(mac) values(#{mac})")
+//    Integer createAnoAccount(@Param("mac") String mac);
+//    @Insert("insert into anonymous_users(id) values(null)")
+    Integer createAnoAccount(AnonymousUser user);
 
 
     @Select("select ano_id as anoId, usr_id as usrId, num from unread_for_me")
@@ -115,4 +120,6 @@ public interface MessageDao {
     int getUsrIdByMsgId(@Param("msgId") int msgId);
 
     Integer insertComFromAno(@Param("anoList") List<AnoComment> comments, @Param("usrComId") Integer id);
+    @Select("select id from anonymous_users where id = #{anoId}")
+    Integer checkAnoInAnoUsr(@Param("anoId") int id);
 }

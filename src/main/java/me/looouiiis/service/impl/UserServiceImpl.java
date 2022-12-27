@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService {
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("login");
         if (select != null) {
-            status.setToken(TokenOperator.generate(select.getId(), 3));
-            status.setRefreshToken(TokenOperator.generate(select.getId(), 7));
+            status.setToken(TokenOperator.generate(select.getId(), 3, select.getIsMe()));
+            status.setRefreshToken(TokenOperator.generate(select.getId(), 7, select.getIsMe()));
             status.setDescription("恭喜我让你登录成功");
             status.setStatus(true);
         } else {
@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
             user.setIsMe(false);
             int res = accountDao.insert(user);
             if (res != 0) {
-                status.setToken(TokenOperator.generate(user.getId(), 3));
-                status.setRefreshToken(TokenOperator.generate(user.getId(), 7));
+                status.setToken(TokenOperator.generate(user.getId(), 3, false));
+                status.setRefreshToken(TokenOperator.generate(user.getId(), 7, false));
                 status.setStatus(true);
             } else {
                 throw new SystemException(Code.SYSTEM_ERR, "疑似数据库出现问题，请及时向我反馈");
@@ -183,6 +183,7 @@ public class UserServiceImpl implements UserService {
         JsonAccountStatus status = new JsonAccountStatus();
         if(checkIsTrusted(first) && checkIsTrusted(second)) {
             int id = checkTokenId(first);
+            User user = accountDao.selectById(id);
             if (id == checkTokenId(second)) {
                 if (checkIsOutdated(second)) {
                     status.setDescription("Refresh token也过期了，请重新登录吧");
@@ -190,8 +191,8 @@ public class UserServiceImpl implements UserService {
                 } else {
                     System.out.println("已发放");
                     status.setDescription("成功(当你看到这条信息时，你给我小心点)");
-                    status.setToken(TokenOperator.generate(id, 3));
-                    status.setRefreshToken(TokenOperator.generate(id, 7));
+                    status.setToken(TokenOperator.generate(id, 3, user.getIsMe()));
+                    status.setRefreshToken(TokenOperator.generate(id, 7, user.getIsMe()));
                     status.setStatus(true);
                 }
             } else {

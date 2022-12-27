@@ -1,11 +1,13 @@
 package me.looouiiis.controller.interceptor;
 
 import com.alibaba.fastjson2.JSON;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import me.looouiiis.pojo.JsonContentReturn;
 import me.looouiiis.service.MessageService;
 import me.looouiiis.service.UserService;
+import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -45,6 +47,9 @@ public class ParseInterceptor implements HandlerInterceptor {
                 }
                 int id = userService.checkTokenId(verify);
                 request.setAttribute("usrId", id);
+                Claims jws = (Claims) verify.get("jws");
+                boolean isMe = (boolean) jws.get("p");
+                request.setAttribute("isMe", isMe);
                 return true;
             } else {
 //                select.setDescription("Token cannot be trusted");
@@ -56,14 +61,16 @@ public class ParseInterceptor implements HandlerInterceptor {
             }
         } else {
             request.setAttribute("usrId", null);
+            request.setAttribute("isMe", false);
         }
 
-        String mac = request.getParameter("mac");
-        if (mac != null && !"".
-
-                equals(mac)) {
-            Integer id = messageService.getAnoIdByMac(mac);
-            request.setAttribute("anoId", id);
+        String anoToken = request.getHeader("anoToken");
+        if (anoToken != null && !"".equals(anoToken)) {
+            HashMap<String, Object> verify = TokenOperator.verify(anoToken);
+            if(userService.checkIsTrusted(verify)){
+                int id = userService.checkTokenId(verify);
+                request.setAttribute("anoId", id);
+            }
         } else {
             request.setAttribute("anoId", null);
         }

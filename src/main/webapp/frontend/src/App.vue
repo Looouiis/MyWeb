@@ -30,9 +30,11 @@
   box-sizing: border-box;
 }
 .background{
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: 95vh;
+  // min-height: 95vh;
+  top: 50px;
+  bottom: 0px;
   background-color: #fff;
   overflow: hidden;
   &.ano{
@@ -164,7 +166,7 @@ form{
 #header{
   position: relative;
   display: flex;
-  height: 5vh;
+  height: 50px;
   background-color: #333333;
   align-items: center;
   justify-content: space-evenly;

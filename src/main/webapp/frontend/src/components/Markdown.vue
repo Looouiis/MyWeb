@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-  <div class="editor">
+  <div class="MDeditor">
     <textarea class="input" :value="input" @input="update"></textarea>
     <div class="output" v-html="output"></div>
   </div>
@@ -32,7 +32,7 @@ body {
   margin: 0;
 }
 
-.editor {
+.MDeditor {
   height: 100vh;
   display: flex;
 }

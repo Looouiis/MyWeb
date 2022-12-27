@@ -17,7 +17,8 @@ export default {
     input: ''
   }),
   props:{
-    default: String
+    default: String,
+    inputDefault: Boolean
   },
   computed: {
     output() {
@@ -27,16 +28,24 @@ export default {
   methods: {
     update: debounce(function (e) {
       this.input = e.target.value
-    }, 100)
+    }, 100),
+    clear(){
+      this.input = ''
+    },
+    submit(){
+      this.$emit('submit', this.input)
+      this.clear
+    }
   },
   created(){
-    if(this.default.indexOf('usr') !== -1){
+    if(this.default.indexOf('usr') !== -1 && this.inputDefault){
       this.input = '# Hello World\n\n在这的留言是\*\*不会\*\*让其他人看到的'
     }
-    else if(this.default.indexOf('ano') !== -1){
+    else if(this.default.indexOf('ano') !== -1 && this.inputDefault){
       
     }
-  }
+  },
+  emits: ['submit']
 }
 </script>
 
@@ -45,16 +54,51 @@ export default {
     <textarea class="input" :value="input" @input="update"></textarea>
     <div class="output" v-html="output"></div>
   </div>
+  <div class="btn">
+    <button class="submit" @click="submit">提交</button>
+    <button class="reset" @click="clear">清空</button>
+  </div>
 </template>
 
-<style>
+<style lang="less">
 body {
   margin: 0;
 }
 
-.editor {
-  height: 100vh;
+.editor{
   display: flex;
+  height: 30vh;
+  margin: 0 2rem;
+  border: solid .2rem rgb(0 0 0 / 30%);
+  border-radius: 1rem;
+}
+.btn{
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem 2rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  button{
+    margin: .3rem .3rem;
+    width: 3.5rem;
+    height: 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &.submit{
+        background-color: #27516e;
+        color: #FFF;
+        &:hover{
+        background-color: #7c9388;
+        color: #000;
+        }
+    }
+    &.reset{
+        background-color: #FFF;
+        border: #000 solid 1px;
+    }
+  }
 }
 
 .input,

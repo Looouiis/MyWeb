@@ -6,6 +6,7 @@ import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.*;
 import me.looouiiis.service.MessageService;
 import me.looouiiis.utils.ContentHandler;
+import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,13 @@ public class MessageServiceImpl implements MessageService {
 
     private MessageDao messageDao;
 
-    @Override
-    public Integer getAnoIdByMac(String mac) {
-        return messageDao.getAnoIdByMac(mac);
-    }
+//    @Override
+//    public Integer getAnoIdByMac(String mac) {
+//        return messageDao.getAnoIdByMac(mac);
+//    }
 
     @Override
-    public HashMap<String, Object> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me) {
-        Integer id = getAnoIdByMac(mac);
+    public HashMap<String, Object> getAnoCommunication(Integer id, Integer start, Integer num, boolean me) {
         if (id == null) {
             id = 0;
         }
@@ -59,8 +59,11 @@ public class MessageServiceImpl implements MessageService {
             }
         }
         HashMap<String, Object> res = new HashMap<>();
+        String myName = messageDao.getMyName();
         res.put("totalCount", totalCount);
         res.put("messages", messages);
+        res.put("anoId", id);
+        res.put("myName", myName);
         return res;
     }
 
@@ -90,17 +93,24 @@ public class MessageServiceImpl implements MessageService {
             }
         }
         HashMap<String, Object> res = new HashMap<>();
+        String username = messageDao.getUsrNameById(id);
+        String myName = messageDao.getMyName();
+        res.put("messageBy", username);
+        res.put("myName", myName);
         res.put("totalCount", totalCount);
         res.put("messages", messages);
         return res;
     }
 
     @Override
-    public JsonContentReturn commitAnoMessage(String mac, String content) {
-        if (messageDao.getAnoIdByMac(mac) == null) {
-            messageDao.createAnoAccount(mac);
+    public JsonContentReturn commitAnoMessage(Integer id, String content) {
+        String anoToken = null;
+        if (id == null || id <=0 || messageDao.checkAnoInAnoUsr(id) == null) {
+            AnonymousUser user = new AnonymousUser();
+            messageDao.createAnoAccount(user);
+            id = user.getId();
+            anoToken = TokenOperator.generateAno(id);
         }
-        int id = messageDao.getAnoIdByMac(mac);
         AnonymousMessage message = new AnonymousMessage();
         message.setDate(new Date());
         JsonContentReturn ret = new JsonContentReturn();
@@ -120,6 +130,9 @@ public class MessageServiceImpl implements MessageService {
         message.setLocal(content.length() > 100);
         message.setAnoId(id);
         if (messageDao.commitAnoMessage(message) != 0) {
+            if(anoToken != null){
+                ret.setContent(anoToken);
+            }
             ret.setStatus(true);
             ret.setDescription("Success");
             addMyAnoUnread(id);
@@ -468,26 +481,51 @@ public class MessageServiceImpl implements MessageService {
         messageDao.deleteUsrUnread(usrId);
     }
 
-    public List<AnoComment> getAnoCommentByMsgId(int id) {
-        List<AnoComment> messages = messageDao.selectAnoCommentByMsgId(id);
-        for (AnoComment message : messages) {
-            if (message.isLocal()) {
+    public HashMap<String, Object> getAnoCommentByMsgId(int id) {
+//        List<AnoComment> messages = messageDao.selectAnoCommentByMsgId(id);
+//        for (AnoComment message : messages) {
+//            if (message.isLocal()) {
+//                try {
+//                    BufferedReader br = new BufferedReader(new FileReader(message.getContent()));
+//                    StringBuilder sb = new StringBuilder();
+//                    String tmp = br.readLine();
+//                    sb.append(tmp);
+//                    while ((tmp = br.readLine()) != null) {
+//                        sb.append("\n").append(tmp);
+//                    }
+//                    message.setContent(sb.toString());
+//                    br.close();
+//                } catch (IOException e) {
+//                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
+//                }
+//            }
+//        }
+//        return messages;
+        HashMap<String, Object> res = new HashMap<>();
+        int anoId = messageDao.getAnoIdByMsgId(id);
+        String myName = messageDao.getMyName();
+        List<AnoComment> comments = messageDao.selectAnoCommentByMsgId(id);
+        for (AnoComment comment : comments) {
+            if (comment.isLocal()) {
                 try {
-                    BufferedReader br = new BufferedReader(new FileReader(message.getContent()));
+                    BufferedReader br = new BufferedReader(new FileReader(comment.getContent()));
                     StringBuilder sb = new StringBuilder();
                     String tmp = br.readLine();
                     sb.append(tmp);
                     while ((tmp = br.readLine()) != null) {
                         sb.append("\n").append(tmp);
                     }
-                    message.setContent(sb.toString());
+                    comment.setContent(sb.toString());
                     br.close();
                 } catch (IOException e) {
                     throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                 }
             }
         }
-        return messages;
+        res.put("messageBy", anoId);
+        res.put("myName", myName);
+        res.put("comments", comments);
+        return res;
     }
 
     @Override
@@ -553,8 +591,33 @@ public class MessageServiceImpl implements MessageService {
         return ret;
     }
 
-    public List<UsrComment> getUsrCommentByMsgId(int id) {
-        return messageDao.selectUsrCommentByMsgId(id);
+    public HashMap<String, Object> getUsrCommentByMsgId(int id) {
+        HashMap<String, Object> res = new HashMap<>();
+        int userId = messageDao.getUsrIdByMsgId(id);
+        String username = messageDao.getUsrNameById(userId);
+        String myName = messageDao.getMyName();
+        List<UsrComment> comments = messageDao.selectUsrCommentByMsgId(id);
+        for (UsrComment comment : comments) {
+            if (comment.isLocal()) {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(comment.getContent()));
+                    StringBuilder sb = new StringBuilder();
+                    String tmp = br.readLine();
+                    sb.append(tmp);
+                    while ((tmp = br.readLine()) != null) {
+                        sb.append("\n").append(tmp);
+                    }
+                    comment.setContent(sb.toString());
+                    br.close();
+                } catch (IOException e) {
+                    throw new SystemException(Code.SYSTEM_IO_ERR, "后台文件读写时发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
+                }
+            }
+        }
+        res.put("messageBy", username);
+        res.put("myName", myName);
+        res.put("comments", comments);
+        return res;
     }
 
     @Override

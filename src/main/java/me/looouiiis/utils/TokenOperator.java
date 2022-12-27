@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TokenOperator {
     static private String secret = "LooouiiisWebLooouiiisWebLooouiiisWeb";
-    public static String generate(int id, int day){
+    public static String generate(int id, int day, boolean isMe){
         Calendar date = Calendar.getInstance();
         Date iat = date.getTime();
         date.add(Calendar.DAY_OF_MONTH, day);
@@ -23,8 +23,22 @@ public class TokenOperator {
         String token = Jwts.builder()
                 .setHeader(header)
                 .claim("id",id)
+                .claim("ano", false)
+                .claim("p", isMe)
                 .setIssuedAt(iat)
                 .setExpiration(exp)
+                .signWith(key)
+                .compact();
+        return token;
+    }
+    public static String generateAno(int id){
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        Map<String,Object> header = new HashMap<>();
+        header.put("typ","JWT");
+        String token = Jwts.builder()
+                .setHeader(header)
+                .claim("id",id)
+                .claim("ano", true)
                 .signWith(key)
                 .compact();
         return token;

@@ -74,7 +74,7 @@ router.beforeEach((to,from,next) => {
   // }
   let token = localStorage.getItem('token')
 
-  if(to.path !== '/LoginorRegister' && (token === null || token === '')){
+  if(to.path !== '/LoginorRegister' && to.path !== '/Message' && (token === null || token === '')){
     next('/LoginorRegister')
   }
   else{

@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 @Transactional(rollbackFor = {Exception.class})
 public interface MessageService {
-    Integer getAnoIdByMac(String mac);
+//    Integer getAnoIdByMac(String mac);
     @Transactional(rollbackFor = {Exception.class})
-    HashMap<String, Object> getAnoCommunicationByMac(String mac, Integer start, Integer num, boolean me);
+    HashMap<String, Object> getAnoCommunication(Integer id, Integer start, Integer num, boolean me);
     @Transactional(rollbackFor = {Exception.class})
     HashMap<String, Object> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me);
-    JsonContentReturn commitAnoMessage(String mac, String content);
+    JsonContentReturn commitAnoMessage(Integer id, String content);
     JsonContentReturn commitMessage(int id, String content);
     JsonContentReturn commitAnoReply(int id, String content);
     JsonContentReturn commitReply(int id, String content);
@@ -32,10 +32,10 @@ public interface MessageService {
     void deleteMyUsrUnread(int usrId);
     void deleteAnoUnread(int anoId);
     void deleteUsrUnread(int usrId);
-    List<AnoComment> getAnoCommentByMsgId(int msgId);
+    HashMap<String, Object> getAnoCommentByMsgId(int msgId);
     JsonContentReturn commitAnoComment(int msgId, String content);
     JsonContentReturn commitAnoCommentReply(int msgId, String content);
-    List<UsrComment> getUsrCommentByMsgId(int msgId);
+    HashMap<String, Object> getUsrCommentByMsgId(int msgId);
     JsonContentReturn commitUsrComment(int msgId, String content);
     JsonContentReturn commitUsrCommentReply(int msgId, String content);
 }

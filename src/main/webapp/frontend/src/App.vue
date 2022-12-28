@@ -7,6 +7,7 @@
         <router-link to="/Announce">Announce</router-link>
         <router-link to="/LoginorRegister">Login</router-link>
         <router-link to="/Update">Update</router-link>
+        <router-link to="/MadrenWork">Madren Work</router-link>
       </nav>
       <p class="welcome">欢迎您{{ user.username }}</p>
     </div>

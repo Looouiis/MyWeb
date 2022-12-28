@@ -14,7 +14,8 @@ import { debounce } from 'lodash-es'
 export default {
   name: 'TextHandler',
   data: () => ({
-    input: ''
+    input: '',
+    talkTo:''
   }),
   props:{
     default: String,
@@ -40,6 +41,9 @@ export default {
     submit(){
       this.$emit('submit', this.input)
       this.clear
+    },
+    fetch(){
+      this.$emit('fetch', this.talkTo)
     }
   },
   created(){
@@ -49,9 +53,8 @@ export default {
     else if(this.default.indexOf('ano') !== -1 && this.inputDefault){
       
     }
-    this.input += this.isMe
   },
-  emits: ['submit']
+  emits: ['submit','fetch']
 }
 </script>
 
@@ -66,17 +69,19 @@ export default {
     <div class="selects" v-if="isMe && selectorDisplay">
       <select class="manage">
         <option v-for="msgUsr in msgUsrList">
-          {{ (msgUsr.anoId === null ? 'ano:' + msgUsr.usrId : 'usr:' + msgUsr.anoId) + ': ' + msgUsr.num}}
+          {{ (msgUsr.anoId === null ? 'usr:' + msgUsr.usrId : 'ano:' + msgUsr.anoId) + ': ' + msgUsr.num}}
         </option>
       </select>
-      <select class="manage">
-        <option v-for="usr in usrList">
+      <select class="manage" v-model="talkTo" >
+        <option v-for="usr in usrList" :value="usr.id+' usr'">
           {{ usr.id+'('+usr.username+','+ (usr.gender ? '女' : '男') +')' }}
         </option>
-        <option v-for="ano in anoList">
+        <option v-for="ano in anoList" :value="ano.id+' ano'">
           {{ ano.id + '(ano)' }}
         </option>
       </select>
+      {{ talkTo }}
+      <button class="go" @click="fetch">GO!</button>
     </div>
   </div>
 </template>

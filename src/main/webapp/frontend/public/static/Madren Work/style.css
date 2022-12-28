@@ -1,0 +1,618 @@
+*{
+    user-select: none;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+@font-face {
+    font-family: 'fzz';
+    src: url('./fonts/FZYanSJW.TTF');
+}
+@font-face {
+    font-family: 'bxk';
+    src: url('./fonts/FZSKBXKJW\ .TTF');
+}
+.links h3{
+    color:rgb(95,133,170);
+    font-weight: 500;
+    font-family: 'fzz';
+    cursor: pointer;
+    user-select: none;
+}
+#yiyan{
+    font-family: 'bxk';
+}
+main{/*设置主背景效果*/
+    min-height:100vh;
+    min-width: 190vh;
+    /* height: 100vh; */
+    background: linear-gradient(to right top,rgb(109,161,230),rgb(221,178,187));/*"linear-gradient() 函数用于创建一个表示两种或多种颜色线性渐变的图片"两种渐变颜色直至右上角（从左下角走对角线到右上角）*/
+    /*设置主背景上的毛玻璃的位置信息*/
+    display: flex;/*弹性布局决定元素如何在页面上排列*/
+    align-items: center;
+    justify-content:center;
+    /*设置主背景上的毛玻璃的位置信息*/
+}
+
+.glass{/*设置毛玻璃主板效果*/
+    background: white;
+    min-height: 90vh;
+    width: 75%;
+    background: linear-gradient(
+        to right bottom,
+        rgba(255,255,255,0.7),
+        rgba(255,255,255,0.3)
+        );/*神在可以用rgba设置模糊颜色，第四个数即与黑混合的白度(0,1)*/
+    border-radius: 1.5rem;
+    z-index: 3;/*位列从底往上数第3层*/
+    backdrop-filter: blur(2rem);/*设置玻璃效果(0，100)rem*/
+    display: flex;
+}
+
+.dashboard{
+    flex: 1;
+    min-height: 90vh;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+    background: linear-gradient(
+        to right bottom,
+        rgba(255,255,255,0.7),
+        rgba(255,255,255,0.3)
+        );
+        border-radius: 1.5rem;
+}
+.zhuban{
+    display: flex;
+}
+.zhuban h2{
+    font-family: 'fzz';
+}
+
+
+
+.search{
+    position: relative;
+    background: linear-gradient(
+        to right bottom,
+        rgba(255,255,255,0.7),
+        rgba(255,255,255,0.3)
+        );
+    /* height:40px; */
+    top: 20%;
+    left: -150px;
+    height: 20px;
+    border-radius: 39px;
+    padding: 5px;
+    transition: 0.7s;
+    backdrop-filter: blur(100rem);
+}
+.search:hover > .search-txt{
+    color: black;
+    width: 300px;
+    height: 30px;
+}
+.search:hover{
+    height: 40px;
+    background: white;
+}
+
+.search:hover > .search-btn{
+    background: linear-gradient(to right top,rgb(109,161,230),rgb(221,178,187));
+    width: 30px;
+    height: 30px;
+}
+/* .search-btn:hover{
+    background: red;
+} */
+.search:hover > .select{
+    width: 30px;
+    height: 30px;
+}
+.search-btn{
+    cursor: pointer;
+    color: black;
+    float: right;
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.7s;/*设置样式改变的时候的变化时间 */
+}
+.search-txt{
+    border: none;
+    color: black;
+    background: none;
+    outline: none;
+    padding: 6 0;
+    float: left;
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+    width: 0px;
+
+    height: 10px;
+
+    transition: 0.7s;
+}
+.select{
+    cursor: pointer;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 1.7s;
+    float: right;
+    border: none;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    transition: 0.7s;
+}
+
+
+/*                         background: linear-gradient( */
+        /*                     to right, */
+                            /* rgb(163,169,209), */
+        /* rgb(226,197,219)， */
+        /* rgb(246,205,205), */
+        /* #F9D3CB, */
+        /* #FADED3, */
+        /* #F6DFD7, */
+        /* #DCDADF, */
+                                   /* rgb(218,178,189), */
+        /* #C5D5E5, */
+        /* #B7CCEB, */
+        /* #A0AAC5, */
+        /* #7990BD, */
+        /* #697BB9, */
+        /* rgb(93,116,150) */
+        /* rgb(87,101,128) */
+                                   /* rgb(226,197,219) */
+                                 /* ); */
+.head:hover{
+    animation: magic 7s infinite;
+}
+.head:hover > #yiyan{
+    font-size: 13pt;
+}
+.head:hover::before{
+    min-height: .5vh;
+    animation: magic 7s infinite;
+    background-size: 250%;
+}
+@keyframes magic{
+    100%{
+        background-position: 100% 0;
+    }
+    50%{
+        background-position: 50% 0;
+    }
+    0%{
+        background-position: 0% 0;
+    }
+}
+.head{
+    min-height: 3vh;
+    position: absolute;
+    top: 0rem;
+    min-width: 100%;
+    transition: 5s;
+    background: linear-gradient(
+        to right,
+        rgb(163,169,209),
+        /* rgb(226,197,219)， */
+        /* rgb(246,205,205), */
+        /* #F9D3CB, */
+        rgb(212, 240, 245),
+        /* #FADED3, */
+        /* #F6DFD7, */
+        /* #DCDADF, */
+        rgb(226,197,219),
+        /* #C5D5E5, */
+        /* #B7CCEB, */
+        /* #A0AAC5, */
+        rgb(163,169,209),
+        /* #7990BD, */
+        /* #697BB9, */
+        /* rgb(93,116,150) */
+        rgb(212, 240, 245),
+        /* rgb(87,101,128) */
+        /* rgb(87,101,128) */
+        /* rgb(87,101,128) */
+        rgb(218,178,189)
+        );
+        background-size: 250%;
+    /* backdrop-filter: blur(1rem); */
+}
+.head::before{
+    content:'';
+    min-height: 0vh;
+    position: absolute;
+    top: 3vh;
+    min-width: 100%;
+    background: linear-gradient(
+        to right,
+        rgb(163,169,209),
+        /* rgb(226,197,219)， */
+        /* rgb(246,205,205), */
+        /* #F9D3CB, */
+        rgb(212, 240, 245),
+        /* #FADED3, */
+        /* #F6DFD7, */
+        /* #DCDADF, */
+        rgb(226,197,219),
+        /* #C5D5E5, */
+        /* #B7CCEB, */
+        /* #A0AAC5, */
+        rgb(163,169,209),
+        /* #7990BD, */
+        /* #697BB9, */
+        /* rgb(93,116,150) */
+        rgb(212, 240, 245),
+        /* rgb(87,101,128) */
+        /* rgb(87,101,128) */
+        /* rgb(87,101,128) */
+        rgb(218,178,189)
+        );
+        background-size: 0%;
+        filter: blur(2px);
+        transition: 0.7s;
+}
+#yiyan{
+    transition: 0.7s;
+    margin: .7vh;
+    text-align: center;
+}
+
+
+/* .botton{
+    position: relative;
+    right: -180px;
+    height: 50px;
+    width: 50px;
+    border-radius: 5rem;
+    background: red;
+    cursor: pointer;
+    top: -360px;
+}
+.botton::before{
+    content: '>';
+    line-height: 47px;
+    font-size: 30px;
+    color: rgb(109,161,230);
+}
+.botton.active::before{
+    content: '<';
+} */
+
+
+
+
+
+.link{
+    display: flex;
+    margin: 2rem 0rem;
+    padding: 1rem 5rem;
+    align-items: center;
+}
+.link img{
+    height: 1rem;
+    width: 1rem;
+}
+.link h3{
+    padding: 0rem 2rem;
+}
+.zhuban{
+    flex: 3;
+} 
+.cpr{
+    background: linear-gradient(to right top,#65dfc9,#6cdbeb);
+    color:white;
+    padding: 1rem;
+    border-radius: .5rem;
+}
+.adw{
+    background:white;
+    color: black;
+    padding: 5rem;
+    font-size: 7px;
+}
+
+.cld{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    text-align: center;
+    text-align-last: center;
+}
+
+
+
+
+.showtime{
+    position: relative;
+    left:10px;
+    top:10px;
+    right:10px;
+    bottom:10px;
+    user-select: none;
+}
+.showtime h2{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    color:rgb(95,133,170);
+    font-size: 3em;
+    left:50%;
+    line-height: 200px;/*设置时钟高度*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* active与非active显示操作前和操作后的两种状态 */
+#calendar body{
+    color:#333;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;/* 后续自己改 */
+}
+#calendar ul{/*去除无序数表的小圆点*/
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#calendar th,td{/*去除表格的padding值*/
+    padding: 0;
+}
+#calendar button{
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: none;
+}
+#calendar i{/*下拉框的箭头*/
+    font-style: normal;
+}
+#calendar{
+    user-select: none;
+    /* position: relative; */
+    /* top: 17rem; */
+    position: absolute;
+    top: 17rem;
+    left: 33rem;
+
+    width: 700px;
+    height: 480px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    border-radius: 16px;
+
+    background: linear-gradient(to right top,rgb(193,182,213),rgb(226,197,219));
+}
+#calendar.c_active .c_zhu{
+    background-color: #65dfc9;
+}
+#calendar .c_zhu{
+    background: linear-gradient(
+        to right bottom,
+        rgba(255,255,255,0.7),
+        rgba(255,255,255,0.3)
+        );
+    border-radius: 16px;
+    padding: 17px 15px 15px 15px;
+}
+/* topbar-------c_top */
+.c_top{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 30px 0px 30px;
+}
+.c_select{
+    height: 30px;
+    box-sizing: border-box;/* 设置盒模型 */
+    border: 1px solid #d7d9e0;
+    border-radius: 6px;
+    cursor: pointer;
+    background: white;
+    user-select: none;/* 禁止用户选中文字 */
+    position: relative;
+}
+.c_yearSelect{
+    width: 96px;
+}
+.c_selected{
+    height: 28px;
+    padding: 0 7px;
+    display: flex;/* 设置弹性盒模型使水平、垂直对齐的设置变容易（有其才能有justify-content与align-items） */
+    justify-content: space-between;/* x轴方向两端对齐 */
+    align-items: center;/* 垂直方向居中对齐 */
+}
+.c_selected i{
+    font-size: 14px;
+    color: #9ba2a9;
+    font-family:'YaHei';
+    transform: scaleX(1.5) rotate(90deg);/* 水平拉伸1.5倍，顺时针旋转90度 */
+}
+.c_select.c_active{
+    border-color: #a7aab5;
+}
+.c_select.c_active .c_selected i{
+    color: #767e87;
+    transform: scaleX(1.5) rotate(270deg);
+}
+.c_selectBox{
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 1px 10px rgba(0,0,0,.1);
+    border-radius: 6px;
+    background: white;
+
+    padding: 9px 0 9px 16px;
+    position: absolute;
+    left: 0px;
+    top: 38px;
+    z-index: 10;
+    display: none;
+}
+.c_select.c_active .c_selectBox{
+    display: block;
+}
+.c_yearSelect .c_selectBox{
+    max-height: 310px;
+    overflow: hidden;
+    /* 内容会被修剪，且其余内容是不可见的 */
+}
+.c_selectBox li{/* 设置行参数 */
+    height: 22px;
+    line-height: 22px;
+    cursor: pointer;
+}
+.c_selectBox li:hover,.c_selectBox li.c_active{
+    color: #65dfc9;
+}
+.c_scroll{
+    width: 11px;
+    position: absolute;/* 用定位撑开滚动条位置：上padding至下padding */
+    top: 9px;/* 用定位撑开滚动条位置：上padding至下padding */
+    bottom: 9px;/* 用定位撑开滚动条位置：上padding至下padding */
+    right: 3px;
+    background: rgba(255,255,255,0.7);
+}
+.c_scroll span{
+    width: 100%;
+    height: 23px;
+    background: #65dfc9;
+    position: absolute;
+    top: 7px;
+    border-radius: 22px;
+}
+
+
+.c_yueSelect{
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+.c_arrow{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+.c_arrow span{
+    font-size: 18px;
+    color: #9ba2a9;
+    transform: scaleY(1.5);
+    font-family: 'YaHei';
+    position: relative;
+    top: -2px;
+}
+.c_yueSelect .c_select{
+    width: 78px;
+}
+
+
+.c_holidaySelect{
+    width: 96px;
+}
+
+
+.c_date{
+    width: 100%;
+    margin-top: 14px;
+
+    border-spacing: 4px;/* 设置边框宽度实现每个元素之间都有间距 */
+}
+.c_date th{
+    height: 36px;
+    font-weight: normal;
+}
+.c_date td{
+    width: 60px;
+    height: 56px;
+}
+.c_date div{
+    height: 100%;
+    box-sizing: border-box;/* 告诉浏览器：你想要设置的边框和内边距的值是包含在 width 内的。也就是说，如果你将一个元素的 width 设为 100px，那么这 100px 会包含它的 border 和 padding，内容区的实际宽度是 width 减 去(border + padding) 的值。大多数情况下，这使得我们更容易地设定一个元素的宽高。注：border-box 不包含 margin。 */
+    border-radius: 6px;
+    border: 2px solid transparent;/* transparent表示透明 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: column;/* 子元素竖着排 */
+    justify-content: center;
+    /* background: grey; */
+    position: relative;
+}
+.c_date div:hover, .c_date div.c_active{
+    border-color: rgb(226,197,219);
+}
+.c_date div span:nth-child(1){/* 元素:nth-clid(n)选择第n个这样的元素 */
+    font-size: 18px;
+    color: black;
+}
+.c_date div span:nth-child(2){
+    font-size: 11px;
+}
+.c_date td:nth-child(n+6)/* 其中n+6表示选择到第6个及以上 */ span{
+    color: rgb(95,133,170);
+}
+.c_date .c_holiday,.c_date .c_holiday.c_active{
+    background: rgb(226,197,219);
+}
+.c_date .c_holiday:hover{
+    border-color: rgb(193,182,213);
+}
+.c_date .c_holiday::before,.c_date .c_weekday::before/* before:创建伪元素，用以显示‘休’字 */{
+    content: "躺";
+    font-size: 12px;
+    line-height: 12px;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    color: rgb(95,133,170);
+}
+.c_date .c_holiday span:nth-child(1),.c_date .c_holiday span:nth-child(2){
+    color: rgb(95,133,170);
+}
+
+
+.c_date .c_weekday{
+    background: rgb(255,255,255,0.5);
+}
+.c_date .c_weekday::before{
+    content: "卷";
+    color: grey;
+}
+.c_date .c_weekday span:nth-child(1),.c_date .c_weekday span:nth-child(2){
+    color: black;
+}
+.c_preMonth,.c_nextMonth{
+    opacity: 0.5;/* 修改透明度 */
+}
+
+.c_date div.c_today{
+    border-color: black;
+}
+.c_date div.c_active.c_holiday{
+    border-color: rgb(95,133,170);
+}

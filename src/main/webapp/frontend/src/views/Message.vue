@@ -31,7 +31,9 @@ export default {
       myName: String,
       msgUsrList: Object,
       usrList: Object,
-      anoList: Object
+      anoList: Object,
+      talkTo: null,
+      talkToWho: String
     }
   },
   mounted(){
@@ -50,7 +52,7 @@ export default {
       })
     }
     else if(this.default.indexOf('usr') !== -1){
-      this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage).then((res) => {
+      this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -60,7 +62,7 @@ export default {
       })
     }
     else if(this.default.indexOf('ano') !== -1){
-      this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage).then((res) => {
+      this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -72,45 +74,114 @@ export default {
   },
   methods: {
     submit(content){
-      if(this.default.indexOf('usr') !== -1){
-        this.axios({
-          method: 'POST',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-          url: 'http://localhost:801/users/communication'
-        }).then((res) => {
-          // console.log(res)
+      if(this.isMe){
+        // alert(this.isMe)
+        if(this.talkTo === null)
+        alert('请先选择对象')
+        if(this.talkToWho === 'usr'){
+          this.axios({
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
+            url: 'http://localhost:801/users/reply/'+this.talkTo
+          }).then((res) => {
+            if('status' in res.data && res.data.status){
+              this.$message.success(res.data.description)
+            }
+            else if('status' in res.data){
+              this.$message.error(res.data.description)
+            }
+            else{
+              this.$message.error(res.data.exceptionMessage)
+            }
+          })
+        }
+        else if(this.talkToWho === 'ano'){
+          this.axios({
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
+            url: 'http://localhost:801/anonymous/reply/'+this.talkTo
+          }).then((res) => {
+            if('status' in res.data && res.data.status){
+              this.$message.success(res.data.description)
+            }
+            else if('status' in res.data){
+              this.$message.error(res.data.description)
+            }
+            else{
+              this.$message.error(res.data.exceptionMessage)
+            }
+          })
+        }
+      }
+      else{
+        if(this.default.indexOf('usr') !== -1){
+          this.axios({
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
+            url: 'http://localhost:801/users/communication'
+          }).then((res) => {
+            // console.log(res)
+            if('status' in res.data && res.data.status){
+              this.$message.success(res.data.description)
+            }
+            else if('status' in res.data){
+              this.$message.error(res.data.description)
+            }
+            else{
+              this.$message.error(res.data.exceptionMessage)
+            }
+          })
+          // .post('http://localhost:801/users/communication','content:'+content)
+        }
+        else if(this.default.indexOf('ano') !== -1){
+          this.axios({
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
+            url: 'http://localhost:801/anonymous/communication'
+          }).then((res) => {
+            // console.log(res)
+            if('status' in res.data && res.data.status){
+              if(res.data.content !== null){
+                localStorage.setItem('anoToken', res.data.content)
+              }
+              this.$message.success(res.data.description)
+            }
+            else if('status' in res.data){
+              this.$message.error(res.data.description)
+            }
+            else{
+              this.$message.error(res.data.exceptionMessage)
+            }
+          })
+        }
+      }
+    },
+    fetch(content){
+      let id = content.match(/\d+/g)
+      this.talkTo = id
+      if(content.indexOf('usr') !== -1){
+        this.talkToWho = 'usr'
+        this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
+          console.log(res.data)
           if('status' in res.data && res.data.status){
-            this.$message.success(res.data.description)
-          }
-          else if('status' in res.data){
-            this.$message.error(res.data.description)
-          }
-          else{
-            this.$message.error(res.data.exceptionMessage)
+            this.msgList = res.data.content.messages
+            this.messageBy = res.data.content.messageBy
+            this.myName = res.data.content.myName
           }
         })
-        // .post('http://localhost:801/users/communication','content:'+content)
       }
-      else if(this.default.indexOf('ano') !== -1){
-        this.axios({
-          method: 'POST',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-          url: 'http://localhost:801/anonymous/communication'
-        }).then((res) => {
-          // console.log(res)
+      else if(content.indexOf('ano') !== -1){
+        this.talkToWho = 'ano'
+        this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
+          console.log(res.data)
           if('status' in res.data && res.data.status){
-            if(res.data.content !== null){
-              localStorage.setItem('anoToken', res.data.content)
-            }
-            this.$message.success(res.data.description)
-          }
-          else if('status' in res.data){
-            this.$message.error(res.data.description)
-          }
-          else{
-            this.$message.error(res.data.exceptionMessage)
+            this.msgList = res.data.content.messages
+            this.messageBy = '匿名'+res.data.content.anoId
+            this.myName = res.data.content.myName
           }
         })
       }
@@ -123,7 +194,7 @@ export default {
   <div class="container">
     <h2 class="title">留言</h2>
     <div class="message-container">
-      <TextHandler @submit="submit"
+      <TextHandler @submit="submit" @fetch="fetch"
         :default=this.default
         :inputDefault=true
         :isMe=isMe

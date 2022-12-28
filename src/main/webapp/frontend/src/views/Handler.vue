@@ -193,8 +193,8 @@ form{
 @media (max-width: 870px){
     .background{
         // min-height: 800px;
-        height: 95vh;
         &.log-in-mode, &.register-mode{
+            height: 95vh;
             .msg{
                 display: none;
             }

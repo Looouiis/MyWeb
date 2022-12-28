@@ -15,7 +15,10 @@ export default {
   methods: {
     update: debounce(function (e) {
       this.input = e.target.value
-    }, 100)
+    }, 100),
+    created(){
+      this.$emit('response', 'background markdown-mode')
+    }
   }
 }
 </script>

@@ -13,6 +13,12 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  props:{
+    default: String
+  },
+  created(){
+    this.$emit('response', this.default+'home-mode')
   }
 }
 </script>

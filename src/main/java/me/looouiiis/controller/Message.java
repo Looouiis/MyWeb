@@ -38,18 +38,21 @@ public class Message {
         return ret;
     }
 
-    @GetMapping(value = "/anonymous/communication")
+    @GetMapping(value = "/anonymous/communication/{num}/{page}")
     @ResponseBody
-    public JsonContentReturn getAnoCommunication(Integer anoId, Integer page, Integer num, HttpServletRequest request) {
+    public JsonContentReturn getAnoCommunication(Integer anoId, @PathVariable Integer page, @PathVariable Integer num, HttpServletRequest request) {
         Integer start = null;
-        if (page != null && num != null && page > 0) {
+        if (page == -1) {
+            start = null;
+            num = null;
+        } else if (page != null && num != null && page > 0) {
             start = num * (page - 1);
-        } else if (page == null && num != null) {
+        } else if ( num != null) {
             start = 0;
         }
         boolean me = (boolean) request.getAttribute("isMe");
         Integer id = (Integer) request.getAttribute("anoId");
-        if(anoId != null && anoId > 0){
+        if (anoId != null && anoId > 0) {
             id = anoId;
         }
         HashMap<String, Object> res = service.getAnoCommunication(id, start, num, me);
@@ -82,8 +85,8 @@ public class Message {
     @ResponseBody
     public JsonContentReturn postAnoReply(String content, HttpServletRequest request) {
         Integer id = (Integer) request.getAttribute("anoId");
-        if(id == null){
-            throw new SystemException(Code.SYSTEM_ERR,"在预期可获得anoId的位置出错");
+        if (id == null) {
+            throw new SystemException(Code.SYSTEM_ERR, "在预期可获得anoId的位置出错");
         }
         return service.commitAnoReply(id, content);
     }
@@ -101,25 +104,29 @@ public class Message {
         } else {
             ret.setContent(null);
             ret.setStatus(false);
-            ret.setDescription("Give me your mac first");
+            ret.setDescription("您还没留言过");
         }
         return ret;
     }
 
-    @GetMapping(value = "/users/communication")
+    @GetMapping(value = "/users/communication/{num}/{page}")
     @ResponseBody
-    public JsonContentReturn getUsrCommunication(Integer usrId, Integer page,Integer num, HttpServletRequest request) {
+    public JsonContentReturn getUsrCommunication(Integer usrId, @PathVariable Integer page, @PathVariable Integer num, HttpServletRequest request) {
         Integer start = null;
         Integer id = (Integer) request.getAttribute("usrId");
-        if(usrId != null && usrId > 0){
+        if (usrId != null && usrId > 0) {
             id = usrId;
         }
         JsonContentReturn ret = new JsonContentReturn();
         if (id != null) {
             boolean me = (boolean) request.getAttribute("isMe");
-            if (page != null && num != null && page > 0) {
+            if(page == -1){
+                start = null;
+                num = null;
+            }
+            else if (page != null && num != null && page > 0) {
                 start = num * (page - 1);
-            } else if (page == null && num != null) {
+            } else if (num != null) {
                 start = 0;
             }
             HashMap<String, Object> res = service.getCommunicationByUserId(id, start, num, me);
@@ -180,11 +187,11 @@ public class Message {
     @ResponseBody
     public JsonContentReturn checkUsrUnread(HttpServletRequest request) {
         Integer id = (Integer) request.getAttribute("usrId");
-        JsonContentReturn ret = checkMyUnreadWithPer(request);
-        if(ret.isStatus()){
-            return ret;
-        }
-        ret = new JsonContentReturn();
+//        JsonContentReturn ret = checkMyUnreadWithPer(request);
+//        if (ret.isStatus()) {
+//            return ret;
+//        }
+        JsonContentReturn ret = new JsonContentReturn();
         if (id != null) {
             UsrUnread res = service.checkUsrUnread(id);
             ret.setContent(res);
@@ -197,21 +204,23 @@ public class Message {
         }
         return ret;
     }
+
     @GetMapping("/anonymous/comment/{msgId}")
     @ResponseBody
-    public JsonContentReturn getAnoComment(@PathVariable int msgId){
+    public JsonContentReturn getAnoComment(@PathVariable int msgId) {
         HashMap<String, Object> res = service.getAnoCommentByMsgId(msgId);
         JsonContentReturn ret = new JsonContentReturn();
-        if(res.size() != 0){
+        if (res.size() != 0) {
             ret.setStatus(true);
             ret.setContent(res);
             ret.setDescription("成功");
-        } else{
+        } else {
             ret.setStatus(false);
             ret.setDescription("无回复");
         }
         return ret;
     }
+
     @PostMapping(value = "/anonymous/comment/{msgId}")
     @ResponseBody
     public JsonContentReturn postAnoComment(@PathVariable Integer msgId, String content, HttpServletRequest request) {
@@ -226,21 +235,23 @@ public class Message {
             return ret;
         }
     }
+
     @GetMapping("/users/comment/{msgId}")
     @ResponseBody
-    public JsonContentReturn getUsrComment(@PathVariable int msgId){
+    public JsonContentReturn getUsrComment(@PathVariable int msgId) {
         HashMap<String, Object> res = service.getUsrCommentByMsgId(msgId);
         JsonContentReturn ret = new JsonContentReturn();
-        if(res.size() != 0){
+        if (res.size() != 0) {
             ret.setStatus(true);
             ret.setContent(res);
             ret.setDescription("成功");
-        } else{
+        } else {
             ret.setStatus(false);
             ret.setDescription("无回复");
         }
         return ret;
     }
+
     @PostMapping(value = "/users/comment/{msgId}")
     @ResponseBody
     public JsonContentReturn postUsrComment(@PathVariable Integer msgId, String content, HttpServletRequest request) {

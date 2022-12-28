@@ -71,10 +71,14 @@ public class MessageServiceImpl implements MessageService {
     public HashMap<String, Object> getCommunicationByUserId(Integer id, Integer start, Integer num, boolean me) {
         int totalCount = messageDao.getUsrMessageTotalNum(id);
         List<Message> messages = messageDao.selectMessageById(id, start, num);
-        if (me)
+        if (me){
+            System.out.println(1);
             deleteMyUsrUnread(id);
-        else
+        }
+        else {
+            System.out.println(2);
             deleteUsrUnread(id);
+        }
         for (Message message : messages) {
             if (message.isLocal()) {
                 try {

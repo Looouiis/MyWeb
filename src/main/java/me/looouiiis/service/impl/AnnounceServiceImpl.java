@@ -51,6 +51,11 @@ public class AnnounceServiceImpl implements AnnounceService {
     }
 
     @Override
+    public Integer insert(String message) {
+        return insert(message, null);
+    }
+
+    @Override
     public HashMap<String, Object> select(Integer start, Integer num) {
         List<Announce> selects = announceDao.select(start, num);
         Integer totalCount = announceDao.getTotalCount();
@@ -63,5 +68,10 @@ public class AnnounceServiceImpl implements AnnounceService {
     @Override
     public Integer delete(int[] ids) {
         return announceDao.delete(ids);
+    }
+
+    @Override
+    public String getMyName() {
+        return announceDao.getMyName();
     }
 }

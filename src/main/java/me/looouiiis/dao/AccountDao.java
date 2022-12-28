@@ -14,6 +14,8 @@ public interface AccountDao {
     User selectByUsername(@Param("username")String username);
     @Select("select id,username,password,is_me as isMe, female as gender from users")
     List<User> selectAll();
+    @Select("select id,username, female as gender from users")
+    List<User> selectSimple();
     @Select("select id, is_me as isMe from users where username = #{username} and password = #{password}")
     User selectByPassword(@Param("username")String username, @Param("password")String password);
     @Insert("insert into users(username, password, is_me, female) values(#{username},#{password},#{isMe},#{gender})")
@@ -30,4 +32,6 @@ public interface AccountDao {
     int deleteFromMyUnread(@Param("userId") int userId);
     @Delete("delete from unread_for_usr where usr_id = #{userId}")
     int deleteFromUsrUnread(@Param("userId") int userId);
+    @Select("select id from anonymous_users")
+    List<AnonymousUser> selectAllAno();
 }

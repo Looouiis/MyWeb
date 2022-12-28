@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface AnnounceDao {
+    @Select("select username from users where is_me = 1 order by id ASC limit 0,1")
+    String getMyName();
     @Insert("insert into announce(content, local, date) values(#{content}, #{local}, #{date})")
     Integer insert(Announce announce);
     @Update("update announce set content = #{msg} where id = #{id}")

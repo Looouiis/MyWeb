@@ -133,9 +133,17 @@ public class UserServiceImpl implements UserService {
 //        return JSON.toJSONString(select);
 //    }
     @Override
-    public JsonContentReturn selectAll() {
+    public JsonContentReturn selectAll(boolean simple) {
         JsonContentReturn select = new JsonContentReturn();
-        select.setContent(JSON.toJSON(accountDao.selectAll()));
+        HashMap<String, Object> allUsers = new HashMap<>();
+        if(simple){
+            allUsers.put("users",accountDao.selectSimple());
+        }
+        else {
+            allUsers.put("users", accountDao.selectAll());
+        }
+        allUsers.put("anoUsers", accountDao.selectAllAno());
+        select.setContent(allUsers);
         select.setStatus(true);
         select.setDescription("Success");
         return select;

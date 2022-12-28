@@ -9,7 +9,7 @@ public interface UserService {
 
     JsonAccountStatus register(User user);
 
-    JsonContentReturn selectAll();
+    JsonContentReturn selectAll(boolean simple);
 
     JsonAccountStatus closeByPassword(User user);
 

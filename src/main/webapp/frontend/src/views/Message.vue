@@ -19,29 +19,38 @@ export default {
   },
   props:{
     default: String,
-    userId: Number
+    userId: Number,
+    isMe: Boolean
   },
   data(){
     return{
-      currentPage: 0,
+      currentPage: -1,
       defaultNum: 3,
       msgList: Object,
-      // msgList: {
-      //   content: String,
-      //   date: String,
-      //   id: Number,
-      //   local: Boolean,
-      //   message: Boolean,
-      //   userId: Number
-      // },
       messageBy: String,
-      myName: String
+      myName: String,
+      msgUsrList: Object,
+      usrList: Object,
+      anoList: Object
     }
   },
   mounted(){
     this.$emit('response', this.default + 'message-mode noMsg')
-    if(this.default.indexOf('usr') !== -1){
-      this.axios.get('http://localhost:801/users/communication').then((res) => {
+    if(this.isMe){
+      this.axios.get('http://localhost:801/myUnread').then((res) => {
+        if(res.data.status){
+          this.msgUsrList = res.data.content
+        }
+      })
+      this.axios.get('http://localhost:801/users/true').then((res) => {
+        // console.log(res.data)
+        this.anoList = res.data.content.anoUsers
+        this.usrList = res.data.content.users
+        console.log(this.usrList)
+      })
+    }
+    else if(this.default.indexOf('usr') !== -1){
+      this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage).then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -51,7 +60,7 @@ export default {
       })
     }
     else if(this.default.indexOf('ano') !== -1){
-      this.axios.get('http://localhost:801/anonymous/communication').then((res) => {
+      this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage).then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -117,6 +126,11 @@ export default {
       <TextHandler @submit="submit"
         :default=this.default
         :inputDefault=true
+        :isMe=isMe
+        :selectorDisplay=true
+        :msgUsrList=this.msgUsrList
+        :usrList=this.usrList
+        :anoList=this.anoList
       />
       <!-- <div class="btn">
         <button class="submit">提交</button>

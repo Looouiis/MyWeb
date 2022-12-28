@@ -18,7 +18,12 @@ export default {
   }),
   props:{
     default: String,
-    inputDefault: Boolean
+    inputDefault: Boolean,
+    isMe: false,
+    selectorDisplay: true,
+    msgUsrList: '',
+    usrList: '',
+    anoList: ''
   },
   computed: {
     output() {
@@ -44,6 +49,7 @@ export default {
     else if(this.default.indexOf('ano') !== -1 && this.inputDefault){
       
     }
+    this.input += this.isMe
   },
   emits: ['submit']
 }
@@ -57,6 +63,21 @@ export default {
   <div class="btn">
     <button class="submit" @click="submit">提交</button>
     <button class="reset" @click="clear">清空</button>
+    <div class="selects" v-if="isMe && selectorDisplay">
+      <select class="manage">
+        <option v-for="msgUsr in msgUsrList">
+          {{ (msgUsr.anoId === null ? 'ano:' + msgUsr.usrId : 'usr:' + msgUsr.anoId) + ': ' + msgUsr.num}}
+        </option>
+      </select>
+      <select class="manage">
+        <option v-for="usr in usrList">
+          {{ usr.id+'('+usr.username+','+ (usr.gender ? '女' : '男') +')' }}
+        </option>
+        <option v-for="ano in anoList">
+          {{ ano.id + '(ano)' }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 

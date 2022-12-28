@@ -12,7 +12,7 @@
     </div>
   <div :class="signUpMode">
     <div class="msg">{{ msg }}</div>
-    <router-view @response="(msg) => signUpMode = msg" :default=this.default :userId=this.user.id />
+    <router-view @response="(msg) => signUpMode = msg" :default=this.default :userId=this.user.id :isMe=this.user.isMe />
   </div>
 
 </template>
@@ -208,23 +208,51 @@ nav {
     },
     methods:{
     },
-    mounted(){
+    async mounted(){
       let token = localStorage.getItem('token')
       if(token !== null && token !== ''){
-        this.axios.get('http://localhost:801/users/token').then((res) => {
+        await this.axios.get('http://localhost:801/users/token').then(async (res) => {
           this.user = res.data.content
-        })
-        this.axios.get('http://localhost:801/users/reply').then((res) => {
-          for (let index = 0; index < res.data.content.length; index++) {
-            this.msg += res.data.content[index].num
+          // console.log(res.data)
+          if(res.data.content.isMe){
+            await this.axios.get('http://localhost:801/myUnread').then((res) => {
+              // console.log(res)
+              if(res.data.content != null){
+                for (let index = 0; index < res.data.content.length; index++) {
+                  this.msg += res.data.content[index].num
+                }
+              }
+              if(this.msg === 0){
+                this.default += 'noMsg '
+              }
+            })
           }
-          if(this.msg === 0){
-            this.default += 'noMsg '
+          else{
+            await this.axios.get('http://localhost:801/users/reply').then((res) => {
+              console.log(res)
+              if(res.data.content != null)
+                this.msg += res.data.content.num
+              else
+                this.msg = 0
+              if(this.msg === 0){
+                this.default += 'noMsg '
+              }
+            })
           }
         })
         this.default += 'background usr '
       }
       else{
+        await this.axios.get('http://localhost:801/anonymous/reply').then((res) => {
+          console.log(res)
+          if(res.data.content != null)
+            this.msg += res.data.content.num
+          else
+            this.msg = 0
+            if(this.msg === 0){
+              this.default += 'noMsg '
+            }
+        })
         this.default += 'background ano '
       }
       this.signUpMode = this.default

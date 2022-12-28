@@ -37,9 +37,9 @@ public class Account {
         return service.update(user);
     }
 
-    @GetMapping
-    public JsonContentReturn manageWithPer(HttpServletRequest request) {
-        return service.selectAll();
+    @GetMapping("/{simple}")
+    public JsonContentReturn manageWithPer(HttpServletRequest request, @PathVariable boolean simple) {
+        return service.selectAll(simple);
     }
 
     @PutMapping("/token")

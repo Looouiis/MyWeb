@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="update">
       <iframe src='https://my.spline.design/componentpencilscopy-659a8d290e9452a65ed61af67bdb62be/' frameborder='0' width='100%' height='100%'></iframe>
       <div class="updateForm">
         
@@ -31,7 +31,7 @@
     </div>
   </template>
 <style lang="less">
-.home{
+.update{
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 95vh;
@@ -95,7 +95,7 @@ form{
       // left: 50%;
       width: 100%;
     }
-    .home{
+    .update{
       display: flex;
       align-items: center;
       justify-content: center;

@@ -18,7 +18,6 @@ public class PermissionAdvice {
         Object[] args = pjp.getArgs();
         HttpServletRequest request = (HttpServletRequest) args[0];
         boolean isMe = (boolean) request.getAttribute("isMe");
-        System.out.println(isMe);
         if(isMe) {
             return pjp.proceed();
         }

@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
-    path: '/index',
+    path: '/',
     name: 'home',
     component: HomeView
   },
@@ -90,7 +90,7 @@ router.beforeEach((to,from,next) => {
   // }
   let token = localStorage.getItem('token')
 
-  if(to.path !== '/LoginorRegister' && to.path !== '/Message' && (token === null || token === '')){
+  if(to.path === '/Update' && (token === null || token === '')){
     next('/LoginorRegister')
   }
   else{

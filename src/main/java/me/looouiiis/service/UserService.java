@@ -7,7 +7,7 @@ import java.util.HashMap;
 public interface UserService {
     JsonAccountStatus login(String username, String password);
 
-    JsonAccountStatus register(User user);
+    JsonAccountStatus register(User user, Integer anoId);
 
     JsonContentReturn selectAll(boolean simple);
 

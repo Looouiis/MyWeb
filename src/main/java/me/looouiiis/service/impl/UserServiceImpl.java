@@ -7,6 +7,7 @@ import me.looouiiis.dao.AccountDao;
 import me.looouiiis.exception.BusinessException;
 import me.looouiiis.exception.SystemException;
 import me.looouiiis.pojo.*;
+import me.looouiiis.service.MessageService;
 import me.looouiiis.service.UserService;
 import me.looouiiis.utils.TokenOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,13 @@ public class UserServiceImpl implements UserService {
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     private AccountDao accountDao;
+    private MessageService messageService;
 
     @Override
     public JsonAccountStatus login(String username, String password) {
@@ -43,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonAccountStatus register(User user) {
+    public JsonAccountStatus register(User user, Integer anoId) {
         User users = accountDao.selectByUsername(user.getUsername());
         JsonAccountStatus status = new JsonAccountStatus();
         status.setMethod("register");
@@ -54,6 +60,9 @@ public class UserServiceImpl implements UserService {
             if (res != 0) {
                 status.setToken(TokenOperator.generate(user.getId(), 3, false));
                 status.setRefreshToken(TokenOperator.generate(user.getId(), 7, false));
+                if(anoId != null){
+                    messageService.transformToUser(anoId, user.getId());
+                }
                 status.setStatus(true);
             } else {
                 throw new SystemException(Code.SYSTEM_ERR, "疑似数据库出现问题，请及时向我反馈");

@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted(){
-    this.axios.get('http://localhost:801/announce/0/-1').then((res) => {
+    this.axios.get(location.origin+'/announce/0/-1').then((res) => {
       console.log(res.data)
       if('status' in res.data && res.data.status){
         this.msgList = res.data.content
@@ -70,7 +70,7 @@ export default {
           method: 'POST',
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
           data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-          url: 'http://localhost:801/announce'
+          url: location.origin+'/announce'
         }).then((res) => {
           // console.log(res)
           if('status' in res.data && res.data.status){

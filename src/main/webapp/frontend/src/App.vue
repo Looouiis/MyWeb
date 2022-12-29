@@ -13,7 +13,7 @@
     </div>
   <div :class="signUpMode">
     <div class="msg">{{ msg }}</div>
-    <router-view @response="(msg) => signUpMode = msg" :default=this.default :userId=this.user.id :isMe=this.user.isMe />
+    <router-view @response="(msg) => signUpMode = msg" @reload="load()" :default=this.default :userId=this.user.id :isMe=this.user.isMe />
   </div>
 
 </template>
@@ -208,15 +208,16 @@ nav {
         }
     },
     methods:{
-    },
-    async mounted(){
-      let token = localStorage.getItem('token')
+      async load(){
+        this.default = ''
+        let token = localStorage.getItem('token')
       if(token !== null && token !== ''){
-        await this.axios.get('http://localhost:801/users/token').then(async (res) => {
+        await this.axios.get(location.origin+'/users/token').then(async (res) => {
           this.user = res.data.content
+          console.log(this.user)
           // console.log(res.data)
           if(res.data.content.isMe){
-            await this.axios.get('http://localhost:801/myUnread').then((res) => {
+            await this.axios.get(location.origin+'/myUnread').then((res) => {
               // console.log(res)
               if(res.data.content != null){
                 for (let index = 0; index < res.data.content.length; index++) {
@@ -229,7 +230,7 @@ nav {
             })
           }
           else{
-            await this.axios.get('http://localhost:801/users/reply').then((res) => {
+            await this.axios.get(location.origin+'/users/reply').then((res) => {
               console.log(res)
               if(res.data.content != null)
                 this.msg += res.data.content.num
@@ -244,7 +245,7 @@ nav {
         this.default += 'background usr '
       }
       else{
-        await this.axios.get('http://localhost:801/anonymous/reply').then((res) => {
+        await this.axios.get(location.origin+'/anonymous/reply').then((res) => {
           console.log(res)
           if(res.data.content != null)
             this.msg += res.data.content.num
@@ -257,6 +258,10 @@ nav {
         this.default += 'background ano '
       }
       this.signUpMode = this.default
+      }
+    },
+    mounted(){
+      this.load()
     }
   }
   

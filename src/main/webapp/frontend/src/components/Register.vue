@@ -82,11 +82,13 @@ export default {
   methods:{
       register(){
         if(this.user.password === this.con){
-          axios.put("http://localhost:801/users",this.user).then((res)=>{
+          this.axios.put(location.origin+'/users',this.user).then((res)=>{
               if(res.data.status){
                   localStorage.setItem("token", res.data.token)
                   localStorage.setItem("refreshToken", res.data.refreshToken)
                   this.$message.success(res.data.description)
+                  this.$emit('reload', 'register')
+                  this.$router.go('/')
               }
               else if('status' in res.data){
                   this.$message.error(res.data.description)
@@ -100,7 +102,8 @@ export default {
           this.$message.error('两次输入密码不一致')
         }
       }
-  }
+  },
+  emits:['reload','response']
 }
 </script>
 

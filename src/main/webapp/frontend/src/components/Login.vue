@@ -55,11 +55,13 @@ import axios from 'axios'
     },
     methods:{
         login(){
-            axios.post("http://localhost:801/users",this.user).then((res)=>{
+            axios.post(location.origin+'/users',this.user).then((res)=>{
                 if(res.data.status){
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("refreshToken", res.data.refreshToken)
                     this.$message.success(res.data.description)
+                    this.$emit('reload')
+                    this.$router.go('/')
                 }
                 else if('status' in res.data){
                     this.$message.error(res.data.description)

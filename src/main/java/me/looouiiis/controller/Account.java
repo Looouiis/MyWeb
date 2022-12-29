@@ -23,8 +23,9 @@ public class Account {
     }
 
     @PutMapping
-    public JsonAccountStatus register(@RequestBody User user) {
-        return service.register(user);
+    public JsonAccountStatus register(HttpServletRequest request, @RequestBody User user) {
+        Integer anoId = (Integer) request.getAttribute("anoId");
+        return service.register(user, anoId);
     }
 
     @DeleteMapping

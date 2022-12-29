@@ -39,12 +39,12 @@ export default {
   mounted(){
     this.$emit('response', this.default + 'message-mode noMsg')
     if(this.isMe){
-      this.axios.get('http://localhost:801/myUnread').then((res) => {
+      this.axios.get(location.origin+'/myUnread').then((res) => {
         if(res.data.status){
           this.msgUsrList = res.data.content
         }
       })
-      this.axios.get('http://localhost:801/users/true').then((res) => {
+      this.axios.get(location.origin+'/users/true').then((res) => {
         // console.log(res.data)
         this.anoList = res.data.content.anoUsers
         this.usrList = res.data.content.users
@@ -52,7 +52,7 @@ export default {
       })
     }
     else if(this.default.indexOf('usr') !== -1){
-      this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
+      this.axios.get(location.origin+'/users/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -62,7 +62,7 @@ export default {
       })
     }
     else if(this.default.indexOf('ano') !== -1){
-      this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
+      this.axios.get(location.origin+'/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
         console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
@@ -83,7 +83,7 @@ export default {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-            url: 'http://localhost:801/users/reply/'+this.talkTo
+            url: location.origin+'/users/reply/'+this.talkTo
           }).then((res) => {
             if('status' in res.data && res.data.status){
               this.$message.success(res.data.description)
@@ -101,7 +101,7 @@ export default {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-            url: 'http://localhost:801/anonymous/reply/'+this.talkTo
+            url: location.origin+'/anonymous/reply/'+this.talkTo
           }).then((res) => {
             if('status' in res.data && res.data.status){
               this.$message.success(res.data.description)
@@ -121,7 +121,7 @@ export default {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-            url: 'http://localhost:801/users/communication'
+            url: location.origin+'/users/communication'
           }).then((res) => {
             // console.log(res)
             if('status' in res.data && res.data.status){
@@ -141,7 +141,7 @@ export default {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-            url: 'http://localhost:801/anonymous/communication'
+            url: location.origin+'/anonymous/communication'
           }).then((res) => {
             // console.log(res)
             if('status' in res.data && res.data.status){
@@ -165,7 +165,7 @@ export default {
       this.talkTo = id
       if(content.indexOf('usr') !== -1){
         this.talkToWho = 'usr'
-        this.axios.get('http://localhost:801/users/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
+        this.axios.get(location.origin+'/users/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
           console.log(res.data)
           if('status' in res.data && res.data.status){
             this.msgList = res.data.content.messages
@@ -176,7 +176,7 @@ export default {
       }
       else if(content.indexOf('ano') !== -1){
         this.talkToWho = 'ano'
-        this.axios.get('http://localhost:801/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
+        this.axios.get(location.origin+'/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
           console.log(res.data)
           if('status' in res.data && res.data.status){
             this.msgList = res.data.content.messages

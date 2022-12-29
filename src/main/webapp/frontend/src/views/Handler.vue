@@ -3,8 +3,8 @@
             <div class="LogInandRegister">
 
         
-                <Login id="login"/>
-                <Register id="register"/>
+                <Login @reload="this.$emit('reload')" id="login"/>
+                <Register @reload="this.$emit('reload')" id="register"/>
   
             <!-- <form action="">
                 <div class="title">LogIn</div>

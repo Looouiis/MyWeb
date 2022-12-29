@@ -35,7 +35,7 @@
 // @ is an alias to /src
 import IndexSingle from '@/components/IndexSingle.vue'
 import png1 from "../assets/ikun.png"
-import png2 from "../assets/MC.png"
+import png2 from "../assets/cat.jpg"
 import png3 from "../assets/mybackground.png"
 import squirrel from "../assets/squirrel.jpg"
 import top from "../assets/top.png"
@@ -57,7 +57,7 @@ export default {
     return{
       topPng: png2,
       ikun: png1,
-      MC: png2,
+      cat: png2,
       mybackground: png3,
       squirrel: squirrel,
       top: top,

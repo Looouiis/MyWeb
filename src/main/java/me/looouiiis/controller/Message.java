@@ -170,7 +170,7 @@ public class Message {
     @PostMapping(value = "/users/reply/{usrId}")
     @ResponseBody
     public JsonContentReturn postUsrReplyWithPer(HttpServletRequest request, @PathVariable Integer usrId, String content) {
-        System.out.println("收到了" + usrId);
+//        System.out.println("收到了" + usrId);
         if (usrId != null) {
             JsonContentReturn res = service.commitReply(usrId, content);
             return res;

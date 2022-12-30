@@ -4,7 +4,7 @@
       <div class="updateForm">
         
         <form action="">
-          <div class="title">Update</div>
+          <div class="title">Account</div>
           <div class="input-text">
             <a>username</a><input type="text" v-model="userForUpdate.username" placeholder="留空则不变"/>
           </div>
@@ -44,6 +44,11 @@
     justify-content: center;
     align-items: center;
   }
+  .title{
+    font-weight: bold;
+    font-size: 2.2rem;
+    margin-bottom: .5rem;
+  }
 }
 form{
   z-index: 10;
@@ -56,11 +61,7 @@ form{
     color: red;
   }
 }
-.title{
-  font-weight: bold;
-  font-size: 2.2rem;
-  margin-bottom: .5rem;
-}
+
 .btnUpdate{
   width: 150px;
   height: 49px;

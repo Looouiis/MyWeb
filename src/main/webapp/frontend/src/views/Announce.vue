@@ -54,7 +54,7 @@ export default {
   },
   mounted(){
     this.axios.get(location.origin+'/announce/0/-1').then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       if('status' in res.data && res.data.status){
         this.msgList = res.data.content
         this.messageBy = ''

@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
                 if(anoId != null){
                     messageService.transformToUser(anoId, user.getId());
                 }
+                status.setDescription("您的注册成功");
                 status.setStatus(true);
             } else {
                 throw new SystemException(Code.SYSTEM_ERR, "疑似数据库出现问题，请及时向我反馈");
@@ -195,8 +196,8 @@ public class UserServiceImpl implements UserService {
     public JsonAccountStatus refresh(RefreshRequest refresh) {
         HashMap<String, Object> first = verify(refresh.getToken());
         HashMap<String, Object> second = verify(refresh.getRefreshToken());
-        System.out.println(first);
-        System.out.println(second);
+//        System.out.println(first);
+//        System.out.println(second);
         JsonAccountStatus status = new JsonAccountStatus();
         if(checkIsTrusted(first) && checkIsTrusted(second)) {
             int id = checkTokenId(first);
@@ -206,7 +207,7 @@ public class UserServiceImpl implements UserService {
                     status.setDescription("Refresh token也过期了，请重新登录吧");
                     status.setStatus(false);
                 } else {
-                    System.out.println("已发放");
+//                    System.out.println("已发放");
                     status.setDescription("成功(当你看到这条信息时，你给我小心点)");
                     status.setToken(TokenOperator.generate(id, 3, user.getIsMe()));
                     status.setRefreshToken(TokenOperator.generate(id, 7, user.getIsMe()));

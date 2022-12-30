@@ -46,12 +46,12 @@ export default {
       this.$emit('fetch', this.talkTo)
     }
   },
-  created(){
+  mounted(){
     if(this.default.indexOf('usr') !== -1 && this.inputDefault){
-      this.input = '# Hello World\n\n在这的留言是\*\*不会\*\*让其他人看到的'
+      this.input = '# Hello World\n\n在这的留言是**不会**让其他人看到的（您也可以提一些对网站的改进建议，这对我很重要）'
     }
     else if(this.default.indexOf('ano') !== -1 && this.inputDefault){
-      
+      this.input = '# Hello World\n\n在这的留言是**不会**让其他人看到的（您也可以提一些对网站的改进建议，这对我很重要）\n\n您现在还处于**未登录**模式，查询历史留言记录功能可能会随着浏览器清数据而失效，推荐您前去**注册**一个账号'
     }
   },
   emits: ['submit','fetch']

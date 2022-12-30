@@ -2,14 +2,17 @@
     <div id="header">
       <nav>
         <p style="color: white;">{{ signUpMode }}</p>
-        <router-link to="/">Home</router-link>
-        <router-link to="/Message">Message</router-link>
-        <router-link to="/Announce">Announce</router-link>
-        <router-link to="/LoginorRegister">Login</router-link>
-        <router-link to="/Update">Update</router-link>
-        <router-link to="/MadrenWork">Madren Work</router-link>
+        <a @click="toGithub" herf="https://github.com/looouiis" target="_blank">Looouiiis</a>
+        <router-link to="/">首页</router-link>
+        <router-link to="/Message">留言</router-link>
+        <router-link to="/Announce">公告</router-link>
+        <a v-if="this.isLogin()" @click="logOut">登出</a>
+        <router-link to="/LoginorRegister" v-else>登录</router-link>
+        <router-link to="/Update">账号</router-link>
+        <!-- <router-link to="/MadrenWork">Madren Work</router-link> -->
+        <a @click="toMaiden">Maiden Work</a>
       </nav>
-      <p class="welcome">欢迎您{{ user.username }}</p>
+      <p class="welcome">欢迎您{{ user.username === undefined ? ',未登录的用户' : user.username }}</p>
     </div>
   <div :class="signUpMode">
     <div class="msg">{{ msg }}</div>
@@ -186,8 +189,8 @@ nav {
     padding: 0 12rem;
   }
   a {
+    text-decoration: none;
     padding: 0 2rem;
-    font-weight: bold;
     color: rgba(255,255,255,0.5);
 
     &.router-link-exact-active {
@@ -208,59 +211,83 @@ nav {
         }
     },
     methods:{
-      async load(){
+      load(){
         this.default = ''
         let token = localStorage.getItem('token')
-      if(token !== null && token !== ''){
-        await this.axios.get(location.origin+'/users/token').then(async (res) => {
-          this.user = res.data.content
-          console.log(this.user)
-          // console.log(res.data)
-          if(res.data.content.isMe){
-            await this.axios.get(location.origin+'/myUnread').then((res) => {
-              // console.log(res)
-              if(res.data.content != null){
-                for (let index = 0; index < res.data.content.length; index++) {
-                  this.msg += res.data.content[index].num
+        if(token !== null && token !== ''){
+          this.axios.get(location.origin+'/users/token').then((res) => {
+            this.user = res.data.content
+            // console.log(this.user)
+            // console.log(res.data)
+            if(res.data.content.isMe){
+              this.axios.get(location.origin+'/myUnread').then((res) => {
+                // console.log(res)
+                if(res.data.content != null){
+                  for (let index = 0; index < res.data.content.length; index++) {
+                    this.msg += res.data.content[index].num
+                  }
                 }
-              }
-              if(this.msg === 0){
-                this.default += 'noMsg '
-              }
-            })
-          }
-          else{
-            await this.axios.get(location.origin+'/users/reply').then((res) => {
-              console.log(res)
-              if(res.data.content != null)
-                this.msg += res.data.content.num
-              else
-                this.msg = 0
-              if(this.msg === 0){
-                this.default += 'noMsg '
-              }
-            })
-          }
-        })
-        this.default += 'background usr '
-      }
-      else{
-        await this.axios.get(location.origin+'/anonymous/reply').then((res) => {
-          console.log(res)
-          if(res.data.content != null)
-            this.msg += res.data.content.num
-          else
-            this.msg = 0
-            if(this.msg === 0){
-              this.default += 'noMsg '
+                if(this.msg === 0){
+                  this.default += 'noMsg '
+                }
+              })
             }
-        })
-        this.default += 'background ano '
-      }
-      this.signUpMode = this.default
+            else{
+              this.axios.get(location.origin+'/users/reply').then((res) => {
+                // console.log(res)
+                if(res.data.content != null)
+                  this.msg += res.data.content.num
+                else
+                  this.msg = 0
+                if(this.msg === 0){
+                  this.default += 'noMsg '
+                }
+              })
+            }
+          })
+          this.default += 'background usr '
+        }
+        else{
+          this.axios.get(location.origin+'/anonymous/reply').then((res) => {
+            // console.log(res)
+            if(res.data.content != null)
+              this.msg += res.data.content.num
+            else
+              this.msg = 0
+              if(this.msg === 0){
+                this.default += 'noMsg '
+              }
+          })
+          this.default += 'background ano '
+        }
+        this.signUpMode = this.default
+      },
+      toGithub(){
+        window.open('https://github.com/looouiis')
+      },
+      toMaiden(){
+        window.open('http://maiden.looouiiis.me')
+      },
+      isMobile() {
+        let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+        return flag;
+      },
+      isLogin(){
+        let flag = (localStorage.getItem('token') !== null && localStorage.getItem('token') !== '')
+        return flag
+      },
+      logOut(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken')
+        alert('已退出登录')
+        this.user = ''
+        this.load()
       }
     },
     mounted(){
+      if (this.isMobile()) {
+        alert("手机端尚未适配完成，请使用电脑访问");
+      }
       this.load()
     }
   }

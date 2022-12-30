@@ -8,6 +8,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/home',
+    name: 'homeWithPath',
+    component: HomeView
+  },
+  {
     path: '/Message',
     name: 'Message',
     // route level code-splitting
@@ -47,14 +52,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Update.vue')
   },
-  {
-    path: '/MadrenWork',
-    name: 'MadrenWork',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/MadrenWork.vue')
-  },
+  // {
+  //   path: '/MadrenWork',
+  //   name: 'MadrenWork',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/MaidenWork.vue')
+  // },
   {
     path: '/Markdown',
     name: 'Markdown',
@@ -91,6 +96,7 @@ router.beforeEach((to,from,next) => {
   let token = localStorage.getItem('token')
 
   if(to.path === '/Update' && (token === null || token === '')){
+    alert('请先登录')
     next('/LoginorRegister')
   }
   else{

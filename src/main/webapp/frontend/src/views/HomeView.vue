@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <img :src="topPng">
+    <div class="img" :style="backgroundImg"></div>
     <div class="top">
         <h1>LooouiiisWeb</h1>
     </div>
@@ -21,12 +21,12 @@
     <IndexSingle
       :imgPath="bird"
       header="对网站最满意的地方"
-      :contents="['留言、公告都是手搓的，没有用Wordpress等（难怪这么简陋）','登录模块赶了趟潮使用了双token机制']"
+      :contents="['除了框架SSM、VUE以外都是手搓的，没有用Wordpress等现成品（难怪这么简陋）','登录模块赶了趟潮使用了双token']"
     />
     <IndexSingle
       :imgPath="point"
       header="你还在看什么"
-      :contents="['这页没东西了','去给我留言吧，或者可以去康康我去年写的Madren Work！']"
+      :contents="['这页没东西了','去给我留言吧，或者可以去康康我去年写的Maiden Work！']"
     />
   </div>
 </template>
@@ -62,7 +62,10 @@ export default {
       squirrel: squirrel,
       top: top,
       bird: bird,
-      point: point
+      point: point,
+      backgroundImg:{
+        backgroundImage : 'url(' + png2 + ')'
+      }
       // contents:{
       //   'Looouiiis,男，活的'
       // }
@@ -76,6 +79,14 @@ export default {
   height: 100%;
   overflow-x: hidden;
   perspective: 3px;
+  .img{
+        // background-image: url('../assets/cat.jpg');
+        transform: translateZ(-1px) scale(1.6);
+        background-size: cover;
+        height: 100%;
+        bottom: 0px;
+        z-index: -1;
+    }
   .top{
     z-index: 0;
     transform: translateY(-35vh) translateZ(1px);

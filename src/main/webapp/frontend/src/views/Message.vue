@@ -22,6 +22,25 @@ export default {
     userId: Number,
     isMe: Boolean
   },
+  watch:{
+    isMe(lat,old){
+      // alert(old)
+      // alert(lat)
+      if(lat){
+        this.axios.get(location.origin+'/myUnread').then((res) => {
+          if(res.data.status){
+            this.msgUsrList = res.data.content
+          }
+        })
+        this.axios.get(location.origin+'/users/true').then((res) => {
+          // console.log(res.data)
+          this.anoList = res.data.content.anoUsers
+          this.usrList = res.data.content.users
+          // console.log(this.usrList)
+        })
+      }
+    }
+  },
   data(){
     return{
       currentPage: -1,
@@ -48,12 +67,12 @@ export default {
         // console.log(res.data)
         this.anoList = res.data.content.anoUsers
         this.usrList = res.data.content.users
-        console.log(this.usrList)
+        // console.log(this.usrList)
       })
     }
     else if(this.default.indexOf('usr') !== -1){
       this.axios.get(location.origin+'/users/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
           this.messageBy = res.data.content.messageBy
@@ -63,7 +82,7 @@ export default {
     }
     else if(this.default.indexOf('ano') !== -1){
       this.axios.get(location.origin+'/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/0').then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         if('status' in res.data && res.data.status){
           this.msgList = res.data.content.messages
           this.messageBy = '匿名'+res.data.content.anoId
@@ -134,7 +153,7 @@ export default {
               this.$message.error(res.data.exceptionMessage)
             }
           })
-          // .post('http://localhost:801/users/communication','content:'+content)
+          // .post("http://localhost:801/users/communication','content:'+content)
         }
         else if(this.default.indexOf('ano') !== -1){
           this.axios({
@@ -166,7 +185,7 @@ export default {
       if(content.indexOf('usr') !== -1){
         this.talkToWho = 'usr'
         this.axios.get(location.origin+'/users/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           if('status' in res.data && res.data.status){
             this.msgList = res.data.content.messages
             this.messageBy = res.data.content.messageBy
@@ -177,7 +196,7 @@ export default {
       else if(content.indexOf('ano') !== -1){
         this.talkToWho = 'ano'
         this.axios.get(location.origin+'/anonymous/communication/'+this.defaultNum+'/'+this.currentPage+'/'+id).then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           if('status' in res.data && res.data.status){
             this.msgList = res.data.content.messages
             this.messageBy = '匿名'+res.data.content.anoId
@@ -192,7 +211,10 @@ export default {
 
 <template>
   <div class="container">
-    <h2 class="title">留言</h2>
+    <div class="title">
+      <h2>留言</h2>     
+      <a href="/Markdown" target="_blank">Markdown?</a>
+    </div>
     <div class="message-container">
       <TextHandler @submit="submit" @fetch="fetch"
         :default=this.default
@@ -254,45 +276,15 @@ export default {
     padding: 2rem 2rem;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    a{
+      margin-top: 5px;
+      margin-left: 1rem;
+    }
   }
   .message-container{
-    // .editor{
-    //   height: 30vh;
-    //   margin: 0 2rem;
-    //   border: solid .2rem rgb(0 0 0 / 30%);
-    //   border-radius: 1rem;
-    // }
-    // .btn{
-    //   display: flex;
-    //   justify-content: flex-start;
-    //   padding: 1rem 2rem;
-    //   padding-top: 0;
-    //   padding-bottom: 0;
-    //   button{
-    //     margin: .3rem .3rem;
-    //     width: 3.5rem;
-    //     height: 1.5rem;
-    //     border: none;
-    //     outline: none;
-    //     border-radius: 5px;
-    //     cursor: pointer;
-    //     &.submit{
-    //       background-color: #27516e;
-    //       color: #FFF;
-    //       &:hover{
-    //         background-color: #7c9388;
-    //         color: #000;
-    //       }
-    //     }
-    //     &.reset{
-    //       background-color: #FFF;
-    //       border: #000 solid 1px;
-    //     }
-    //   }
-    // }
     .cut{
       margin: .5rem 2rem;
-      // padding: 1rem;
       height: 2px;
       border-radius: 50%;
       background-color: rgb(0 0 0 / 50%);

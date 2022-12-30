@@ -17,8 +17,8 @@ public class Account {
 
     @PostMapping
     public JsonAccountStatus login(@RequestBody User user) {
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
+//        System.out.println(user.getUsername());
+//        System.out.println(user.getPassword());
         return service.login(user.getUsername(), user.getPassword());
     }
 

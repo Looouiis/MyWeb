@@ -1,6 +1,7 @@
 <template>
     <!-- <div class="img"></div> -->
-    <img :src="imgPath" alt="">
+    <!-- <img :src="imgPath" alt=""> -->
+    <div class="img" :style="backgroundImg"></div>
     <div class="heading">
         <h1>{{ header }}</h1>
     </div>
@@ -18,7 +19,7 @@
         font-style: 30px;
         letter-spacing: 2px;
     }
-    img{
+    .img{
         // background-image: url(`${imgPath}`);
         transform: translateZ(-1px) scale(1.6);
         background-size: cover;
@@ -34,7 +35,7 @@
     }
     .text{
         z-index: 2;
-        height: 50vh;
+        height: 51vh;
         background-color: #FFF;
         display: flex;
         flex-direction: column;
@@ -62,6 +63,13 @@ export default{
         imgPath: String,
         header: String,
         contents: Array
+    },
+    data(){
+        return{
+            backgroundImg:{
+                backgroundImage : 'url(' + this.imgPath + ')'
+            }
+        }
     }
 }
 </script>

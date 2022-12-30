@@ -64,7 +64,7 @@ export default{
             flag: false
         }
     },
-    created(){
+    mounted(){
         if(this.default.indexOf('usr') !== -1){
             this.axios.get(location.origin+'/users/comment/'+this.msgId).then((res) => {
               if('status' in res.data && res.data.status){
@@ -96,7 +96,7 @@ export default{
                 data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
                 url: location.origin+'/users/comment/'+this.msgId
                 }).then((res) => {
-                console.log(res)
+                // console.log(res)
                 if('status' in res.data && res.data.status){
                     this.$message.success(res.data.description)
                 }
@@ -116,7 +116,7 @@ export default{
                 data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
                 url: location.origin+'/anonymous/comment/'+this.msgId
                 }).then((res) => {
-                console.log(res)
+                // console.log(res)
                 if('status' in res.data && res.data.status){
                     this.$message.success(res.data.description)
                 }

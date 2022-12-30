@@ -61,7 +61,7 @@ import axios from 'axios'
                     localStorage.setItem("refreshToken", res.data.refreshToken)
                     this.$message.success(res.data.description)
                     this.$emit('reload')
-                    this.$router.go('/')
+                    this.$router.push('/')
                 }
                 else if('status' in res.data){
                     this.$message.error(res.data.description)

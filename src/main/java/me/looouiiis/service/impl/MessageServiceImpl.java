@@ -72,11 +72,11 @@ public class MessageServiceImpl implements MessageService {
         int totalCount = messageDao.getUsrMessageTotalNum(id);
         List<Message> messages = messageDao.selectMessageById(id, start, num);
         if (me){
-            System.out.println(1);
+//            System.out.println(1);
             deleteMyUsrUnread(id);
         }
         else {
-            System.out.println(2);
+//            System.out.println(2);
             deleteUsrUnread(id);
         }
         for (Message message : messages) {
@@ -138,7 +138,7 @@ public class MessageServiceImpl implements MessageService {
                 ret.setContent(anoToken);
             }
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addMyAnoUnread(id);
         } else {
             ret.setStatus(false);
@@ -169,7 +169,7 @@ public class MessageServiceImpl implements MessageService {
         message.setUserId(id);
         if (messageDao.commitMessage(message) != 0) {
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addMyUsrUnread(id);
         } else {
             ret.setStatus(false);
@@ -199,7 +199,7 @@ public class MessageServiceImpl implements MessageService {
         message.setAnoId(id);
         if (messageDao.commitAnoReply(message) != 0) {
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addAnoUnread(id);
         } else {
             ret.setStatus(false);
@@ -229,7 +229,7 @@ public class MessageServiceImpl implements MessageService {
         message.setUserId(id);
         if (messageDao.commitReply(message) != 0) {
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addUsrUnread(id);
         } else {
             ret.setStatus(false);
@@ -555,7 +555,7 @@ public class MessageServiceImpl implements MessageService {
         if (messageDao.addAnoComment(comment) != 0) {
             int anoId = messageDao.getAnoIdByMsgId(msgId);
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addMyAnoUnread(anoId);
         } else {
             ret.setStatus(false);
@@ -586,7 +586,7 @@ public class MessageServiceImpl implements MessageService {
         if (messageDao.addAnoCommentReply(comment) != 0) {
             int anoId = messageDao.getAnoIdByMsgId(msgId);
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addAnoUnread(anoId);
         } else {
             ret.setStatus(false);
@@ -647,7 +647,7 @@ public class MessageServiceImpl implements MessageService {
         if (messageDao.addUsrComment(comment) != 0) {
             int usrId = messageDao.getUsrIdByMsgId(msgId);
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addMyUsrUnread(usrId);
         } else {
             ret.setStatus(false);
@@ -678,7 +678,7 @@ public class MessageServiceImpl implements MessageService {
         if (messageDao.addUsrCommentReply(comment) != 0) {
             int usrId = messageDao.getUsrIdByMsgId(msgId);
             ret.setStatus(true);
-            ret.setDescription("Success");
+            ret.setDescription("成功，麻烦手动刷新下");
             addUsrUnread(usrId);
         } else {
             ret.setStatus(false);

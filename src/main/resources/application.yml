@@ -1,7 +1,7 @@
 server:
-  port: 80
+  port: 722
 jdbc:
   driver: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://localhost:3306/MyWeb
-  username: root
-  password: 123
+  username: MyWeb
+  password: 7M7JAYcNX5krHidY

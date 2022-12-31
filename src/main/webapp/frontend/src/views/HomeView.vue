@@ -37,9 +37,7 @@
 import IndexSingle from '@/components/IndexSingle.vue'
 import png1 from "../assets/ikun.png"
 import png2 from "../assets/cat.jpg"
-import png3 from "../assets/mybackground.png"
 import squirrel from "../assets/squirrel.jpg"
-import top from "../assets/top.png"
 import bird from "../assets/bird.jpg"
 import point from "../assets/point.jpeg"
 
@@ -59,9 +57,7 @@ export default {
       topPng: png2,
       ikun: png1,
       cat: png2,
-      mybackground: png3,
       squirrel: squirrel,
-      top: top,
       bird: bird,
       point: point,
       backgroundImg:{

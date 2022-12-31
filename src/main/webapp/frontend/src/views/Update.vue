@@ -139,7 +139,7 @@ export default {
   },
   methods:{
     send(){
-      this.axios.patch('http://localhost/users', this.userForUpdate).then((res) => {
+      this.axios.patch(location.origin+'/users', this.userForUpdate).then((res) => {
         if(res.data.status){
           this.$message.success(res.data.description)
         }

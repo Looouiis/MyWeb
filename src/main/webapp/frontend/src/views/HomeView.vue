@@ -81,6 +81,13 @@ export default {
     z-index: 1;
     left: 3rem;
     top: 1rem;
+    width: 17vh;
+    height: 9vh;
+    transition: .5s 0s ease-in-out;
+    &:hover{
+      width: 30rem;
+      height: 23rem;
+    }
   }
   iframe{
     position: absolute;

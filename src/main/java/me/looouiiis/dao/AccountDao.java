@@ -25,6 +25,8 @@ public interface AccountDao {
     int delete(User user);
     @Select("select id from users where id = #{id} and password = #{oriPassword}")
     User preUpdate(UserForUpdate user);
+    @Select("select id from users where username = #{username}")
+    User checkUsername(@Param("username")String username);
     int update(UserForUpdate user);
     @Delete("delete from message where user_id = #{userId}")
     int deleteFromMessage(@Param("userId") int userId);

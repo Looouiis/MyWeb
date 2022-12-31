@@ -123,9 +123,16 @@ export default {
           username: '',
           newPassword: '',
           oriPassword: '',
-          gender: Boolean
+          gender: null
         }
       }
+  },
+  watch:{
+    userId(lat,old){
+      if(lat !== undefined && lat >=0 && lat !==null){
+        this.userForUpdate.id = this.userId
+      }
+    }
   },
   created(){
     this.$emit('response', this.default + 'update-mode noMsg')
@@ -140,15 +147,20 @@ export default {
   methods:{
     send(){
       this.axios.patch(location.origin+'/users', this.userForUpdate).then((res) => {
-        if(res.data.status){
-          this.$message.success(res.data.description)
-        }
-        else if('status' in res.data){
-          this.$message.error(res.data.description)
-        }
-        else{
-          this.$message.infor(res.data.exceptionMessage)
-        }
+        // if(this.userForUpdate.gender === null){
+        //   this.$message.error("请设置性别")
+        // }
+        // else{
+          if(res.data.status){
+            this.$message.success(res.data.description)
+          }
+          else if('status' in res.data){
+            this.$message.error(res.data.description)
+          }
+          else{
+            this.$message.error(res.data.exceptionMessage)
+          }
+      // }
       })
     }
   }

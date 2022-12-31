@@ -101,9 +101,16 @@ public class UserServiceImpl implements UserService {
         else {
             User select = accountDao.preUpdate(user);
             if (select != null) {
-                int res = accountDao.update(user);
-                status.setStatus(res != 0);
-                status.setDescription("成功");
+                User user1 = accountDao.checkUsername(user.getUsername());
+                if(user1 != null){
+                    status.setStatus(false);
+                    status.setDescription("用户名与其他用户相同了");
+                }
+                else{
+                    int res = accountDao.update(user);
+                    status.setStatus(res != 0);
+                    status.setDescription("成功");
+                }
             } else {
                 status.setDescription("输入的原始密码错误");
                 status.setStatus(false);

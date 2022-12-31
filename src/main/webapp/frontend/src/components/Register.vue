@@ -88,6 +88,7 @@ export default {
                   if(res.data.status){
                       localStorage.setItem("token", res.data.token)
                       localStorage.setItem("refreshToken", res.data.refreshToken)
+                      localStorage.removeItem("anoToken")
                       this.$message.success(res.data.description)
                       this.$emit('reload', 'register')
                       this.$router.push('/')

@@ -117,6 +117,7 @@ export default {
 <style lang="less">
 .background.announce-mode{
   // min-height: 95vh;
+  min-height: 919px;
   bottom: initial;
   &:before{
     content: '';

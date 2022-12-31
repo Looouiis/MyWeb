@@ -281,38 +281,39 @@ public class MessageServiceImpl implements MessageService {
             messageDao.insertSingleFromAno(message, usrId);
             int usrComId = message.getId();
 
-            for (AnoComment comment : comments) {
-                if (comment.isLocal()) {
-                    String filePath = comment.getContent();
-                    String targetPath = filePath.replace("Ano", "Usr").replace("/" + anoComId + "/", "/" + usrComId + "/");
-                    try {
-                        File path = new File(targetPath.substring(0, targetPath.lastIndexOf("/")));
-                        path.mkdirs();
-                        BufferedReader br = new BufferedReader(new FileReader(filePath));
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(targetPath));
-                        StringBuilder sb = new StringBuilder();
-                        String tmp = br.readLine();
-                        sb.append(tmp);
-                        while ((tmp = br.readLine()) != null) {
-                            sb.append("\n").append(tmp);
+            if(comments.size() != 0) {
+                for (AnoComment comment : comments) {
+                    if (comment.isLocal()) {
+                        String filePath = comment.getContent();
+                        String targetPath = filePath.replace("Ano", "Usr").replace("/" + anoComId + "/", "/" + usrComId + "/");
+                        try {
+                            File path = new File(targetPath.substring(0, targetPath.lastIndexOf("/")));
+                            path.mkdirs();
+                            BufferedReader br = new BufferedReader(new FileReader(filePath));
+                            BufferedWriter bw = new BufferedWriter(new FileWriter(targetPath));
+                            StringBuilder sb = new StringBuilder();
+                            String tmp = br.readLine();
+                            sb.append(tmp);
+                            while ((tmp = br.readLine()) != null) {
+                                sb.append("\n").append(tmp);
+                            }
+                            bw.write(sb.toString());
+                            bw.close();
+                            br.close();
+                            news.add(new File(targetPath));
+                            olds.add(new File(filePath));
+                            comment.setContent(targetPath);
+                        } catch (IOException e) {
+                            for (File newFile : news) {
+                                newFile.delete();
+                            }
+                            throw new SystemException(Code.SYSTEM_IO_ERR, "处理评论时后台文件读写发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                         }
-                        bw.write(sb.toString());
-                        bw.close();
-                        br.close();
-                        news.add(new File(targetPath));
-                        olds.add(new File(filePath));
-                        comment.setContent(targetPath);
-                    } catch (IOException e) {
-                        for (File newFile : news) {
-                            newFile.delete();
-                        }
-                        throw new SystemException(Code.SYSTEM_IO_ERR, "处理评论时后台文件读写发生异常，已开启事务所以您的数据是安全的不用担心，您可重试或想办法联系我", e);
                     }
                 }
+                messageDao.insertComFromAno(comments, usrComId);
+                messageDao.delAnoComment(anoComId);
             }
-            messageDao.insertComFromAno(comments, usrComId);
-            messageDao.delAnoComment(anoComId);
-
         }
         for (File old : olds) {
             old.delete();

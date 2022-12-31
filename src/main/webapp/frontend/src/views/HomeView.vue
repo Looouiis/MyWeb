@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+    <iframe class="kurt" src="//player.bilibili.com/player.html?aid=413628523&bvid=BV1sV411k749&cid=243827381&page=33&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
     <div class="img" :style="backgroundImg"></div>
     <div class="top">
         <h1>LooouiiisWeb</h1>
@@ -79,6 +80,15 @@ export default {
   height: 100%;
   overflow-x: hidden;
   perspective: 3px;
+  .kurt{
+    position: absolute;
+    z-index: 1;
+    left: 3rem;
+    top: 1rem;
+  }
+  iframe{
+    position: absolute;
+  }
   .img{
         // background-image: url('../assets/cat.jpg');
         transform: translateZ(-1px) scale(1.6);

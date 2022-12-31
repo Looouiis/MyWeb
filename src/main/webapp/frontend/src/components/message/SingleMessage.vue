@@ -66,7 +66,7 @@ export default{
     },
     mounted(){
         if(this.default.indexOf('usr') !== -1){
-            this.axios.get(location.origin+'/users/comment/'+this.msgId).then((res) => {
+            this.axios.get('http://localhost/users/comment/'+this.msgId).then((res) => {
               if('status' in res.data && res.data.status){
                 this.comList = res.data.content.comments
                 this.messageBy = res.data.content.messageBy
@@ -75,7 +75,7 @@ export default{
             })
         }
         else if(this.default.indexOf('ano') !== -1){
-            this.axios.get(location.origin+'/anonymous/comment/'+this.msgId).then((res) => {
+            this.axios.get('http://localhost/anonymous/comment/'+this.msgId).then((res) => {
               if('status' in res.data && res.data.status){
                 this.comList = res.data.content.comments
                 this.messageBy = '匿名'+res.data.content.messageBy
@@ -94,7 +94,7 @@ export default{
                 method: 'POST',
                 headers: { 'content-type': 'application/x-www-form-urlencoded' },
                 data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-                url: location.origin+'/users/comment/'+this.msgId
+                url: 'http://localhost/users/comment/'+this.msgId
                 }).then((res) => {
                 // console.log(res)
                 if('status' in res.data && res.data.status){
@@ -107,14 +107,14 @@ export default{
                     this.$message.error(res.data.exceptionMessage)
                 }
                 })
-                // .post(location.origin+'/users/communication','content:'+content)
+                // .post('http://localhost/users/communication','content:'+content)
             }
             else if(this.default.indexOf('ano') !== -1){
                 this.axios({
                 method: 'POST',
                 headers: { 'content-type': 'application/x-www-form-urlencoded' },
                 data: 'content='+content,   // 用 qs 将js对象转换为字符串 'name=edward&age=25'
-                url: location.origin+'/anonymous/comment/'+this.msgId
+                url: 'http://localhost/anonymous/comment/'+this.msgId
                 }).then((res) => {
                 // console.log(res)
                 if('status' in res.data && res.data.status){

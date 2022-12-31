@@ -1,7 +1,7 @@
 <template>
     <div id="header">
       <nav>
-        <p style="color: white;">{{ signUpMode }}</p>
+        <!-- <p style="color: white;">{{ signUpMode }}</p> -->
         <a @click="toGithub" herf="https://github.com/looouiis" target="_blank">Looouiiis</a>
         <router-link to="/">首页</router-link>
         <router-link to="/Message">留言</router-link>
@@ -215,12 +215,12 @@ nav {
         this.default = ''
         let token = localStorage.getItem('token')
         if(token !== null && token !== ''){
-          this.axios.get(location.origin+'/users/token').then((res) => {
+          this.axios.get('http://localhost/users/token').then((res) => {
             this.user = res.data.content
             // console.log(this.user)
             // console.log(res.data)
             if(res.data.content.isMe){
-              this.axios.get(location.origin+'/myUnread').then((res) => {
+              this.axios.get('http://localhost/myUnread').then((res) => {
                 // console.log(res)
                 if(res.data.content != null){
                   for (let index = 0; index < res.data.content.length; index++) {
@@ -233,7 +233,7 @@ nav {
               })
             }
             else{
-              this.axios.get(location.origin+'/users/reply').then((res) => {
+              this.axios.get('http://localhost/users/reply').then((res) => {
                 // console.log(res)
                 if(res.data.content != null)
                   this.msg += res.data.content.num
@@ -248,7 +248,7 @@ nav {
           this.default += 'background usr '
         }
         else{
-          this.axios.get(location.origin+'/anonymous/reply').then((res) => {
+          this.axios.get('http://localhost/anonymous/reply').then((res) => {
             // console.log(res)
             if(res.data.content != null)
               this.msg += res.data.content.num

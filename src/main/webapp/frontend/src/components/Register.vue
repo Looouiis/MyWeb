@@ -84,7 +84,7 @@ export default {
         if(this.user.password === this.con){
           if(this.user.username.length <= 10 && this.user.username.length > 0){
             if(this.user.password.length <= 20 && this.user.password.length >0){
-              this.axios.put(location.origin+'/users',this.user).then((res)=>{
+              this.axios.put('http://localhost/users',this.user).then((res)=>{
                   if(res.data.status){
                       localStorage.setItem("token", res.data.token)
                       localStorage.setItem("refreshToken", res.data.refreshToken)

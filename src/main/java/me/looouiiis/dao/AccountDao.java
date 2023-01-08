@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+@Mapper
 public interface AccountDao {
     @Select("select id,username,is_me as isMe, female as gender from users where id = #{id}")
     User selectById(@Param("id")int id);

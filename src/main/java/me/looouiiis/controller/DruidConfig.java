@@ -8,30 +8,30 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-@Component
+//@Component
 public class DruidConfig {
-    @Value("${jdbc.driver}")
-    private String driver;
-    @Value("${jdbc.url}")
-    private String url;
-    @Value("${jdbc.username}")
-    private String username;
-    @Value("${jdbc.password}")
-    private String password;
-    @Bean
-    public DataSource dataSource(){
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        return dataSource;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(dataSource);
-        return transactionManager;
-    }
+//    @Value("${jdbc.driver}")
+//    private String driver;
+//    @Value("${jdbc.url}")
+//    private String url;
+//    @Value("${jdbc.username}")
+//    private String username;
+//    @Value("${jdbc.password}")
+//    private String password;
+//    @Bean
+//    public DataSource dataSource(){
+//        DruidDataSource dataSource = new DruidDataSource();
+//        dataSource.setDriverClassName(driver);
+//        dataSource.setUrl(url);
+//        dataSource.setUsername(username);
+//        dataSource.setPassword(password);
+//        return dataSource;
+//    }
+//
+//    @Bean
+//    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+//        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+//        transactionManager.setDataSource(dataSource);
+//        return transactionManager;
+//    }
 }

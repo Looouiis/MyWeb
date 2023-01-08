@@ -4,7 +4,12 @@ import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import me.looouiiis.controller.Message;
+import me.looouiiis.dao.HomeDao;
 import me.looouiiis.dao.MessageDao;
+import me.looouiiis.pojo.Header;
+import me.looouiiis.pojo.Home;
+import me.looouiiis.service.HeaderService;
+import me.looouiiis.service.HomeService;
 import me.looouiiis.service.MessageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,32 +25,16 @@ import java.util.Map;
 @SpringBootTest
 class MyWebTests {
     @Autowired
-    private Message messageService;
+    private HomeService homeService;
     @Test
     void contextLoads() {
-        String secret = "LooouiiisWebLooouiiisWeb";
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjEsImFubyI6dHJ1ZX0.fY48lZ6XyQgyEIUdGGsEU1ETC4Js4v98FNYH2UKLRXc";
-        Jws<Claims> jws;
-        HashMap<String, Object> res = new HashMap<>();
-        res.put("trusted",true);
-        res.put("outdated", false);
-        try{
-            SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-            jws = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            res.put("jws",jws.getBody());
-        }
-        catch (ExpiredJwtException e){
-            res.put("jws",e.getClaims());
-            res.put("outdated", true);
-        }
-        catch (JwtException e){
-            e.printStackTrace();
-            res.put("trusted",false);
-        }
-        return;
+        Home home = new Home();
+//        home.setId(1);
+        home.setContents(new String[]{"123","321"});
+        home.setHeader("lalala");
+        home.setId(7);
+        homeService.updateSingle(home);
+        System.out.println("haha"+home.getId());
     }
 
 }

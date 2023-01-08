@@ -55,7 +55,7 @@ import axios from 'axios'
     },
     methods:{
         login(){
-            axios.post(location.origin+'/users',this.user).then((res)=>{
+            axios.post('http://localhost:722/users',this.user).then((res)=>{
                 if(res.data.status){
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("refreshToken", res.data.refreshToken)

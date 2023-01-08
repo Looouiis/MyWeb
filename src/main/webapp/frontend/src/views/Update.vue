@@ -146,7 +146,7 @@ export default {
   },
   methods:{
     send(){
-      this.axios.patch(location.origin+'/users', this.userForUpdate).then((res) => {
+      this.axios.patch('http://localhost:722/users', this.userForUpdate).then((res) => {
         // if(this.userForUpdate.gender === null){
         //   this.$message.error("请设置性别")
         // }

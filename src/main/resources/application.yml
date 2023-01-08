@@ -1,7 +1,14 @@
 server:
   port: 722
-jdbc:
-  driver: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/MyWeb
-  username: MyWeb
-  password: 7M7JAYcNX5krHidY
+#jdbc:
+#  driver: com.mysql.cj.jdbc.Driver
+#  url: jdbc:mysql://localhost:3306/MyWeb
+#  username: root
+#  password: 123
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/MyWeb
+    username: root
+    password: 123
+    type: com.alibaba.druid.pool.DruidDataSource

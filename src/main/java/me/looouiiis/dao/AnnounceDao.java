@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+@Mapper
 public interface AnnounceDao {
     @Select("select username from users where is_me = 1 order by id ASC limit 0,1")
     String getMyName();

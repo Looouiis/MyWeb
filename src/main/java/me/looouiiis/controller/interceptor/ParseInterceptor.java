@@ -1,6 +1,5 @@
 package me.looouiiis.controller.interceptor;
 
-import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
 @Component

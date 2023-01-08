@@ -17,12 +17,12 @@
     <IndexSingle
       :imgPath="squirrel"
       header="网页介绍"
-      :contents="['网页后端采用SSM三大框架在SpringBoot上开发，前端采用VUE。为了赶在2023来临之时发布，本次开发时间较短，功能也很简陋（好像就只有留言、公告两个实用功能）。会在后续持续完善、补充的']"
+      :contents="['仅有的功能','用户/匿名留言','公告']"
     />
     <IndexSingle
       :imgPath="bird"
       header="对网站最满意的地方"
-      :contents="['除了框架SSM、VUE以外都是手搓的，没有用Wordpress等现成品（难怪这么简陋）','登录模块赶了趟潮使用了双token']"
+      :contents="['开发正好用时一坤（时间单位）']"
     />
     <IndexSingle
       :imgPath="point"
